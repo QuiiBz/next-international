@@ -1,3 +1,4 @@
+import React from 'react';
 import { GetStaticProps } from 'next';
 import { getLocaleStaticProps, useChangeLocale, useI18n } from '../locales';
 
