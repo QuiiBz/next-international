@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-white.png">
     <source media="(prefers-color-scheme: light)" srcset="./assets/logo-black.png" />
-    <img alt="" height="80px" src="./assets/logo-white.png">
+    <img alt="" height="100px" src="./assets/logo-white.png">
   </picture>
   <br />
   Type-safe internationalization (i18n) for Next.js
@@ -58,7 +58,22 @@ export default {
 } as const
 ```
 
-3. Add `getLocaleStaticProps` to your pages if you want SSR, or wrap your existing `getStaticProps`:
+3. Wrap your whole app with `I18nProvider` inside `_app.tsx`:
+
+```tsx
+// pages/app.tsx
+import { I18nProvider } from '../locales'
+
+function App({ Component, pageProps }) => {
+  return (
+    <I18nProvider locale={pageProps.locale}>
+      <Component {...pageProps} />
+    </I18nProvider>
+  )
+}
+```
+
+3. Add `getLocaleStaticProps` to your pages, or wrap your existing `getStaticProps` (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
 
 ```ts
 // pages/index.tsx
@@ -133,6 +148,20 @@ export const {
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
 });
+```
+
+### Load initial locales client-side
+
+> **Warning**: This should not be used unless you know what you're doing and what that implies.
+
+If for x reason you don't want to SSR the initial locale, you can load it on the client. Simply remove the `getLocaleStaticProps` from your pages.
+
+You can also provide a fallback component while waiting for the initial locale to load inside `I18nProvider`:
+
+```tsx
+<I18nProvider locale={pageProps.locale} fallback={<p>Loading locales...</p>}>
+  ...
+</I18nProvider>
 ```
 
 ## License
