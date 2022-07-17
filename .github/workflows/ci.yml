@@ -35,5 +35,7 @@ jobs:
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
+    - name: Build next-international
+      run: cd packages/next-international && pnpm build
     - name: Run TSC
       run: pnpm typecheck
