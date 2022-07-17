@@ -32,6 +32,7 @@ const Home = () => {
   );
 };
 
+// Comment this to disable SSR of initial locale
 export const getStaticProps: GetStaticProps = getLocaleStaticProps();
 
 export default Home;

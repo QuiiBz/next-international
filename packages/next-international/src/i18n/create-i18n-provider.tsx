@@ -1,10 +1,11 @@
-import React, { Context, ReactNode, useEffect, useState } from 'react';
+import React, { Context, ReactElement, ReactNode, useEffect, useState } from 'react';
 import { LocaleContext, Locales, Locale } from '../types';
 import { useRouter } from 'next/router';
 import { warn } from '../helpers/log';
 
 type I18nProviderProps<LocaleType extends Locale> = {
   locale: LocaleType;
+  fallback?: ReactElement;
   children: ReactNode;
 };
 
@@ -12,16 +13,8 @@ export function createI18nProvider<LocaleType extends Locale>(
   I18nContext: Context<LocaleContext<LocaleType> | null>,
   locales: Locales,
 ) {
-  return function I18nProvider({ locale: baseLocale, children }: I18nProviderProps<LocaleType>) {
-    const {
-      locale,
-      defaultLocale,
-      locales: nextLocales,
-    } = useRouter() as {
-      locale: string | undefined;
-      defaultLocale: string | undefined;
-      locales: string[] | undefined;
-    };
+  return function I18nProvider({ locale: baseLocale, fallback, children }: I18nProviderProps<LocaleType>) {
+    const { locale, defaultLocale, locales: nextLocales } = useRouter();
     const [clientLocale, setClientLocale] = useState<LocaleType>();
 
     useEffect(() => {
@@ -62,6 +55,10 @@ export function createI18nProvider<LocaleType extends Locale>(
     if (!nextLocales) {
       warn(`'i18n.locales' not defined in 'next.config.js'`);
       return null;
+    }
+
+    if (!clientLocale && !baseLocale) {
+      return fallback || null;
     }
 
     return (
