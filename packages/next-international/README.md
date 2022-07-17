@@ -13,8 +13,10 @@
 - [Features](#features)
 - [Usage](#usage)
 - [Examples](#examples)
-  - [Change current language](#change-current-language)
+  - [Change current locale](#change-current-locale)
   - [Use JSON files instead of TS for locales](#use-json-files-instead-of-ts-for-locales)
+  - [Load initial locales client-side](#load-initial-locales-client-side)
+  - [Type-safety on locales files](#type-safety-on-locales-files)
 - [License](#license)
 
 ## Features
@@ -73,10 +75,10 @@ function App({ Component, pageProps }) => {
 }
 ```
 
-3. Add `getLocaleStaticProps` to your pages, or wrap your existing `getStaticProps` (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
+4. Add `getLocaleStaticProps` to your pages, or wrap your existing `getStaticProps` (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
 
 ```ts
-// pages/index.tsx
+// locales/index.tsx
 export const getStaticProps = getLocaleStaticProps()
 
 // or with an existing `getStaticProps` function:
@@ -88,7 +90,7 @@ export const getStaticProps = getLocaleStaticProps((ctx) => {
 })
 ```
 
-4. Use `useI18n`:
+5. Use `useI18n`:
 
 ```tsx
 import { useI18n } from '../locales'
@@ -106,10 +108,12 @@ function App() {
 
 ## Examples
 
-### Change current language
+### Change current locale
 
 Export `useChangeLocale` from `createI18n`:
-```tsx
+
+```ts
+// locales/index.ts
 export const {
   useChangeLocale,
   ...
@@ -119,6 +123,7 @@ export const {
 ```
 
 Then use this as a hook:
+
 ```tsx
 import { useChangeLocale } from '../locales'
 
@@ -137,6 +142,7 @@ function App() {
 Currently, this breaks the parameters type-safety, so we recommend using the TS syntax. See this issue: https://github.com/microsoft/TypeScript/issues/32063.
 
 ```ts
+// locales/index.ts
 import { createI18n } from 'next-international'
 import type Locale from './en.json'
 
@@ -162,6 +168,30 @@ You can also provide a fallback component while waiting for the initial locale t
 <I18nProvider locale={pageProps.locale} fallback={<p>Loading locales...</p>}>
   ...
 </I18nProvider>
+```
+
+### Type-safety on locales files
+
+Using `defineLocale`, you can make sure all your locale files implements all the keys of the base locale:
+
+```ts
+// locales/index.ts
+export const {
+  defineLocale
+  ...
+} = createI18n({
+  ...
+});
+```
+
+It's a simple wrapper function around other locales:
+
+```ts
+// locales/fr.ts
+export default defineLocale({
+  'hello': 'Bonjour',
+  'welcome': 'Bonjour {name}!',
+})
 ```
 
 ## License
