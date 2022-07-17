@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-white.png">
     <source media="(prefers-color-scheme: light)" srcset="./assets/logo-black.png" />
-    <img alt="" height="80px" src="./assets/logo-white.png">
+    <img alt="" height="100px" src="./assets/logo-white.png">
   </picture>
   <br />
   Type-safe internationalization (i18n) for Next.js
@@ -73,7 +73,7 @@ function App({ Component, pageProps }) => {
 }
 ```
 
-3. Add `getLocaleStaticProps` to your pages, or wrap your existing `getStaticProps` (this will allows SSR locales, see []):
+3. Add `getLocaleStaticProps` to your pages, or wrap your existing `getStaticProps` (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
 
 ```ts
 // pages/index.tsx
@@ -151,6 +151,8 @@ export const {
 ```
 
 ### Load initial locales client-side
+
+> **Warning**: This should not be used unless you know what you're doing and what that implies.
 
 If for x reason you don't want to SSR the initial locale, you can load it on the client. Simply remove the `getLocaleStaticProps` from your pages.
 
