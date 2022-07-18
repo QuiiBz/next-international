@@ -13,7 +13,7 @@ export function createGetLocaleStaticProps(locales: Locales) {
         return initialResult || { props: {} };
       }
 
-      const load = locales[context.locale!];
+      const load = locales[context.locale];
 
       return {
         ...initialResult,
