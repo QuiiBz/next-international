@@ -1,7 +1,7 @@
 import React, { Context, ReactElement, ReactNode, useEffect, useState } from 'react';
 import { LocaleContext, Locales, Locale } from '../types';
 import { useRouter } from 'next/router';
-import { warn } from '../helpers/log';
+import { error, warn } from '../helpers/log';
 
 type I18nProviderProps<LocaleType extends Locale> = {
   locale: LocaleType;
@@ -48,12 +48,12 @@ export function createI18nProvider<LocaleType extends Locale>(
     }, [locale, defaultLocale]);
 
     if (!locale || !defaultLocale) {
-      warn(`'i18n.defaultLocale' not defined in 'next.config.js'`);
+      error(`'i18n.defaultLocale' not defined in 'next.config.js'`);
       return null;
     }
 
     if (!nextLocales) {
-      warn(`'i18n.locales' not defined in 'next.config.js'`);
+      error(`'i18n.locales' not defined in 'next.config.js'`);
       return null;
     }
 
