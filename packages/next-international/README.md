@@ -66,7 +66,7 @@ export default {
 // pages/app.tsx
 import { I18nProvider } from '../locales'
 
-function App({ Component, pageProps }) => {
+function App({ Component, pageProps }) {
   return (
     <I18nProvider locale={pageProps.locale}>
       <Component {...pageProps} />
