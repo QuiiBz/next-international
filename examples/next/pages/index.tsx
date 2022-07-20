@@ -3,8 +3,9 @@ import { GetStaticProps } from 'next';
 import { getLocaleStaticProps, useChangeLocale, useI18n } from '../locales';
 
 const Home = () => {
-  const t = useI18n();
+  const { t, scopedT } = useI18n();
   const changeLocale = useChangeLocale();
+  const t2 = scopedT('scope.more');
 
   return (
     <div>
@@ -22,6 +23,13 @@ const Home = () => {
           name: 'Doe',
         })}
       </p>
+      <p>{t2('test')}</p>
+      <p>
+        {t2('param', {
+          param: 'test',
+        })}
+      </p>
+      <p>{t2('and.more.test')}</p>
       <button type="button" onClick={() => changeLocale('en')}>
         EN
       </button>

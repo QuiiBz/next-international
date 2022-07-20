@@ -13,6 +13,7 @@
 - [Features](#features)
 - [Usage](#usage)
 - [Examples](#examples)
+  - [Scoped translations](#scoped-translations)
   - [Change current locale](#change-current-locale)
   - [Use JSON files instead of TS for locales](#use-json-files-instead-of-ts-for-locales)
   - [Load initial locales client-side](#load-initial-locales-client-side)
@@ -21,7 +22,7 @@
 
 ## Features
 
-- **100% Type-safe**: Locales in TS or JSON, type-safe `t()`, type-safe params
+- **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params
 - **Small**: 1.2 KB gzipped (1.7 KB uncompressed), no dependencies
 - **Simple**: No webpack configuration, no CLI, just pure TypeScript
 - **SSR**: Load only the required locale, SSRed
@@ -96,7 +97,7 @@ export const getStaticProps = getLocaleStaticProps((ctx) => {
 import { useI18n } from '../locales'
 
 function App() {
-  const t = useI18n()
+  const { t } = useI18n()
   return (
     <div>
       <p>{t('hello')}</p>
@@ -107,6 +108,30 @@ function App() {
 ```
 
 ## Examples
+
+### Scoped translations
+
+When you have a lot of keys, you may notice in a file that you always use and such duplicate the same scope:
+
+```ts
+// We always repeat `pages.settings`
+t('pages.settings.title')
+t('pages.settings.description', { identifier })
+t('pages.settings.cta')
+```
+
+We can avoid this using scoped translations with the `scopedT` function from `useI18n`:
+
+```ts
+const { scopedT } = useI18n()
+const t = scopedT('pages.settings')
+
+t('title')
+t('description', { identifier })
+t('ct')
+```
+
+And of course, the scoped key, subsequents keys and params will still be 100% type-safe.
 
 ### Change current locale
 
