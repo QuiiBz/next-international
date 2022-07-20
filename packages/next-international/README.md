@@ -131,7 +131,7 @@ t('description', { identifier })
 t('ct')
 ```
 
-And of course, the scoped key, subsequents keys and params will still be autocompleted.
+And of course, the scoped key, subsequents keys and params will still be 100% type-safe.
 
 ### Change current locale
 
