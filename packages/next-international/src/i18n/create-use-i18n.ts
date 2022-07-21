@@ -19,7 +19,6 @@ export function createUsei18n<LocaleType extends Locale>(I18nContext: Context<Lo
         let value;
 
         if (scope) {
-          console.log(scope, key);
           value = (localeContent[`${scope}.${key}`] || key).toString();
         } else {
           value = (localeContent[key] || key).toString();
