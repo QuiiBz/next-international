@@ -12,6 +12,12 @@ const Home = () => {
       <p>Hello: {t('hello')}</p>
       <p>
         Hello:{' '}
+        {t('test', {
+          param: 'test',
+        })}
+      </p>
+      <p>
+        Hello:{' '}
         {t('welcome', {
           name: 'John',
         })}

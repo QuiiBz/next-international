@@ -1,15 +1,19 @@
+export interface BaseLocale {
+  hello: string;
+}
+
 export type LocaleValue = string | number;
 export type Locale = Record<string, LocaleValue>;
 
 export type LocaleKeys<
-  LocaleType extends Locale,
+  LocaleType extends BaseLocale,
   Scope extends Scopes<LocaleType> | undefined,
   Key extends string = Extract<keyof LocaleType, string>,
 > = Scope extends undefined ? Key : Key extends `${Scope}.${infer Test}` ? Test : never;
 
 export type Locales = Record<string, () => Promise<any>>;
 
-export type LocaleContext<LocaleType extends Locale> = {
+export type LocaleContext<LocaleType extends BaseLocale> = {
   localeContent: LocaleType;
 };
 
@@ -32,10 +36,11 @@ export type ExtractScopes<
     ]
   : [];
 
-export type Scopes<LocaleType extends Locale> = ExtractScopes<Extract<keyof LocaleType, string>>[number];
+export type Scopes<LocaleType extends BaseLocale> = ExtractScopes<Extract<keyof LocaleType, string>>[number];
 
 export type ScopedValue<
-  LocaleType extends Locale,
+  LocaleType extends BaseLocale,
   Scope extends Scopes<LocaleType> | undefined,
   Key extends LocaleKeys<LocaleType, Scope>,
+  // @ts-ignore
 > = Scope extends undefined ? LocaleType[Key] : LocaleType[`${Scope}.${Key}`];
