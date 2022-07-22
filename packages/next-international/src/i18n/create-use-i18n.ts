@@ -1,7 +1,17 @@
 import React, { useContext, Context } from 'react';
-import { Locale, LocaleContext, LocaleKeys, LocaleValue, Params, ParamsObject, ScopedValue, Scopes } from '../types';
+import {
+  Locale,
+  LocaleContext,
+  BaseLocale,
+  LocaleKeys,
+  LocaleValue,
+  Params,
+  ParamsObject,
+  ScopedValue,
+  Scopes,
+} from '../types';
 
-export function createUsei18n<LocaleType extends Locale>(I18nContext: Context<LocaleContext<LocaleType> | null>) {
+export function createUsei18n<LocaleType extends BaseLocale>(I18nContext: Context<LocaleContext<LocaleType> | null>) {
   return function useI18n() {
     const context = useContext(I18nContext);
 

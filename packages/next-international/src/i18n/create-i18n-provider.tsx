@@ -1,15 +1,15 @@
 import React, { Context, ReactElement, ReactNode, useEffect, useState } from 'react';
-import { LocaleContext, Locales, Locale } from '../types';
+import { LocaleContext, Locales, Locale, BaseLocale } from '../types';
 import { useRouter } from 'next/router';
 import { error, warn } from '../helpers/log';
 
-type I18nProviderProps<LocaleType extends Locale> = {
+type I18nProviderProps<LocaleType extends BaseLocale> = {
   locale: LocaleType;
   fallback?: ReactElement;
   children: ReactNode;
 };
 
-export function createI18nProvider<LocaleType extends Locale>(
+export function createI18nProvider<LocaleType extends BaseLocale>(
   I18nContext: Context<LocaleContext<LocaleType> | null>,
   locales: Locales,
 ) {
