@@ -1,21 +1,21 @@
 import React, { Context, ReactElement, ReactNode, useEffect, useState } from 'react';
-import { LocaleContext, Locales, Locale } from '../types';
+import { LocaleContext, Locales, BaseLocale } from '../types';
 import { useRouter } from 'next/router';
 import { error, warn } from '../helpers/log';
 
-type I18nProviderProps<LocaleType extends Locale> = {
-  locale: LocaleType;
+type I18nProviderProps<Locale extends BaseLocale> = {
+  locale: Locale;
   fallback?: ReactElement;
   children: ReactNode;
 };
 
-export function createI18nProvider<LocaleType extends Locale>(
-  I18nContext: Context<LocaleContext<LocaleType> | null>,
+export function createI18nProvider<Locale extends BaseLocale>(
+  I18nContext: Context<LocaleContext<Locale> | null>,
   locales: Locales,
 ) {
-  return function I18nProvider({ locale: baseLocale, fallback, children }: I18nProviderProps<LocaleType>) {
+  return function I18nProvider({ locale: baseLocale, fallback, children }: I18nProviderProps<Locale>) {
     const { locale, defaultLocale, locales: nextLocales } = useRouter();
-    const [clientLocale, setClientLocale] = useState<LocaleType>();
+    const [clientLocale, setClientLocale] = useState<Locale>();
 
     useEffect(() => {
       function checkConfigMatch([first, second]: [[string, string[]], [string, string[]]]) {
@@ -43,7 +43,7 @@ export function createI18nProvider<LocaleType extends Locale>(
       const load = locales[locale] || locales[defaultLocale];
 
       load().then(content => {
-        setClientLocale(content.default as LocaleType);
+        setClientLocale(content.default as Locale);
       });
     }, [locale, defaultLocale]);
 

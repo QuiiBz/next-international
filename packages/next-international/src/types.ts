@@ -1,16 +1,16 @@
 export type LocaleValue = string | number;
-export type Locale = Record<string, LocaleValue>;
+export type BaseLocale = Record<string, LocaleValue>;
 
 export type LocaleKeys<
-  LocaleType extends Locale,
-  Scope extends Scopes<LocaleType> | undefined,
-  Key extends string = Extract<keyof LocaleType, string>,
+  Locale extends BaseLocale,
+  Scope extends Scopes<Locale> | undefined,
+  Key extends string = Extract<keyof Locale, string>,
 > = Scope extends undefined ? Key : Key extends `${Scope}.${infer Test}` ? Test : never;
 
 export type Locales = Record<string, () => Promise<any>>;
 
-export type LocaleContext<LocaleType extends Locale> = {
-  localeContent: LocaleType;
+export type LocaleContext<Locale extends BaseLocale> = {
+  localeContent: Locale;
 };
 
 export type Params<Value extends LocaleValue> = Value extends ''
@@ -32,10 +32,10 @@ export type ExtractScopes<
     ]
   : [];
 
-export type Scopes<LocaleType extends Locale> = ExtractScopes<Extract<keyof LocaleType, string>>[number];
+export type Scopes<Locale extends BaseLocale> = ExtractScopes<Extract<keyof Locale, string>>[number];
 
 export type ScopedValue<
-  LocaleType extends Locale,
-  Scope extends Scopes<LocaleType> | undefined,
-  Key extends LocaleKeys<LocaleType, Scope>,
-> = Scope extends undefined ? LocaleType[Key] : LocaleType[`${Scope}.${Key}`];
+  Locale extends BaseLocale,
+  Scope extends Scopes<Locale> | undefined,
+  Key extends LocaleKeys<Locale, Scope>,
+> = Scope extends undefined ? Locale[Key] : Locale[`${Scope}.${Key}`];

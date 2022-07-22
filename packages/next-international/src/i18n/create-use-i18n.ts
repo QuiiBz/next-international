@@ -1,7 +1,16 @@
 import React, { useContext, Context } from 'react';
-import { Locale, LocaleContext, LocaleKeys, LocaleValue, Params, ParamsObject, ScopedValue, Scopes } from '../types';
+import {
+  BaseLocale,
+  LocaleContext,
+  LocaleKeys,
+  LocaleValue,
+  Params,
+  ParamsObject,
+  ScopedValue,
+  Scopes,
+} from '../types';
 
-export function createUsei18n<LocaleType extends Locale>(I18nContext: Context<LocaleContext<LocaleType> | null>) {
+export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<LocaleContext<Locale> | null>) {
   return function useI18n() {
     const context = useContext(I18nContext);
 
@@ -9,12 +18,12 @@ export function createUsei18n<LocaleType extends Locale>(I18nContext: Context<Lo
       throw new Error('`useI18n` must be used inside `I18nProvider`');
     }
 
-    function createT<Scope extends Scopes<LocaleType> | undefined>(scope: Scope) {
+    function createT<Scope extends Scopes<Locale> | undefined>(scope: Scope) {
       return function t<
-        Key extends LocaleKeys<LocaleType, Scope>,
-        Value extends LocaleValue = ScopedValue<LocaleType, Scope, Key>,
+        Key extends LocaleKeys<Locale, Scope>,
+        Value extends LocaleValue = ScopedValue<Locale, Scope, Key>,
       >(key: Key, ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value>]) {
-        const { localeContent } = context as LocaleContext<LocaleType>;
+        const { localeContent } = context as LocaleContext<Locale>;
 
         let value;
 
@@ -38,7 +47,7 @@ export function createUsei18n<LocaleType extends Locale>(I18nContext: Context<Lo
       };
     }
 
-    function scopedT<Scope extends Scopes<LocaleType>>(scope: Scope) {
+    function scopedT<Scope extends Scopes<Locale>>(scope: Scope) {
       return createT(scope);
     }
 
