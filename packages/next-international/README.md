@@ -16,7 +16,7 @@
   - [Scoped translations](#scoped-translations)
   - [Change current locale](#change-current-locale)
   - [Use JSON files instead of TS for locales](#use-json-files-instead-of-ts-for-locales)
-  - [Explicitely typing the locales](#explicitely-typing-the-locales)
+  - [Explicitly typing the locales](#explicitly-typing-the-locales)
   - [Load initial locales client-side](#load-initial-locales-client-side)
   - [Type-safety on locales files](#type-safety-on-locales-files)
 - [License](#license)
@@ -167,7 +167,7 @@ function App() {
 
 Currently, this breaks the parameters type-safety, so we recommend using the TS syntax. See this issue: https://github.com/microsoft/TypeScript/issues/32063.
 
-You can still get type-safety by [explicitely typing the locales](#explicitely-typing-the-locales)
+You can still get type-safety by [explicitly typing the locales](#explicitly-typing-the-locales)
 
 ```ts
 // locales/index.ts
@@ -184,9 +184,9 @@ export const {
 });
 ```
 
-### Explicitely typing the locales
+### Explicitly typing the locales
 
-If you want to explicitely type the locale, you can create an interface that extends `BaseLocale` and use it as the generic in `createI18n`:
+If you want to explicitly type the locale, you can create an interface that extends `BaseLocale` and use it as the generic in `createI18n`:
 
 ```ts
 // locales/index.ts
