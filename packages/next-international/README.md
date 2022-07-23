@@ -16,6 +16,7 @@
   - [Scoped translations](#scoped-translations)
   - [Change current locale](#change-current-locale)
   - [Use JSON files instead of TS for locales](#use-json-files-instead-of-ts-for-locales)
+  - [Explicitly typing the locales](#explicitly-typing-the-locales)
   - [Load initial locales client-side](#load-initial-locales-client-side)
   - [Type-safety on locales files](#type-safety-on-locales-files)
 - [License](#license)
@@ -166,6 +167,8 @@ function App() {
 
 Currently, this breaks the parameters type-safety, so we recommend using the TS syntax. See this issue: https://github.com/microsoft/TypeScript/issues/32063.
 
+You can still get type-safety by [explicitly typing the locales](#explicitly-typing-the-locales)
+
 ```ts
 // locales/index.ts
 import { createI18n } from 'next-international'
@@ -176,6 +179,27 @@ export const {
   I18nProvider,
   getLocaleStaticProps,
 } = createI18n<typeof Locale>({
+  en: () => import('./en.json'),
+  fr: () => import('./fr.json'),
+});
+```
+
+### Explicitly typing the locales
+
+If you want to explicitly type the locale, you can create an interface that extends `BaseLocale` and use it as the generic in `createI18n`:
+
+```ts
+// locales/index.ts
+import { createI18n, BaseLocale } from 'next-international'
+
+interface Locale extends BaseLocale {
+  'hello': string
+  'welcome': string
+}
+
+export const {
+  ...
+} = createI18n<Locale>({
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
 });
