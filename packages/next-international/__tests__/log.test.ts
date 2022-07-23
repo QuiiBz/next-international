@@ -7,7 +7,7 @@ describe('log', () => {
 
     warn('This is a warn');
 
-    expect(console.warn).toHaveBeenCalledOnce();
+    expect(console.warn).toHaveBeenCalledWith('[next-international] This is a warn');
     spy.mockClear();
   });
 
@@ -16,7 +16,7 @@ describe('log', () => {
 
     error('This is an error');
 
-    expect(console.error).toHaveBeenCalledOnce();
+    expect(console.error).toHaveBeenCalledWith('[next-international] This is an error');
     spy.mockClear();
   });
 });
