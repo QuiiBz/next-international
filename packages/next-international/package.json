@@ -1,8 +1,8 @@
 {
   "name": "next-international",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Type-safe internationalization (i18n) for Next.js",
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "keywords": [
     "next",
@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/QuiiBz/next-international#readme",
   "scripts": {
-    "build": "tsup src/index.tsx --dts --format esm --minify",
-    "watch": "tsup src/index.tsx --dts --format esm --watch"
+    "build": "tsup src/index.tsx --dts --minify",
+    "watch": "tsup src/index.tsx --dts --watch"
   },
   "devDependencies": {
     "@types/react": "^18.0.15",
