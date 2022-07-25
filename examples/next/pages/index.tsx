@@ -30,6 +30,7 @@ const Home = () => {
         })}
       </p>
       <p>{t2('and.more.test')}</p>
+      <p>{t('missing.translation.in.fr')}</p>
       <button type="button" onClick={() => changeLocale('en')}>
         EN
       </button>

@@ -8,4 +8,5 @@ export default {
   'namespace.subnamespace.hello.world': 'Hello World!',
   'namespace.subnamespace.weather': "Today's weather is {weather}",
   'namespace.subnamespace.user.description': '{name} is {years} years old',
+  'only.exists.in.en': 'EN locale',
 } as const;

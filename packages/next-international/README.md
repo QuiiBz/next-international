@@ -15,6 +15,7 @@
 - [Examples](#examples)
   - [Scoped translations](#scoped-translations)
   - [Change current locale](#change-current-locale)
+  - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
   - [Use JSON files instead of TS for locales](#use-json-files-instead-of-ts-for-locales)
   - [Explicitly typing the locales](#explicitly-typing-the-locales)
   - [Load initial locales client-side](#load-initial-locales-client-side)
@@ -161,6 +162,22 @@ function App() {
     <button onClick={() => changeLocale('fr')}>French</button>
   )
 }
+```
+
+### Fallback locale for missing translations
+
+It's common to have missing translations in an application. By default, next-international outputs the key when no translation is found for the current locale, to avoid sending to users uncessary data.
+
+You can provide a fallback locale that will be used for all missing translations:
+
+```tsx
+// pages/_app.tsx
+import { I18nProvider } from '../locales'
+import en from '../locales/en'
+
+<I18nProvider locale={pageProps.locale} fallbackLocale={en}>
+  ...
+</I18nProvider>
 ```
 
 ### Use JSON files instead of TS for locales

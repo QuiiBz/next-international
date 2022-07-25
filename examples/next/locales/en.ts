@@ -8,4 +8,5 @@ export default {
   'scope.more.test': 'A scope',
   'scope.more.param': 'A scope with {param}',
   'scope.more.and.more.test': 'A scope',
+  'missing.translation.in.fr': 'This should work',
 } as const;
