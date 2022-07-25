@@ -3,8 +3,8 @@ import type { GetStaticProps } from 'next';
 import { error } from '../helpers/log';
 
 export function createGetLocaleStaticProps(locales: Locales) {
-  return function getLocaleStaticProps<T>(initialGetStaticProps?: GetStaticProps<T>) {
-    const getStaticProps: GetStaticProps<T> = async context => {
+  return function getLocaleStaticProps<T>(initialGetStaticProps?: GetStaticProps<T>): GetStaticProps<T> {
+    return async context => {
       const initialResult = await initialGetStaticProps?.(context);
 
       // No current locales means that `defaultLocale` does not exists
@@ -24,7 +24,5 @@ export function createGetLocaleStaticProps(locales: Locales) {
         },
       };
     };
-
-    return getStaticProps;
   };
 }
