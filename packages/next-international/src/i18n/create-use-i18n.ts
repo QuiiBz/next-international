@@ -25,14 +25,7 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
       >(key: Key, ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value>]) {
         const { localeContent } = context as LocaleContext<Locale>;
 
-        let value;
-
-        if (scope) {
-          value = (localeContent[`${scope}.${key}`] || key).toString();
-        } else {
-          value = (localeContent[key] || key).toString();
-        }
-
+        let value = ((scope ? localeContent[`${scope}.${key}`] : localeContent[key]) || key).toString();
         const paramObject = params[0];
 
         if (!paramObject) {

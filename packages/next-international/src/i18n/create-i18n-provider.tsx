@@ -5,7 +5,7 @@ import { error, warn } from '../helpers/log';
 
 type I18nProviderProps<Locale extends BaseLocale> = {
   locale: Locale;
-  fallback?: ReactElement;
+  fallback?: ReactElement | null;
   children: ReactNode;
 };
 
@@ -13,7 +13,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
   I18nContext: Context<LocaleContext<Locale> | null>,
   locales: Locales,
 ) {
-  return function I18nProvider({ locale: baseLocale, fallback, children }: I18nProviderProps<Locale>) {
+  return function I18nProvider({ locale: baseLocale, fallback = null, children }: I18nProviderProps<Locale>) {
     const { locale, defaultLocale, locales: nextLocales } = useRouter();
     const [clientLocale, setClientLocale] = useState<Locale>();
 
@@ -48,17 +48,15 @@ export function createI18nProvider<Locale extends BaseLocale>(
     }, [locale, defaultLocale]);
 
     if (!locale || !defaultLocale) {
-      error(`'i18n.defaultLocale' not defined in 'next.config.js'`);
-      return null;
+      return error(`'i18n.defaultLocale' not defined in 'next.config.js'`);
     }
 
     if (!nextLocales) {
-      error(`'i18n.locales' not defined in 'next.config.js'`);
-      return null;
+      return error(`'i18n.locales' not defined in 'next.config.js'`);
     }
 
     if (!clientLocale && !baseLocale) {
-      return fallback || null;
+      return fallback;
     }
 
     return (
