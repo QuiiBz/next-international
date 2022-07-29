@@ -21,7 +21,11 @@ describe('getLocaleStaticProps', () => {
       fr: () => import('./utils/fr'),
     });
 
-    const props = getLocaleStaticProps();
+    const props = await getLocaleStaticProps()({
+      locale: 'en',
+      defaultLocale: 'en',
+      locales: ['en', 'fr'],
+    });
 
     expect(props).toEqual({
       props: {
@@ -30,17 +34,21 @@ describe('getLocaleStaticProps', () => {
     });
   });
 
-  it('should return default locale with existing getStaticProps', () => {
+  it('should return default locale with existing getStaticProps', async () => {
     const { getLocaleStaticProps } = createI18n<typeof import('./utils/en').default>({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
 
-    const props = getLocaleStaticProps(() => ({
+    const props = await getLocaleStaticProps(() => ({
       props: {
         hello: 'world',
       },
-    }));
+    }))({
+      locale: 'en',
+      defaultLocale: 'en',
+      locales: ['en', 'fr'],
+    });
 
     expect(props).toEqual({
       props: {
