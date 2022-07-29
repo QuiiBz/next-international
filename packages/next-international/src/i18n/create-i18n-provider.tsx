@@ -46,9 +46,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
         return;
       }
 
-      const load = locales[locale] || locales[defaultLocale];
-
-      load().then(content => {
+      locales[locale]().then(content => {
         setClientLocale(content.default as Locale);
       });
     }, [locale, defaultLocale]);

@@ -6,11 +6,20 @@ import en from './utils/en';
 
 beforeEach(() => {
   vi.mock('next/router', () => ({
-    useRouter: vi.fn().mockImplementation(() => ({
-      locale: 'en',
-      defaultLocale: 'en',
-      locales: ['en', 'fr'],
-    })),
+    useRouter: vi
+      .fn()
+      .mockImplementationOnce(() => ({
+        locales: ['en', 'fr'],
+      }))
+      .mockImplementationOnce(() => ({
+        locale: 'en',
+        defaultLocale: 'en',
+      }))
+      .mockImplementation(() => ({
+        locale: 'en',
+        defaultLocale: 'en',
+        locales: ['en', 'fr'],
+      })),
   }));
 });
 
@@ -19,7 +28,55 @@ afterEach(() => {
 });
 
 describe('useI18n', () => {
-  it('should thrown if not used inside I18nProvider', () => {
+  it('should log error if locale not set in next.config.js', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
+    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+      en: () => import('./utils/en'),
+      fr: () => import('./utils/fr'),
+    });
+
+    function App() {
+      const { t } = useI18n();
+
+      return <p>{t('hello')}</p>;
+    }
+
+    render(
+      <I18nProvider locale={en}>
+        <App />
+      </I18nProvider>,
+    );
+    expect(console.error).toHaveBeenCalledWith(
+      "[next-international] 'i18n.defaultLocale' not defined in 'next.config.js'",
+    );
+
+    spy.mockReset();
+  });
+
+  it('should log error if locales not set in next.config.js', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
+    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+      en: () => import('./utils/en'),
+      fr: () => import('./utils/fr'),
+    });
+
+    function App() {
+      const { t } = useI18n();
+
+      return <p>{t('hello')}</p>;
+    }
+
+    render(
+      <I18nProvider locale={en}>
+        <App />
+      </I18nProvider>,
+    );
+    expect(console.error).toHaveBeenCalledWith("[next-international] 'i18n.locales' not defined in 'next.config.js'");
+
+    spy.mockReset();
+  });
+
+  it('should throw if not used inside I18nProvider', () => {
     const { useI18n } = createI18n<typeof import('./utils/en').default>({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
