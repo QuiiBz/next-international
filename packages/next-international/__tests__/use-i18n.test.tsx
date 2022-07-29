@@ -19,6 +19,21 @@ afterEach(() => {
 });
 
 describe('useI18n', () => {
+  it('should thrown if not used inside I18nProvider', () => {
+    const { useI18n } = createI18n<typeof import('./utils/en').default>({
+      en: () => import('./utils/en'),
+      fr: () => import('./utils/fr'),
+    });
+
+    function App() {
+      const { t } = useI18n();
+
+      return <p>{t('hello')}</p>;
+    }
+
+    expect(() => render(<App />)).toThrowError('`useI18n` must be used inside `I18nProvider`');
+  });
+
   it('should translate', async () => {
     const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
       en: () => import('./utils/en'),
