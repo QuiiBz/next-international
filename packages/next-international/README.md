@@ -30,7 +30,7 @@
 - **Simple**: No webpack configuration, no CLI, just pure TypeScript
 - **SSR**: Load only the required locale, SSRed
 
-> **Note**: You can now build on top of the types used by next-international using [international-types](./packages/international-types)!
+> **Note**: You can now build on top of the types used by next-international using [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types)!
 
 ## Usage
 
