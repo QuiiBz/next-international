@@ -1,8 +1,8 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-white.png">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/logo-black.png" />
-    <img alt="" height="100px" src="./assets/logo-white.png">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/QuiiBz/next-international/blob/main/assets/logo-white.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/QuiiBz/next-international/blob/main/assets/logo-black.png" />
+    <img alt="" height="100px" src="https://github.com/QuiiBz/next-international/blob/main/assets/logo-white.png">
   </picture>
   <br />
   Type-safe internationalization (i18n) utility types
