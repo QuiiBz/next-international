@@ -1,6 +1,6 @@
 {
-  "name": "next-i18n",
-  "version": "0.1.0",
+  "name": "example-next",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "next": "12.2.2",
-    "next-international": "workspace:*",
+    "next-international": "workspace:0.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

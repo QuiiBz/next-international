@@ -1,5 +1,6 @@
 import React, { Context, ReactElement, ReactNode, useEffect, useState } from 'react';
-import { LocaleContext, Locales, BaseLocale } from '../types';
+import type { LocaleContext, Locales } from '../types';
+import type { BaseLocale } from 'international-types';
 import { useRouter } from 'next/router';
 import { error, warn } from '../helpers/log';
 

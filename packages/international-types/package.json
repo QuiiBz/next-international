@@ -1,0 +1,27 @@
+{
+  "name": "international-types",
+  "version": "0.1.1",
+  "description": "Type-safe internationalization (i18n) utility types",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "i18n",
+    "types",
+    "typescript",
+    "translate",
+    "internationalization"
+  ],
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuiiBz/next-international.git"
+  },
+  "bugs": {
+    "url": "https://github.com/QuiiBz/next-international/issues"
+  },
+  "homepage": "https://github.com/QuiiBz/next-international#readme",
+  "scripts": {
+    "build": "tsc --declaration --emitDeclarationOnly --outDir dist index.ts"
+  }
+}

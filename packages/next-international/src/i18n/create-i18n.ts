@@ -1,5 +1,6 @@
 import React, { createContext } from 'react';
-import type { Locales, BaseLocale, LocaleContext } from '../types';
+import type { Locales, LocaleContext } from '../types';
+import type { BaseLocale } from 'international-types';
 import { createDefineLocale } from './create-define-locale';
 import { createGetLocaleStaticProps } from './create-get-locale-static-props';
 import { createI18nProvider } from './create-i18n-provider';

@@ -1,14 +1,14 @@
 import React, { useContext, Context } from 'react';
-import {
+import type {
   BaseLocale,
-  LocaleContext,
   LocaleKeys,
   LocaleValue,
   Params,
   ParamsObject,
   ScopedValue,
   Scopes,
-} from '../types';
+} from 'international-types';
+import type { LocaleContext } from '../types';
 
 export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<LocaleContext<Locale> | null>) {
   return function useI18n() {
