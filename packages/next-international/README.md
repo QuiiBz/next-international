@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-white.png">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/logo-black.png" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/QuiiBz/next-international/blob/feat/introduce-international-types/assets/logo-white.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/QuiiBz/next-international/blob/feat/introduce-international-types/assets/logo-black.png" />
     <img alt="" height="100px" src="./assets/logo-white.png">
   </picture>
   <br />
@@ -265,7 +265,7 @@ export default defineLocale({
 
 ### Use the types for my own library
 
-We also provide a separate package called [international-types](./packages/international-types) that contains the utility types for next-international. You can build a library on top of it and get the same awesome type-safety.
+We also provide a separate package called [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types) that contains the utility types for next-international. You can build a library on top of it and get the same awesome type-safety.
 
 ## License
 
