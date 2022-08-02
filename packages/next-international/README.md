@@ -20,6 +20,7 @@
   - [Explicitly typing the locales](#explicitly-typing-the-locales)
   - [Load initial locales client-side](#load-initial-locales-client-side)
   - [Type-safety on locales files](#type-safety-on-locales-files)
+  - [Use the types for my own library](#use-the-types-for-my-own-library)
 - [License](#license)
 
 ## Features
@@ -28,6 +29,8 @@
 - **Small**: 1.2 KB gzipped (1.7 KB uncompressed), no dependencies
 - **Simple**: No webpack configuration, no CLI, just pure TypeScript
 - **SSR**: Load only the required locale, SSRed
+
+> **Note**: You can now build on top of the types used by next-international using [international-types](./packages/international-types)!
 
 ## Usage
 
@@ -259,6 +262,10 @@ export default defineLocale({
   'welcome': 'Bonjour {name}!',
 })
 ```
+
+### Use the types for my own library
+
+We also provide a separate package called [international-types](./packages/international-types) that contains the utility types for next-international. You can build a library on top of it and get the same awesome type-safety.
 
 ## License
 
