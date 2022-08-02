@@ -34,5 +34,8 @@
   "peerDependencies": {
     "next": "12.x | 11.x",
     "react": "18.x | 17.x"
+  },
+  "dependencies": {
+    "international-types": "workspace:^0.1.0"
   }
 }
