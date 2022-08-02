@@ -1,6 +1,6 @@
 {
   "name": "international-types",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Type-safe internationalization (i18n) utility types",
   "types": "dist/index.d.ts",
   "keywords": [
@@ -11,7 +11,7 @@
     "internationalization"
   ],
   "files": [
-    "index.d.ts"
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/QuiiBz/next-international/issues"
   },
-  "homepage": "https://github.com/QuiiBz/next-international#readme"
+  "homepage": "https://github.com/QuiiBz/next-international#readme",
+  "scripts": {
+    "build": "tsc --declaration --emitDeclarationOnly --outDir dist index.ts"
+  }
 }
