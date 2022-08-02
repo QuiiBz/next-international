@@ -1,4 +1,4 @@
-import { Locales } from '../types';
+import type { Locales } from '../types';
 import type { GetStaticProps } from 'next';
 import { error } from '../helpers/log';
 
