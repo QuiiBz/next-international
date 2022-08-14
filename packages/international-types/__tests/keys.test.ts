@@ -3,7 +3,7 @@ import type { LocaleKeys } from '../';
 
 describe('keys', () => {
   it('should return the keys', () => {
-    const keys = {} as LocaleKeys<
+    const value = {} as LocaleKeys<
       {
         hello: 'Hello';
         'hello.world': 'Hello World';
@@ -11,11 +11,11 @@ describe('keys', () => {
       undefined
     >;
 
-    tsd.expectType<'hello' | 'hello.world'>(keys);
+    tsd.expectType<'hello' | 'hello.world'>(value);
   });
 
   it('should return the keys with scope', () => {
-    const keys = {} as LocaleKeys<
+    const value = {} as LocaleKeys<
       {
         hello: 'Hello';
         'scope.demo': 'Nested scope';
@@ -24,12 +24,11 @@ describe('keys', () => {
       'scope'
     >;
 
-    tsd.expectType<'demo' | 'another.demo'>(keys);
-    tsd.expectType<'demo' | 'another.demo'>(keys);
+    tsd.expectType<'demo' | 'another.demo'>(value);
   });
 
   it('should return the keys with nested scope', () => {
-    const keys = {} as LocaleKeys<
+    const value = {} as LocaleKeys<
       {
         hello: 'Hello';
         'scope.nested.demo': 'Nested scope';
@@ -38,7 +37,6 @@ describe('keys', () => {
       'scope.nested'
     >;
 
-    tsd.expectType<'demo' | 'another.demo'>(keys);
-    tsd.expectType<'demo' | 'another.demo'>(keys);
+    tsd.expectType<'demo' | 'another.demo'>(value);
   });
 });

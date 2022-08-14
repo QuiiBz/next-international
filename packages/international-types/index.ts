@@ -16,7 +16,7 @@ export type Params<Value extends LocaleValue> = Value extends ''
 
 export type ParamsObject<Value extends LocaleValue> = Record<Params<Value>[number], LocaleValue>;
 
-export type ExtractScopes<
+type ExtractScopes<
   Value extends string,
   Prev extends string | undefined = undefined,
 > = Value extends `${infer Head}.${infer Tail}`
