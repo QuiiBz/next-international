@@ -1,5 +1,5 @@
 import * as tsd from 'vite-plugin-vitest-typescript-assert/tsd';
-import type { Params } from '../dist';
+import type { Params } from '../';
 
 describe('param', () => {
   it('should extract param', () => {
