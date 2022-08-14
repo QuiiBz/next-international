@@ -25,6 +25,7 @@ importers:
       react-dom: 18.2.0
       typescript: ^4.7.4
       vite: ^3.0.2
+      vite-plugin-vitest-typescript-assert: ^1.1.4
       vitest: ^0.18.1
     devDependencies:
       '@testing-library/jest-dom': 5.16.4
@@ -48,6 +49,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       typescript: 4.7.4
       vite: 3.0.2
+      vite-plugin-vitest-typescript-assert: 1.1.4_7l6hxwasnum7dmzcrweg72dsj4
       vitest: 0.18.1_c8@7.12.0+jsdom@20.0.0
 
   examples/next:
@@ -4037,6 +4039,17 @@ packages:
     engines: {node: '>= 4.0.0'}
     dev: true
 
+  /unleashed-typescript/1.3.0_typescript@4.7.4:
+    resolution: {integrity: sha512-ORMwdtBlEQTD4Dl+HkPVfwnIG5wKBqQn72INfCHGN8dgZ3AFKwv1m7a4tL1JEGLwCUzFVH3sq/nDxPjDmvlWwg==}
+    engines: {node: '>=12', pnpm: '>=6'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      typescript: '*'
+    dependencies:
+      typescript: 4.7.4
+    dev: true
+
   /update-browserslist-db/1.0.5_browserslist@4.21.2:
     resolution: {integrity: sha512-dteFFpCyvuDdr9S/ff1ISkKt/9YZxKjI9WlRR99c180GaztJtRa/fn18FdxGVKVsnPY7/a/FDN68mcvUmP4U7Q==}
     hasBin: true
@@ -4072,6 +4085,20 @@ packages:
       '@jridgewell/trace-mapping': 0.3.14
       '@types/istanbul-lib-coverage': 2.0.4
       convert-source-map: 1.8.0
+    dev: true
+
+  /vite-plugin-vitest-typescript-assert/1.1.4_7l6hxwasnum7dmzcrweg72dsj4:
+    resolution: {integrity: sha512-ZJcjNwMmYqlxtLw6esH4upjyU5cizvOn347cvgFYqvJRIR676vEe6cKZLF2WQMgKJ4sea2w2TaY3wmx9nJBynw==}
+    engines: {node: '>=12', pnpm: '>=6'}
+    peerDependencies:
+      typescript: '*'
+      vitest: '*'
+    dependencies:
+      magic-string: 0.26.2
+      micromatch: 4.0.5
+      typescript: 4.7.4
+      unleashed-typescript: 1.3.0_typescript@4.7.4
+      vitest: 0.18.1_c8@7.12.0+jsdom@20.0.0
     dev: true
 
   /vite/3.0.2:
