@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { getLocaleProps, useChangeLocale, useI18n } from '../locales';
 
 const Home = () => {
@@ -9,7 +9,7 @@ const Home = () => {
 
   return (
     <div>
-      <h1>SSG</h1>
+      <h1>SSR</h1>
       <p>Hello: {t('hello')}</p>
       <p>
         Hello:{' '}
@@ -43,6 +43,6 @@ const Home = () => {
 };
 
 // Comment this to disable SSR of initial locale
-export const getStaticProps: GetStaticProps = getLocaleProps();
+export const getServerSideProps: GetServerSideProps = getLocaleProps();
 
 export default Home;
