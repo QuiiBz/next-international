@@ -1,11 +1,13 @@
 import type { Locales } from '../types';
-import type { GetStaticProps } from 'next';
+import type { GetStaticProps, GetServerSideProps } from 'next';
 import { error } from '../helpers/log';
 
-export function createGetLocaleStaticProps(locales: Locales) {
-  return function getLocaleStaticProps<T>(initialGetStaticProps?: GetStaticProps<T>): GetStaticProps<T> {
-    return async context => {
-      const initialResult = await initialGetStaticProps?.(context);
+export function createGetLocaleProps(locales: Locales) {
+  return function getLocaleProps<T, GetProps extends GetStaticProps<T> | GetServerSideProps<T>>(
+    initialGetProps?: GetProps,
+  ) {
+    return async (context: any) => {
+      const initialResult = await initialGetProps?.(context);
 
       // No current locales means that `defaultLocale` does not exists
       if (!context.locale) {

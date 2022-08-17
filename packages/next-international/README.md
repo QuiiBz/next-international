@@ -49,7 +49,7 @@ import type Locale from './en'
 export const {
   useI18n,
   I18nProvider,
-  getLocaleStaticProps,
+  getLocaleProps,
 } = createI18n<typeof Locale>({
   en: () => import('./en'),
   fr: () => import('./fr'),
@@ -81,14 +81,28 @@ function App({ Component, pageProps }) {
 }
 ```
 
-4. Add `getLocaleStaticProps` to your pages, or wrap your existing `getStaticProps` (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
+4. Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps`  (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
 
 ```ts
 // locales/index.tsx
-export const getStaticProps = getLocaleStaticProps()
+export const getStaticProps = getLocalProps()
 
 // or with an existing `getStaticProps` function:
-export const getStaticProps = getLocaleStaticProps((ctx) => {
+export const getStaticProps = getLocaleProps((ctx) => {
+  // your existing code
+  return {
+    ...
+  }
+})
+```
+
+If you already have `getServerSideProps` on this page, you can't use `getStaticProps`. In this case, you can still use `getLocaleProps` the same way:
+
+```ts
+export const getServerSideProps = getLocalProps()
+
+// or with an existing `getServerSideProps` function:
+export const getServerSideProps = getLocaleProps((ctx) => {
   // your existing code
   return {
     ...
@@ -197,7 +211,7 @@ import type Locale from './en.json'
 export const {
   useI18n,
   I18nProvider,
-  getLocaleStaticProps,
+  getLocaleProps,
 } = createI18n<typeof Locale>({
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
@@ -229,7 +243,7 @@ export const {
 
 > **Warning**: This should not be used unless you know what you're doing and what that implies.
 
-If for x reason you don't want to SSR the initial locale, you can load it on the client. Simply remove the `getLocaleStaticProps` from your pages.
+If for x reason you don't want to SSR the initial locale, you can load it on the client. Simply remove the `getLocaleProps` from your pages.
 
 You can also provide a fallback component while waiting for the initial locale to load inside `I18nProvider`:
 

@@ -2,15 +2,15 @@ import { describe, expect, it, vi } from 'vitest';
 import { createI18n } from '../src';
 import en from './utils/en';
 
-describe('getLocaleStaticProps', () => {
+describe('getLocaleProps', () => {
   it('should error if locale is not defined', async () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-    const { getLocaleStaticProps } = createI18n<typeof import('./utils/en').default>({
+    const { getLocaleProps } = createI18n<typeof import('./utils/en').default>({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
 
-    const props = await getLocaleStaticProps()({
+    const props = await getLocaleProps()({
       locales: ['en', 'fr'],
     });
 
@@ -24,12 +24,12 @@ describe('getLocaleStaticProps', () => {
   });
 
   it('should return default locale', async () => {
-    const { getLocaleStaticProps } = createI18n<typeof import('./utils/en').default>({
+    const { getLocaleProps } = createI18n<typeof import('./utils/en').default>({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
 
-    const props = await getLocaleStaticProps()({
+    const props = await getLocaleProps()({
       locale: 'en',
       defaultLocale: 'en',
       locales: ['en', 'fr'],
@@ -43,12 +43,12 @@ describe('getLocaleStaticProps', () => {
   });
 
   it('should return default locale with existing getStaticProps', async () => {
-    const { getLocaleStaticProps } = createI18n<typeof import('./utils/en').default>({
+    const { getLocaleProps } = createI18n<typeof import('./utils/en').default>({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
 
-    const props = await getLocaleStaticProps(() => ({
+    const props = await getLocaleProps(() => ({
       props: {
         hello: 'world',
       },

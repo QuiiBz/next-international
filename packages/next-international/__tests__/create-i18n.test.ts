@@ -10,6 +10,9 @@ describe('createI18n', () => {
     expect(result.getLocaleStaticProps).toBeDefined();
     expect(result.getLocaleStaticProps).toBeInstanceOf(Function);
 
+    expect(result.getLocaleProps).toBeDefined();
+    expect(result.getLocaleProps).toBeInstanceOf(Function);
+
     expect(result.useChangeLocale).toBeDefined();
     expect(result.useChangeLocale).toBeInstanceOf(Function);
 
