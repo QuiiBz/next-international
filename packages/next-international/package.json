@@ -32,8 +32,8 @@
     "tsup": "^6.1.3"
   },
   "peerDependencies": {
-    "next": "12.x | 11.x",
-    "react": "18.x | 17.x"
+    "next": "^12.0.0 || ^11.0.0",
+    "react": "^18.0.0 || ^17.0.0"
   },
   "dependencies": {
     "international-types": "0.1.1"
