@@ -85,7 +85,7 @@ function App({ Component, pageProps }) {
 
 ```ts
 // locales/index.tsx
-export const getStaticProps = getLocalProps()
+export const getStaticProps = getLocaleProps()
 
 // or with an existing `getStaticProps` function:
 export const getStaticProps = getLocaleProps((ctx) => {
@@ -99,7 +99,7 @@ export const getStaticProps = getLocaleProps((ctx) => {
 If you already have `getServerSideProps` on this page, you can't use `getStaticProps`. In this case, you can still use `getLocaleProps` the same way:
 
 ```ts
-export const getServerSideProps = getLocalProps()
+export const getServerSideProps = getLocaleProps()
 
 // or with an existing `getServerSideProps` function:
 export const getServerSideProps = getLocaleProps((ctx) => {
