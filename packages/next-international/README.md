@@ -121,6 +121,7 @@ function App() {
     <div>
       <p>{t('hello')}</p>
       <p>{t('welcome', { name: 'John' })}</p>
+      <p>{t('welcome', { name: <strong>John</strong> })}</p>
     </div>
   )
 }

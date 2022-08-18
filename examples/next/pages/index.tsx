@@ -18,9 +18,22 @@ const Home = () => {
         })}
       </p>
       <p>
+        Hello (with React components):{' '}
+        {t('welcome', {
+          name: <strong>John</strong>,
+        })}
+      </p>
+      <p>
         Hello:{' '}
         {t('about.you', {
           age: '23',
+          name: 'Doe',
+        })}
+      </p>
+      <p>
+        Hello (with React components):{' '}
+        {t('about.you', {
+          age: <strong>23</strong>,
           name: 'Doe',
         })}
       </p>
@@ -28,6 +41,11 @@ const Home = () => {
       <p>
         {t2('param', {
           param: 'test',
+        })}
+      </p>
+      <p>
+        {t2('param', {
+          param: <strong>test</strong>,
         })}
       </p>
       <p>{t2('and.more.test')}</p>

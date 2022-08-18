@@ -18,6 +18,12 @@ const Home = () => {
         })}
       </p>
       <p>
+        Hello (with React components):{' '}
+        {t('welcome', {
+          name: <strong>John</strong>,
+        })}
+      </p>
+      <p>
         Hello:{' '}
         {t('about.you', {
           age: '23',
