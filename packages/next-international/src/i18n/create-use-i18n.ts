@@ -37,7 +37,7 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
         }
 
         for (const [param, paramValue] of Object.entries(paramObject as Locale)) {
-          value = value.toString().replaceAll(`{${param}}`, paramValue.toString());
+          value = value.toString().replace(new RegExp(`{${param}}`, 'g'), paramValue.toString());
         }
 
         return value;
