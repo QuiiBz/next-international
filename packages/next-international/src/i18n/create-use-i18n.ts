@@ -8,7 +8,7 @@ import type {
   ScopedValue,
   Scopes,
 } from 'international-types';
-import type { LocaleContext } from '../types';
+import type { LocaleContext, ReactParamsObject, LocaleMap } from '../types';
 
 export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<LocaleContext<Locale> | null>) {
   return function useI18n() {
@@ -19,13 +19,21 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
     }
 
     function createT<Scope extends Scopes<Locale> | undefined>(scope: Scope) {
-      return function t<
-        Key extends LocaleKeys<Locale, Scope>,
-        Value extends LocaleValue = ScopedValue<Locale, Scope, Key>,
-      >(key: Key, ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value>]) {
+      function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
+        key: Key,
+        ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value>]
+      ): string;
+      function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
+        key: Key,
+        ...params: Params<Value>['length'] extends 0 ? [] : [ReactParamsObject<Value>]
+      ): React.ReactNode;
+      function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
+        key: Key,
+        ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value> | ReactParamsObject<Value>]
+      ) {
         const { localeContent, fallbackLocale } = context as LocaleContext<Locale>;
 
-        let value = (
+        const value = (
           (scope ? localeContent[`${scope}.${key}`] : localeContent[key]) ||
           (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]) ||
           key
@@ -36,12 +44,31 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
           return value;
         }
 
-        for (const [param, paramValue] of Object.entries(paramObject as Locale)) {
-          value = value.toString().replace(new RegExp(`{${param}}`, 'g'), paramValue.toString());
+        let isString = true;
+        const result = value.split(/({[^}]*})/).map((part, index) => {
+          const match = part.match(/{(.*)}/);
+          if (match) {
+            const param = match[1] as keyof Locale;
+            const paramValue = (paramObject as LocaleMap<Locale>)[param];
+            if (typeof paramValue !== 'string') {
+              isString = false;
+            }
+            if (React.isValidElement(paramValue)) {
+              return React.cloneElement(paramValue, { key: `${String(param)}-${index}` });
+            } else {
+              return paramValue as React.ReactNode;
+            }
+          }
+          // if there's no match - it's not a variable and just a normal string
+          return part;
+        });
+        if (isString) {
+          return result.join('');
+        } else {
+          return result;
         }
-
-        return value;
-      };
+      }
+      return t;
     }
 
     function scopedT<Scope extends Scopes<Locale>>(scope: Scope) {
