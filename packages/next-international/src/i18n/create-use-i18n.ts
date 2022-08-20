@@ -1,4 +1,4 @@
-import React, { useContext, Context } from 'react';
+import React, { useContext, Context, isValidElement, cloneElement, ReactNode } from 'react';
 import type {
   BaseLocale,
   LocaleKeys,
@@ -45,29 +45,28 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
         }
 
         let isString = true;
+
         const result = value.split(/({[^}]*})/).map((part, index) => {
           const match = part.match(/{(.*)}/);
+
           if (match) {
             const param = match[1] as keyof Locale;
             const paramValue = (paramObject as LocaleMap<Locale>)[param];
-            if (typeof paramValue !== 'string') {
-              isString = false;
-            }
-            if (React.isValidElement(paramValue)) {
-              return React.cloneElement(paramValue, { key: `${String(param)}-${index}` });
-            } else {
-              return paramValue as React.ReactNode;
-            }
+
+            if (typeof paramValue !== 'string') isString = false;
+
+            return isValidElement(paramValue)
+              ? cloneElement(paramValue, { key: `${String(param)}-${index}` })
+              : (paramValue as ReactNode);
           }
+
           // if there's no match - it's not a variable and just a normal string
           return part;
         });
-        if (isString) {
-          return result.join('');
-        } else {
-          return result;
-        }
+
+        return isString ? result.join('') : result;
       }
+
       return t;
     }
 
