@@ -37,7 +37,7 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
           (scope ? localeContent[`${scope}.${key}`] : localeContent[key]) ||
           (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]) ||
           key
-        ).toString();
+        )?.toString();
         const paramObject = params[0];
 
         if (!paramObject) {
@@ -46,7 +46,7 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
 
         let isString = true;
 
-        const result = value.split(/({[^}]*})/).map((part, index) => {
+        const result = value?.split(/({[^}]*})/).map((part, index) => {
           const match = part.match(/{(.*)}/);
 
           if (match) {
@@ -64,7 +64,7 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
           return part;
         });
 
-        return isString ? result.join('') : result;
+        return isString ? result?.join('') : result;
       }
 
       return t;
