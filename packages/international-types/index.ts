@@ -1,4 +1,4 @@
-export type LocaleValue = string | number;
+export type LocaleValue = string | number | boolean | null | undefined | Date;
 export type BaseLocale = Record<string, LocaleValue>;
 
 export type LocaleKeys<
