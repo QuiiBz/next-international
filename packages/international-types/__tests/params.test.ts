@@ -13,4 +13,10 @@ describe('param', () => {
 
     tsd.expectType<['username', 'age']>(value);
   });
+
+  it('should extract params from plural', () => {
+    const value = {} as Params<'{value, plural, =1 {{value} item left} other {{value} items left}'>;
+
+    tsd.expectType<['value']>(value);
+  });
 });

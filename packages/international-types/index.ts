@@ -9,10 +9,13 @@ export type LocaleKeys<
 
 export type Params<Value extends LocaleValue> = Value extends ''
   ? []
-  : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Value extends `${infer Head}{${infer Param}}${infer Tail}`
-  ? [Param, ...Params<Tail>]
-  : [];
+  // Plural form (e.g `{value, plural, =1 {...} other {...}}`)
+  : Value extends `{${infer Param}, ${string}, ${string}}`
+    ? [Param]
+    // Other params (e.g `This is a {param}`)
+    : Value extends `${string}{${infer Param}}${infer Tail}`
+      ? [Param, ...Params<Tail>]
+      : [];
 
 export type ParamsObject<Value extends LocaleValue> = Record<Params<Value>[number], LocaleValue>;
 
