@@ -1,6 +1,6 @@
 {
   "name": "international-types",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Type-safe internationalization (i18n) utility types",
   "types": "dist/index.d.ts",
   "keywords": [

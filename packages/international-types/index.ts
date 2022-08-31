@@ -7,11 +7,17 @@ export type LocaleKeys<
   Key extends string = Extract<keyof Locale, string>,
 > = Scope extends undefined ? Key : Key extends `${Scope}.${infer Test}` ? Test : never;
 
+type Delimiter = '=0' | '=1' | 'other';
+
+type ExtractSentence<Value extends string> = Value extends `${Delimiter} {${infer Content}} ${Delimiter} ${infer Tail}`
+  ? Content | ExtractSentence<Tail>
+  : never;
+
 export type Params<Value extends LocaleValue> = Value extends ''
   ? []
   : // Plural form (e.g `{value, plural, =1 {...} other {...}}`)
-  Value extends `{${infer Param}, ${string}, ${string}}`
-  ? [Param]
+  Value extends `{${infer Param}, ${string}, ${infer Tail}}`
+  ? [Param, ...Params<ExtractSentence<Tail>>]
   : // Other params (e.g `This is a {param}`)
   Value extends `${string}{${infer Param}}${infer Tail}`
   ? [Param, ...Params<Tail>]

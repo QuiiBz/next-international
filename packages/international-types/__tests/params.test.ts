@@ -1,5 +1,5 @@
 import * as tsd from 'vite-plugin-vitest-typescript-assert/tsd';
-import type { Params } from '../';
+import type { Params } from '../index';
 
 describe('param', () => {
   it('should extract param', () => {
@@ -15,8 +15,14 @@ describe('param', () => {
   });
 
   it('should extract params from plural', () => {
-    const value = {} as Params<'{value, plural, =1 {{value} item left} other {{value} items left}'>;
+    const value = {} as Params<'{value, plural, =1 {1 item left} other {Many items left}}'>;
 
     tsd.expectType<['value']>(value);
+  });
+
+  it('should extract multiple params from plural', () => {
+    const value = {} as Params<'{value, plural, =1 {{items} item left} other {{items} items left}}'>;
+
+    tsd.expectType<['value', 'items']>(value);
   });
 });
