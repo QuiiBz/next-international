@@ -9,9 +9,12 @@ export type LocaleKeys<
 
 type Delimiter = '=0' | '=1' | 'other';
 
-type ExtractSentence<Value extends string> = Value extends `${Delimiter} {${infer Content}} ${Delimiter} ${infer Tail}`
-  ? Content | ExtractSentence<Tail>
-  : never;
+type ExtractSentence<Value extends string> =
+  Value extends `${Delimiter} {${infer Content}} ${Delimiter} ${string} ${Delimiter} ${string}`
+    ? Content
+    : Value extends `${Delimiter} {${infer Content}} ${Delimiter} ${string}`
+    ? Content
+    : never;
 
 export type Params<Value extends LocaleValue> = Value extends ''
   ? []
@@ -22,6 +25,13 @@ export type Params<Value extends LocaleValue> = Value extends ''
   Value extends `${string}{${infer Param}}${infer Tail}`
   ? [Param, ...Params<Tail>]
   : [];
+
+type a =
+  Params<'{length, plural, =0 {Please choose {label}.} =1 {{label} must have at least one character.} other {{label} must have at least # characters.}}'>;
+type b = Params<'{nbRules, plural, =1 {{nbRules} rule} other {{nbRules} rules}}'>;
+type c =
+  Params<'{nbScopes, plural, =1 {{nbScopes} scope} other {{nbScopes} scopes}}, {nbPermissionSets, plural, =1 {{nbPermissionSets} permission set} other {{nbPermissionSets} permissions sets}}'>;
+type d = Params<'{count, plural, =0 {Add a member} other {Add another member}'>;
 
 export type ParamsObject<Value extends LocaleValue> = Record<Params<Value>[number], LocaleValue>;
 

@@ -20,8 +20,14 @@ describe('param', () => {
     tsd.expectType<['value']>(value);
   });
 
-  it('should extract multiple params from plural', () => {
+  it('should extract two params from plural', () => {
     const value = {} as Params<'{value, plural, =1 {{items} item left} other {{items} items left}}'>;
+
+    tsd.expectType<['value', 'items']>(value);
+  });
+
+  it('should extract multiple params from plural', () => {
+    const value = {} as Params<'{value, plural, =0 {{items} left} =1 {{items} item left} other {{items} items left}}'>;
 
     tsd.expectType<['value', 'items']>(value);
   });
