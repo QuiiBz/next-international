@@ -277,7 +277,7 @@ We also provide a separate package called [international-types](https://github.c
 
 ### Testing
 
-In case you want use tests with next-international you will need to create a custom render. The following example uses `@testing-library` and `Vitest`, but should work with `Jest` too.
+In case you want to make tests with next-international, you will need to create a custom render. The following example uses `@testing-library` and `Vitest`, but should work with `Jest` too.
 
 ```tsx
 // customRender.tsx
