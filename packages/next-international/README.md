@@ -21,6 +21,7 @@
   - [Load initial locales client-side](#load-initial-locales-client-side)
   - [Type-safety on locales files](#type-safety-on-locales-files)
   - [Use the types for my own library](#use-the-types-for-my-own-library)
+  - [Testing](#testing)
 - [License](#license)
 
 ## Features
@@ -46,14 +47,10 @@ pnpm install next-international
 import { createI18n } from 'next-international'
 import type Locale from './en'
 
-export const {
-  useI18n,
-  I18nProvider,
-  getLocaleProps,
-} = createI18n<typeof Locale>({
+export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale>({
   en: () => import('./en'),
   fr: () => import('./fr'),
-});
+})
 ```
 
 Each locale file should export a default object (don't forget `as const`):
@@ -61,8 +58,8 @@ Each locale file should export a default object (don't forget `as const`):
 ```ts
 // locales/en.ts
 export default {
-  'hello': 'Hello',
-  'welcome': 'Hello {name}!',
+  hello: 'Hello',
+  welcome: 'Hello {name}!',
 } as const
 ```
 
@@ -81,7 +78,7 @@ function App({ Component, pageProps }) {
 }
 ```
 
-4. Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps`  (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
+4. Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps` (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
 
 ```ts
 // locales/index.tsx
@@ -164,7 +161,7 @@ export const {
   ...
 } = createI18n({
   ...
-});
+})
 ```
 
 Then use this as a hook:
@@ -209,14 +206,10 @@ You can still get type-safety by [explicitly typing the locales](#explicitly-typ
 import { createI18n } from 'next-international'
 import type Locale from './en.json'
 
-export const {
-  useI18n,
-  I18nProvider,
-  getLocaleProps,
-} = createI18n<typeof Locale>({
+export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale>({
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
-});
+})
 ```
 
 ### Explicitly typing the locales
@@ -237,7 +230,7 @@ export const {
 } = createI18n<Locale>({
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
-});
+})
 ```
 
 ### Load initial locales client-side
@@ -265,7 +258,7 @@ export const {
   ...
 } = createI18n({
   ...
-});
+})
 ```
 
 It's a simple wrapper function around other locales:
@@ -273,14 +266,101 @@ It's a simple wrapper function around other locales:
 ```ts
 // locales/fr.ts
 export default defineLocale({
-  'hello': 'Bonjour',
-  'welcome': 'Bonjour {name}!',
+  hello: 'Bonjour',
+  welcome: 'Bonjour {name}!',
 })
 ```
 
 ### Use the types for my own library
 
 We also provide a separate package called [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types) that contains the utility types for next-international. You can build a library on top of it and get the same awesome type-safety.
+
+### Testing
+
+In case you want to make tests with next-international, you will need to create a custom render. The following example uses `@testing-library` and `Vitest`, but should work with `Jest` too.
+
+```tsx
+// customRender.tsx
+import { cleanup, render } from '@testing-library/react'
+import { afterEach } from 'vitest'
+
+afterEach(() => {
+  cleanup()
+})
+
+const customRender = (ui: React.ReactElement, options = {}) =>
+  render(ui, {
+    // wrap provider(s) here if needed
+    wrapper: ({ children }) => children,
+    ...options,
+  })
+
+export * from '@testing-library/react'
+export { default as userEvent } from '@testing-library/user-event'
+// override render export
+export { customRender as render }
+```
+
+You will also need a locale created, or one for testing purposes.
+
+```ts
+// en.ts
+export default {
+  hello: 'Hello',
+} as const
+```
+
+Then, you can later use it in your tests like this.
+
+```tsx
+// *.test.tsx
+import { describe, vi } from 'vitest'
+import { createI18n } from 'next-international'
+import { render, screen, waitFor } from './customRender' // Our custom render function.
+import en from './en' // Your locales.
+
+// Don't forget to mock the "next/router", not doing this may lead to some console errors.
+beforeEach(() => {
+  vi.mock('next/router', () => ({
+    useRouter: vi.fn().mockImplementation(() => ({
+      locale: 'en',
+      defaultLocale: 'en',
+      locales: ['en', 'fr'],
+    })),
+  }))
+})
+
+afterEach(() => {
+  vi.clearAllMocks()
+})
+
+describe('Example test', () => {
+  it('just an example', async () => {
+    const { useI18n, I18nProvider } = createI18n<typeof import('./en')>({
+      en: () => import('./en'),
+      // Other locales you might have.
+    })
+
+    function App() {
+      const { t } = useI18n()
+
+      return <p>{t('hello')}</p>
+    }
+
+    render(
+      <I18nProvider locale={en}>
+        <App />
+      </I18nProvider>,
+    )
+
+    expect(screen.queryByText('Hello')).not.toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(screen.getByText('Hello')).toBeInTheDocument()
+    })
+  })
+})
+```
 
 ## License
 
