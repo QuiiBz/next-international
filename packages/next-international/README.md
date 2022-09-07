@@ -336,8 +336,8 @@ afterEach(() => {
 
 describe('Example test', () => {
   it('just an example', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
-      en: () => import('./utils/en'),
+    const { useI18n, I18nProvider } = createI18n<typeof import('./en')>({
+      en: () => import('./en'),
       // Other locales you might have.
     })
 
