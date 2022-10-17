@@ -1,4 +1,4 @@
-import React, { Context, ReactElement, ReactNode, useEffect, useState } from 'react';
+import React, { Context, ReactElement, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import type { LocaleContext, Locales } from '../types';
 import type { BaseLocale } from 'international-types';
 import { useRouter } from 'next/router';
@@ -23,6 +23,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
   }: I18nProviderProps<Locale>) {
     const { locale, defaultLocale, locales: nextLocales } = useRouter();
     const [clientLocale, setClientLocale] = useState<Locale>();
+    const initialLoadRef = useRef(true);
 
     useEffect(() => {
       function checkConfigMatch([first, second]: [[string, string[]], [string, string[]]]) {
@@ -42,15 +43,26 @@ export function createI18nProvider<Locale extends BaseLocale>(
       checkConfigMatch([nextConfig, createI18n]);
     }, [nextLocales]);
 
-    useEffect(() => {
-      if (!locale || !defaultLocale) {
-        return;
-      }
-
+    const loadLocale = useCallback((locale: string) => {
       locales[locale]().then(content => {
         setClientLocale(content.default as Locale);
       });
-    }, [locale, defaultLocale]);
+    }, []);
+
+    useEffect(() => {
+      // Initial page load
+      // Load locale if no baseLocale provided from getLocaleProps
+      if (!baseLocale && locale && initialLoadRef.current) {
+        loadLocale(locale);
+      }
+
+      // Subsequent locale change
+      if (locale && !initialLoadRef.current) {
+        loadLocale(locale);
+      }
+
+      initialLoadRef.current = false;
+    }, [baseLocale, loadLocale, locale]);
 
     if (!locale || !defaultLocale) {
       return error(`'i18n.defaultLocale' not defined in 'next.config.js'`);
