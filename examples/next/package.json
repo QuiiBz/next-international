@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "next": "12.2.2",
-    "next-international": "workspace:0.3.5",
+    "next-international": "workspace:0.3.6",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
