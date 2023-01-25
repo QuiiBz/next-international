@@ -7,7 +7,7 @@ export type LocaleKeys<
   Key extends string = Extract<keyof Locale, string>,
 > = Scope extends undefined ? Key : Key extends `${Scope}.${infer Test}` ? Test : never;
 
-type Delimiter = '=0' | '=1' | 'other';
+type Delimiter = `=${number}` | 'other';
 
 type ExtractParam<Value extends LocaleValue> = Value extends `${string}{${infer Param}}${string}` ? Param : never;
 
