@@ -13,9 +13,11 @@ type ExtractParam<Value extends LocaleValue> = Value extends `${string}{${infer 
 
 export type Params<Value extends LocaleValue> = Value extends ''
   ? []
-  : Value extends `{${infer Param}, plural, ${Delimiter} {${infer Content}} ${Delimiter} {${infer Content2}} ${Delimiter} {${infer Content3}}}`
+  : // Plural with 3 cases
+  Value extends `{${infer Param}, plural, ${Delimiter} {${infer Content}} ${Delimiter} {${infer Content2}} ${Delimiter} {${infer Content3}}}`
   ? [Param, ExtractParam<Content>, ExtractParam<Content2>, ExtractParam<Content3>]
-  : Value extends `{${infer Param}, plural, ${Delimiter} {${infer Content}} ${Delimiter} {${infer Content2}}}`
+  : // Plural with 2 cases
+  Value extends `{${infer Param}, plural, ${Delimiter} {${infer Content}} ${Delimiter} {${infer Content2}}}`
   ? [Param, ExtractParam<Content>, ExtractParam<Content2>]
   : // Simple cases (e.g `This is a {param}`)
   Value extends `${string}{${infer Param}}${infer Tail}`
