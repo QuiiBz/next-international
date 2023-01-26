@@ -56,4 +56,15 @@ describe('param', () => {
       custom: LocaleValue;
     }>(value);
   });
+
+  it('should extract multiple params from plural with multiple params inside', () => {
+    const value =
+      {} as ParamsObject<'{count, plural, =1 {The {serverName} server could not be delivered because the {serverModel} is out of stock. You will not be billed for this order} other {The {serverName} servers could not be delivered because the {serverModel} are out of stock. You will not be billed for this order}}'>;
+
+    tsd.expectType<{
+      count: LocaleValue;
+      serverName: LocaleValue;
+      serverModel: LocaleValue;
+    }>(value);
+  });
 });
