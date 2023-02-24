@@ -1,9 +1,17 @@
 import React, { useContext, Context, isValidElement, cloneElement, ReactNode } from 'react';
-import type { BaseLocale, LocaleKeys, LocaleValue, Params, ParamsObject, ScopedValue } from 'international-types';
+import type {
+  BaseLocale,
+  LocaleKeys,
+  LocaleValue,
+  Params,
+  ParamsObject,
+  ScopedValue,
+  Scopes,
+} from 'international-types';
 import type { LocaleContext, ReactParamsObject, LocaleMap } from '../types';
 
-export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<LocaleContext<Locale> | null>) {
-  return function useI18n() {
+export function createScopedUsei18n<Locale extends BaseLocale>(I18nContext: Context<LocaleContext<Locale> | null>) {
+  return function useScopedI18n<Scope extends Scopes<Locale> | undefined>(scope: Scope) {
     const context = useContext(I18nContext);
 
     if (!context) {
@@ -11,24 +19,25 @@ export function createUsei18n<Locale extends BaseLocale>(I18nContext: Context<Lo
     }
 
     function createT() {
-      function t<
-        Key extends LocaleKeys<Locale, undefined>,
-        Value extends LocaleValue = ScopedValue<Locale, undefined, Key>,
-      >(key: Key, ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value>]): string;
-      function t<
-        Key extends LocaleKeys<Locale, undefined>,
-        Value extends LocaleValue = ScopedValue<Locale, undefined, Key>,
-      >(key: Key, ...params: Params<Value>['length'] extends 0 ? [] : [ReactParamsObject<Value>]): React.ReactNode;
-      function t<
-        Key extends LocaleKeys<Locale, undefined>,
-        Value extends LocaleValue = ScopedValue<Locale, undefined, Key>,
-      >(
+      function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
+        key: Key,
+        ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value>]
+      ): string;
+      function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
+        key: Key,
+        ...params: Params<Value>['length'] extends 0 ? [] : [ReactParamsObject<Value>]
+      ): React.ReactNode;
+      function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
         key: Key,
         ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value> | ReactParamsObject<Value>]
       ) {
         const { localeContent, fallbackLocale } = context as LocaleContext<Locale>;
 
-        const value = (localeContent[key] || fallbackLocale?.[key] || key)?.toString();
+        const value = (
+          (scope ? localeContent[`${scope}.${key}`] : localeContent[key]) ||
+          (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]) ||
+          key
+        )?.toString();
         const paramObject = params[0];
 
         if (!paramObject) {

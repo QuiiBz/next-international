@@ -27,7 +27,7 @@ describe('fallbackLocale', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return <p>{t('only.exists.in.en')}</p>;
     }
@@ -49,7 +49,7 @@ describe('fallbackLocale', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return <p>{t('only.exists.in.en')}</p>;
     }
