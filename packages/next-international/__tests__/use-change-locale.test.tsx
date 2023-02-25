@@ -32,7 +32,7 @@ describe('useChangeLocale', () => {
 
     function App() {
       const changeLocale = useChangeLocale();
-      const { t } = useI18n();
+      const t = useI18n();
 
       return (
         <div>

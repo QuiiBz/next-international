@@ -1,11 +1,10 @@
 import React from 'react';
-import { GetStaticProps } from 'next';
-import { getLocaleProps, useChangeLocale, useI18n } from '../locales';
+import { useChangeLocale, useI18n, useScopedI18n } from '../locales';
 
 const Home = () => {
-  const { t, scopedT } = useI18n();
+  const t = useI18n();
   const changeLocale = useChangeLocale();
-  const t2 = scopedT('scope.more');
+  const t2 = useScopedI18n('scope.more');
 
   return (
     <div>

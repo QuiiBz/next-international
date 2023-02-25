@@ -37,7 +37,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return <p>{t('hello')}</p>;
     }
@@ -62,7 +62,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return <p>{t('hello')}</p>;
     }
@@ -84,7 +84,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return <p>{t('hello')}</p>;
     }
@@ -99,7 +99,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return <p>{t('hello')}</p>;
     }
@@ -120,7 +120,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return <p>{t('hello.world')}</p>;
     }
@@ -141,7 +141,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return (
         <p>
@@ -168,7 +168,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return (
         <p data-testid="test">
@@ -194,7 +194,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return (
         <p>
@@ -220,7 +220,7 @@ describe('useI18n', () => {
     });
 
     function App() {
-      const { t } = useI18n();
+      const t = useI18n();
 
       return (
         <p>
@@ -239,142 +239,6 @@ describe('useI18n', () => {
     );
 
     expect(screen.getByText('John is 30 years old')).toBeInTheDocument();
-  });
-
-  it('should translate with scoped', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
-      en: () => import('./utils/en'),
-      fr: () => import('./utils/fr'),
-    });
-
-    function App() {
-      const { scopedT } = useI18n();
-      const t = scopedT('namespace');
-
-      return <p>{t('hello')}</p>;
-    }
-
-    render(
-      <I18nProvider locale={en}>
-        <App />
-      </I18nProvider>,
-    );
-
-    expect(screen.getByText('Hello')).toBeInTheDocument();
-  });
-
-  it('should translate multiple keys with scoped', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
-      en: () => import('./utils/en'),
-      fr: () => import('./utils/fr'),
-    });
-
-    function App() {
-      const { scopedT } = useI18n();
-      const t = scopedT('namespace.subnamespace');
-
-      return (
-        <>
-          <p>{t('hello')}</p>
-          <p>{t('hello.world')}</p>
-        </>
-      );
-    }
-
-    render(
-      <I18nProvider locale={en}>
-        <App />
-      </I18nProvider>,
-    );
-
-    expect(screen.getByText('Hello')).toBeInTheDocument();
-    expect(screen.getByText('Hello World!')).toBeInTheDocument();
-  });
-
-  it('should translate with param and scoped', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
-      en: () => import('./utils/en'),
-      fr: () => import('./utils/fr'),
-    });
-
-    function App() {
-      const { scopedT } = useI18n();
-      const t = scopedT('namespace.subnamespace');
-
-      return (
-        <p>
-          {t('weather', {
-            weather: 'sunny',
-          })}
-        </p>
-      );
-    }
-
-    render(
-      <I18nProvider locale={en}>
-        <App />
-      </I18nProvider>,
-    );
-
-    expect(screen.getByText("Today's weather is sunny")).toBeInTheDocument();
-  });
-
-  it('should translate with multiple params and scoped', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
-      en: () => import('./utils/en'),
-      fr: () => import('./utils/fr'),
-    });
-
-    function App() {
-      const { scopedT } = useI18n();
-      const t = scopedT('namespace.subnamespace');
-
-      return (
-        <p>
-          {t('user.description', {
-            name: 'John',
-            years: '30',
-          })}
-        </p>
-      );
-    }
-
-    render(
-      <I18nProvider locale={en}>
-        <App />
-      </I18nProvider>,
-    );
-
-    expect(screen.getByText('John is 30 years old')).toBeInTheDocument();
-  });
-
-  it('should translate with multiple params and scoped (using react component)', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
-      en: () => import('./utils/en'),
-      fr: () => import('./utils/fr'),
-    });
-
-    function App() {
-      const { scopedT } = useI18n();
-      const t = scopedT('namespace.subnamespace');
-
-      return (
-        <p data-testid="test">
-          {t('user.description', {
-            name: <strong>John</strong>,
-            years: '30',
-          })}
-        </p>
-      );
-    }
-
-    render(
-      <I18nProvider locale={en}>
-        <App />
-      </I18nProvider>,
-    );
-
-    expect(screen.getByTestId('test')).toHaveTextContent('John is 30 years old');
   });
 
   it('return a string if no properties are passed', async () => {
@@ -389,7 +253,7 @@ describe('useI18n', () => {
 
     const { result } = renderHook(
       () => {
-        const { t } = useI18n();
+        const t = useI18n();
         return t('hello');
       },
       {
@@ -412,7 +276,7 @@ describe('useI18n', () => {
 
     const { result } = renderHook(
       () => {
-        const { t } = useI18n();
+        const t = useI18n();
         return t('user.description', {
           name: 'John',
           years: '30',
@@ -438,7 +302,7 @@ describe('useI18n', () => {
 
     const { result } = renderHook(
       () => {
-        const { t } = useI18n();
+        const t = useI18n();
         return t('user.description', {
           name: <strong>John</strong>,
           years: '30',

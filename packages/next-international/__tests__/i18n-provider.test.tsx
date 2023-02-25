@@ -27,7 +27,7 @@ describe('I18nProvider', () => {
       });
 
       function App() {
-        const { t } = useI18n();
+        const t = useI18n();
 
         return <p>{t('hello')}</p>;
       }
@@ -53,7 +53,7 @@ describe('I18nProvider', () => {
       });
 
       function App() {
-        const { t } = useI18n();
+        const t = useI18n();
 
         return <p>{t('hello')}</p>;
       }
@@ -84,7 +84,7 @@ describe('I18nProvider', () => {
       });
 
       function App() {
-        const { t } = useI18n();
+        const t = useI18n();
 
         return <p>{t('hello')}</p>;
       }
@@ -109,7 +109,7 @@ describe('I18nProvider', () => {
       });
 
       function App() {
-        const { t } = useI18n();
+        const t = useI18n();
 
         return <p>{t('hello')}</p>;
       }
