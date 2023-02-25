@@ -92,27 +92,6 @@ describe('useScopedI18n', () => {
   });
 
   it('should translate', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
-      en: () => import('./utils/en'),
-      fr: () => import('./utils/fr'),
-    });
-
-    function App() {
-      const t = useI18n();
-
-      return <p>{t('hello')}</p>;
-    }
-
-    render(
-      <I18nProvider locale={en}>
-        <App />
-      </I18nProvider>,
-    );
-
-    expect(screen.getByText('Hello')).toBeInTheDocument();
-  });
-
-  it('should translate', async () => {
     const { useScopedI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
