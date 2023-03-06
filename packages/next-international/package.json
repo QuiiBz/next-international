@@ -36,6 +36,6 @@
     "react": "^18.0.0 || ^17.0.0"
   },
   "dependencies": {
-    "international-types": "0.3.6"
+    "international-types": "workspace:*"
   }
 }
