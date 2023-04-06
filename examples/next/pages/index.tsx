@@ -1,14 +1,18 @@
 import React from 'react';
-import { useChangeLocale, useI18n, useScopedI18n } from '../locales';
+import { useChangeLocale, useCurrentLocale, useI18n, useScopedI18n } from '../locales';
 
 const Home = () => {
   const t = useI18n();
   const changeLocale = useChangeLocale();
   const t2 = useScopedI18n('scope.more');
+  const locale = useCurrentLocale();
 
   return (
     <div>
       <h1>SSG</h1>
+      <p>
+        Current locale: <span>{locale}</span>
+      </p>
       <p>Hello: {t('hello')}</p>
       <p>
         Hello:{' '}
