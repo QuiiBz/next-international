@@ -21,7 +21,7 @@ afterEach(() => {
 describe('I18nProvider', () => {
   describe('fallback', () => {
     it('should return the fallback while loading the locale', async () => {
-      const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+      const { useI18n, I18nProvider } = createI18n({
         en: () => import('./utils/en'),
         fr: () => import('./utils/fr'),
       });
@@ -47,7 +47,7 @@ describe('I18nProvider', () => {
     });
 
     it('should return null if no fallback provided', async () => {
-      const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+      const { useI18n, I18nProvider } = createI18n({
         en: () => import('./utils/en'),
         fr: () => import('./utils/fr'),
       });
@@ -77,7 +77,7 @@ describe('I18nProvider', () => {
     it('should warn about mismatching locales in createI18n', () => {
       const spy = vi.spyOn(console, 'warn').mockImplementation(() => null);
 
-      const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+      const { useI18n, I18nProvider } = createI18n({
         en: () => import('./utils/en'),
         fr: () => import('./utils/fr'),
         es: () => import('./utils/en'),
@@ -104,7 +104,7 @@ describe('I18nProvider', () => {
     it('should warn about mismatching locales in next.config.js', () => {
       const spy = vi.spyOn(console, 'warn').mockImplementation(() => null);
 
-      const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+      const { useI18n, I18nProvider } = createI18n({
         en: () => import('./utils/en'),
       });
 

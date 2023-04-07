@@ -21,7 +21,7 @@ afterEach(() => {
 
 describe('fallbackLocale', () => {
   it('should output the key when no fallback locale is configured', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -43,7 +43,7 @@ describe('fallbackLocale', () => {
   });
 
   it('should output the key when no fallback locale is configured', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
