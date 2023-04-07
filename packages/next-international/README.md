@@ -44,21 +44,21 @@ pnpm install next-international
 2. Create `locales/index.ts` with your locales:
 
 ```ts
-import { createI18n } from 'next-international';
-import type Locale from './en';
+import { createI18n } from 'next-international'
+import type Locale from './en'
 
 const locales = {
   en: () => import('./en'),
   fr: () => import('./fr'),
-};
+}
 
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale, typeof locales>(locales);
+export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale, typeof locales>(locales)
 
 // This will work as well, but you won't get type-safety in `useChangeLocale` or `useCurrentLocale`:
 export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale>({
   en: () => import('./en'),
   fr: () => import('./fr'),
-});
+})
 ```
 
 Each locale file should export a default object (don't forget `as const`):
@@ -68,21 +68,21 @@ Each locale file should export a default object (don't forget `as const`):
 export default {
   hello: 'Hello',
   welcome: 'Hello {name}!',
-} as const;
+} as const
 ```
 
 3. Wrap your whole app with `I18nProvider` inside `_app.tsx`:
 
 ```tsx
 // pages/_app.tsx
-import { I18nProvider } from '../locales';
+import { I18nProvider } from '../locales'
 
 function App({ Component, pageProps }) {
   return (
     <I18nProvider locale={pageProps.locale}>
       <Component {...pageProps} />
     </I18nProvider>
-  );
+  )
 }
 ```
 
@@ -118,17 +118,17 @@ export const getServerSideProps = getLocaleProps((ctx) => {
 5. Use `useI18n`:
 
 ```tsx
-import { useI18n } from '../locales';
+import { useI18n } from '../locales'
 
 function App() {
-  const { t } = useI18n();
+  const { t } = useI18n()
   return (
     <div>
       <p>{t('hello')}</p>
       <p>{t('welcome', { name: 'John' })}</p>
       <p>{t('welcome', { name: <strong>John</strong> })}</p>
     </div>
-  );
+  )
 }
 ```
 
@@ -140,20 +140,20 @@ When you have a lot of keys, you may notice in a file that you always use and su
 
 ```ts
 // We always repeat `pages.settings`
-t('pages.settings.title');
-t('pages.settings.description', { identifier });
-t('pages.settings.cta');
+t('pages.settings.title')
+t('pages.settings.description', { identifier })
+t('pages.settings.cta')
 ```
 
 We can avoid this using scoped translations with the `scopedT` function from `useI18n`:
 
 ```ts
-const { scopedT } = useI18n();
-const t = scopedT('pages.settings');
+const { scopedT } = useI18n()
+const t = scopedT('pages.settings')
 
-t('title');
-t('description', { identifier });
-t('ct');
+t('title')
+t('description', { identifier })
+t('ct')
 ```
 
 And of course, the scoped key, subsequents keys and params will still be 100% type-safe.
@@ -200,12 +200,12 @@ You can provide a fallback locale that will be used for all missing translations
 
 ```tsx
 // pages/_app.tsx
-import { I18nProvider } from '../locales';
-import en from '../locales/en';
+import { I18nProvider } from '../locales'
+import en from '../locales/en'
 
 <I18nProvider locale={pageProps.locale} fallbackLocale={en}>
   ...
-</I18nProvider>;
+</I18nProvider>
 ```
 
 ### Use JSON files instead of TS for locales
@@ -216,15 +216,15 @@ You can still get type-safety by [explicitly typing the locales](#explicitly-typ
 
 ```ts
 // locales/index.ts
-import { createI18n } from 'next-international';
-import type Locale from './en.json';
+import { createI18n } from 'next-international'
+import type Locale from './en.json'
 
 const locales = {
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
-};
+}
 
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale, typeof locales>(locales);
+export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale, typeof locales>(locales)
 ```
 
 ### Explicitly typing the locales
@@ -285,7 +285,7 @@ It's a simple wrapper function around other locales:
 export default defineLocale({
   hello: 'Bonjour',
   welcome: 'Bonjour {name}!',
-});
+})
 ```
 
 ### Use the types for my own library
@@ -298,24 +298,24 @@ In case you want to make tests with next-international, you will need to create 
 
 ```tsx
 // customRender.tsx
-import { cleanup, render } from '@testing-library/react';
-import { afterEach } from 'vitest';
+import { cleanup, render } from '@testing-library/react'
+import { afterEach } from 'vitest'
 
 afterEach(() => {
-  cleanup();
-});
+  cleanup()
+})
 
 const customRender = (ui: React.ReactElement, options = {}) =>
   render(ui, {
     // wrap provider(s) here if needed
     wrapper: ({ children }) => children,
     ...options,
-  });
+  })
 
-export * from '@testing-library/react';
-export { default as userEvent } from '@testing-library/user-event';
+export * from '@testing-library/react'
+export { default as userEvent } from '@testing-library/user-event'
 // override render export
-export { customRender as render };
+export { customRender as render }
 ```
 
 You will also need a locale created, or one for testing purposes.
@@ -324,17 +324,17 @@ You will also need a locale created, or one for testing purposes.
 // en.ts
 export default {
   hello: 'Hello',
-} as const;
+} as const
 ```
 
 Then, you can later use it in your tests like this.
 
 ```tsx
 // *.test.tsx
-import { describe, vi } from 'vitest';
-import { createI18n } from 'next-international';
-import { render, screen, waitFor } from './customRender'; // Our custom render function.
-import en from './en'; // Your locales.
+import { describe, vi } from 'vitest'
+import { createI18n } from 'next-international'
+import { render, screen, waitFor } from './customRender' // Our custom render function.
+import en from './en' // Your locales.
 
 // Don't forget to mock the "next/router", not doing this may lead to some console errors.
 beforeEach(() => {
@@ -344,39 +344,39 @@ beforeEach(() => {
       defaultLocale: 'en',
       locales: ['en', 'fr'],
     })),
-  }));
-});
+  }))
+})
 
 afterEach(() => {
-  vi.clearAllMocks();
-});
+  vi.clearAllMocks()
+})
 
 describe('Example test', () => {
   it('just an example', async () => {
     const { useI18n, I18nProvider } = createI18n<typeof import('./en')>({
       en: () => import('./en'),
       // Other locales you might have.
-    });
+    })
 
     function App() {
-      const { t } = useI18n();
+      const { t } = useI18n()
 
-      return <p>{t('hello')}</p>;
+      return <p>{t('hello')}</p>
     }
 
     render(
       <I18nProvider locale={en}>
         <App />
       </I18nProvider>,
-    );
+    )
 
-    expect(screen.queryByText('Hello')).not.toBeInTheDocument();
+    expect(screen.queryByText('Hello')).not.toBeInTheDocument()
 
     await waitFor(() => {
-      expect(screen.getByText('Hello')).toBeInTheDocument();
-    });
-  });
-});
+      expect(screen.getByText('Hello')).toBeInTheDocument()
+    })
+  })
+})
 ```
 
 ## License
