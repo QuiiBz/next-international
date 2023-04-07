@@ -45,20 +45,12 @@ pnpm install next-international
 
 ```ts
 import { createI18n } from 'next-international'
-import type Locale from './en'
 
-const locales = {
-  en: () => import('./en'),
-  fr: () => import('./fr'),
-}
-
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale, typeof locales>(locales)
-
-// This will work as well, but you won't get type-safety in `useChangeLocale` or `useCurrentLocale`:
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale>({
+export const { useI18n, I18nProvider, getLocaleProps } = createI18n({
   en: () => import('./en'),
   fr: () => import('./fr'),
 })
+
 ```
 
 Each locale file should export a default object (don't forget `as const`):
@@ -160,12 +152,13 @@ And of course, the scoped key, subsequents keys and params will still be 100% ty
 
 ### Change and get current locale
 
-Export `useChangeLocale` from `createI18n`:
+Export `useChangeLocale` and `useCurrentLocale` from `createI18n`:
 
 ```ts
 // locales/index.ts
 export const {
   useChangeLocale,
+  useCurrentLocale,
   ...
 } = createI18n({
   ...
@@ -217,14 +210,11 @@ You can still get type-safety by [explicitly typing the locales](#explicitly-typ
 ```ts
 // locales/index.ts
 import { createI18n } from 'next-international'
-import type Locale from './en.json'
 
-const locales = {
+export const { useI18n, I18nProvider, getLocaleProps } = createI18n({
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
-}
-
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale, typeof locales>(locales)
+})
 ```
 
 ### Explicitly typing the locales
@@ -233,21 +223,24 @@ If you want to explicitly type the locale, you can create an interface that exte
 
 ```ts
 // locales/index.ts
-import { createI18n, BaseLocale } from 'next-international'
+import { createI18n } from 'next-international';
 
-interface Locale extends BaseLocale {
-  'hello': string
-  'welcome': string
+type Locale = {
+  hello: string;
+  welcome: string;
 }
 
-const locales = {
-  en: () => import('./en.json'),
-  fr: () => import('./fr.json'),
-};
+type Locales = {
+  en: Locale;
+  fr: Locale;
+}
 
 export const {
   ...
-} = createI18n<Locale, typeof locales>(locales)
+} = createI18n<any, Locales>({
+  en: () => import('./en.json'),
+  fr: () => import('./fr.json'),
+})
 ```
 
 ### Load initial locales client-side

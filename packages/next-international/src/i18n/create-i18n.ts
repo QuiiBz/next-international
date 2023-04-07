@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import type { Locales as LocalesBase, LocaleContext } from '../types';
-import type { BaseLocale } from 'international-types';
+import { BaseLocales, GetLocaleType } from 'international-types';
+import type { LocaleContext } from '../types';
 import { createDefineLocale } from './create-define-locale';
 import { createGetLocaleProps } from './create-get-locale-static-props';
 import { createI18nProvider } from './create-i18n-provider';
@@ -9,7 +9,10 @@ import { createUsei18n } from './create-use-i18n';
 import { createScopedUsei18n } from './create-use-scoped-i18n';
 import { createUseCurrentLocale } from './create-use-current-locale';
 
-export function createI18n<Locale extends BaseLocale, Locales extends LocalesBase = LocalesBase>(locales: Locales) {
+export function createI18n<Locales extends BaseLocales, ExplicitLocales extends BaseLocales | null = null>(
+  locales: Locales,
+) {
+  type Locale = ExplicitLocales extends BaseLocales ? GetLocaleType<ExplicitLocales> : GetLocaleType<Locales>;
   const I18nContext = createContext<LocaleContext<Locale> | null>(null);
   const I18nProvider = createI18nProvider(I18nContext, locales);
   const useI18n = createUsei18n(I18nContext);
