@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 
-export function createUseCurrentLocale<LocalesType>(): () => keyof LocalesType {
+export function createUseCurrentLocale<LocalesKeys>(): () => LocalesKeys {
   return function useCurrentLocale() {
     const { locale } = useRouter();
 
-    return locale as keyof LocalesType;
+    return locale as unknown as LocalesKeys;
   };
 }

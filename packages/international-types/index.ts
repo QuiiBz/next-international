@@ -1,6 +1,7 @@
 export type LocaleValue = string | number | boolean | null | undefined | Date;
 export type BaseLocale = Record<string, LocaleValue>;
-export type BaseLocales = Record<string, any>;
+export type ImportedLocales = Record<string, () => Promise<any>>;
+export type ExplicitLocales = Record<string, BaseLocale>;
 
 export type LocaleKeys<
   Locale extends BaseLocale,
@@ -64,6 +65,6 @@ type SomeKey<T extends Record<string, any>> = UnionToTuple<keyof T>[0] extends s
   : never;
 
 // Gets a single locale type from an object of the shape of BaseLocales.
-export type GetLocaleType<Locales extends BaseLocales> = Locales[SomeKey<Locales>] extends () => any
+export type GetLocaleType<Locales extends ImportedLocales | ExplicitLocales> = Locales extends ImportedLocales
   ? Awaited<ReturnType<Locales[SomeKey<Locales>]>>['default']
   : Locales[SomeKey<Locales>];
