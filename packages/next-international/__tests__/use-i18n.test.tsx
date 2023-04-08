@@ -31,7 +31,7 @@ afterEach(() => {
 describe('useI18n', () => {
   it('should log error if locale not set in next.config.js', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -56,7 +56,7 @@ describe('useI18n', () => {
 
   it('should log error if locales not set in next.config.js', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -78,7 +78,7 @@ describe('useI18n', () => {
   });
 
   it('should throw if not used inside I18nProvider', () => {
-    const { useI18n } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -93,7 +93,7 @@ describe('useI18n', () => {
   });
 
   it('should translate', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -114,7 +114,7 @@ describe('useI18n', () => {
   });
 
   it('should translate multiple keys', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -135,7 +135,7 @@ describe('useI18n', () => {
   });
 
   it('should translate with param', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -162,7 +162,7 @@ describe('useI18n', () => {
   });
 
   it('should translate with param (with react component)', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -188,7 +188,7 @@ describe('useI18n', () => {
   });
 
   it('should translate with the same param used twice', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -214,7 +214,7 @@ describe('useI18n', () => {
   });
 
   it('should translate with multiple params', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -242,7 +242,7 @@ describe('useI18n', () => {
   });
 
   it('return a string if no properties are passed', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -265,7 +265,7 @@ describe('useI18n', () => {
   });
 
   it('return a string if all properties are strings', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -291,7 +291,7 @@ describe('useI18n', () => {
   });
 
   it('return an array if some property is a react node', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });

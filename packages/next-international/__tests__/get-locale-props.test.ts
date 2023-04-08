@@ -5,7 +5,7 @@ import en from './utils/en';
 describe('getLocaleProps', () => {
   it('should error if locale is not defined', async () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-    const { getLocaleProps } = createI18n<typeof import('./utils/en').default>({
+    const { getLocaleProps } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -24,7 +24,7 @@ describe('getLocaleProps', () => {
   });
 
   it('should return default locale', async () => {
-    const { getLocaleProps } = createI18n<typeof import('./utils/en').default>({
+    const { getLocaleProps } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -43,7 +43,7 @@ describe('getLocaleProps', () => {
   });
 
   it('should return default locale with existing getStaticProps', async () => {
-    const { getLocaleProps } = createI18n<typeof import('./utils/en').default>({
+    const { getLocaleProps } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });

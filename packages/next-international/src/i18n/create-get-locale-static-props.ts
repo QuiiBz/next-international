@@ -3,9 +3,10 @@ import type { GetStaticProps, GetServerSideProps } from 'next';
 import { error } from '../helpers/log';
 
 export function createGetLocaleProps(locales: Locales) {
-  return function getLocaleProps<T, GetProps extends GetStaticProps<T> | GetServerSideProps<T>>(
-    initialGetProps?: GetProps,
-  ) {
+  return function getLocaleProps<
+    T extends { [key: string]: any },
+    GetProps extends GetStaticProps<T> | GetServerSideProps<T>,
+  >(initialGetProps?: GetProps) {
     return async (context: any) => {
       const initialResult = await initialGetProps?.(context);
 

@@ -25,7 +25,7 @@ afterEach(() => {
 
 describe('useChangeLocale', () => {
   it('should change locale', async () => {
-    const { useI18n, I18nProvider, useChangeLocale } = createI18n<typeof import('./utils/en').default>({
+    const { useI18n, I18nProvider, useChangeLocale } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });

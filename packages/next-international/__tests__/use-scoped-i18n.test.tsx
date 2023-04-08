@@ -30,7 +30,7 @@ afterEach(() => {
 describe('useScopedI18n', () => {
   it('should log error if locale not set in next.config.js', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-    const { useScopedI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useScopedI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -55,7 +55,7 @@ describe('useScopedI18n', () => {
 
   it('should log error if locales not set in next.config.js', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-    const { useScopedI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useScopedI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -77,7 +77,7 @@ describe('useScopedI18n', () => {
   });
 
   it('should throw if not used inside I18nProvider', () => {
-    const { useScopedI18n } = createI18n<typeof import('./utils/en').default>({
+    const { useScopedI18n } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -92,7 +92,7 @@ describe('useScopedI18n', () => {
   });
 
   it('should translate', async () => {
-    const { useScopedI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useScopedI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -113,7 +113,7 @@ describe('useScopedI18n', () => {
   });
 
   it('should translate multiple keys', async () => {
-    const { useScopedI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useScopedI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -140,7 +140,7 @@ describe('useScopedI18n', () => {
   });
 
   it('should translate with param', async () => {
-    const { useScopedI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useScopedI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -167,7 +167,7 @@ describe('useScopedI18n', () => {
   });
 
   it('should translate with multiple params', async () => {
-    const { useScopedI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useScopedI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });
@@ -195,7 +195,7 @@ describe('useScopedI18n', () => {
   });
 
   it('should translate with multiple params (using react component)', async () => {
-    const { useScopedI18n, I18nProvider } = createI18n<typeof import('./utils/en').default>({
+    const { useScopedI18n, I18nProvider } = createI18n({
       en: () => import('./utils/en'),
       fr: () => import('./utils/fr'),
     });

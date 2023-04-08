@@ -14,7 +14,7 @@
 - [Usage](#usage)
 - [Examples](#examples)
   - [Scoped translations](#scoped-translations)
-  - [Change current locale](#change-current-locale)
+  - [Change and get current locale](#change-and-get-current-locale)
   - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
   - [Use JSON files instead of TS for locales](#use-json-files-instead-of-ts-for-locales)
   - [Explicitly typing the locales](#explicitly-typing-the-locales)
@@ -44,13 +44,13 @@ pnpm install next-international
 2. Create `locales/index.ts` with your locales:
 
 ```ts
-import { createI18n } from 'next-international';
-import type Locale from './en';
+import { createI18n } from 'next-international'
 
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale>({
+export const { useI18n, I18nProvider, getLocaleProps } = createI18n({
   en: () => import('./en'),
   fr: () => import('./fr'),
-});
+
+})
 ```
 
 Each locale file should export a default object (don't forget `as const`):
@@ -67,7 +67,7 @@ export default {
 
 ```tsx
 // pages/_app.tsx
-import { I18nProvider } from '../locales';
+import { I18nProvider } from '../locales'
 
 function App({ Component, pageProps }) {
   return (
@@ -168,14 +168,15 @@ function App() {
 
 And of course, the scoped key, subsequents keys and params will still be 100% type-safe.
 
-### Change current locale
+### Change and get current locale
 
-Export `useChangeLocale` from `createI18n`:
+Export `useChangeLocale` and `useCurrentLocale` from `createI18n`:
 
 ```ts
 // locales/index.ts
 export const {
   useChangeLocale,
+  useCurrentLocale,
   ...
 } = createI18n({
   ...
@@ -185,14 +186,19 @@ export const {
 Then use this as a hook:
 
 ```tsx
-import { useChangeLocale } from '../locales'
+import { useChangeLocale, useCurrentLocale } from '../locales'
 
 function App() {
   const changeLocale = useChangeLocale()
+  const locale = useCurrentLocale()
+  //    ^ typed as 'en' | 'fr'
 
   return (
+    <>
+    <p>Current locale: <span>{locale}</span></p>
     <button onClick={() => changeLocale('en')}>English</button>
     <button onClick={() => changeLocale('fr')}>French</button>
+    <>
   )
 }
 ```
@@ -221,10 +227,9 @@ You can still get type-safety by [explicitly typing the locales](#explicitly-typ
 
 ```ts
 // locales/index.ts
-import { createI18n } from 'next-international';
-import type Locale from './en.json';
+import { createI18n } from 'next-international'
 
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n<typeof Locale>({
+export const { useI18n, I18nProvider, getLocaleProps } = createI18n({
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
 });
@@ -236,16 +241,21 @@ If you want to explicitly type the locale, you can create an interface that exte
 
 ```ts
 // locales/index.ts
-import { createI18n, BaseLocale } from 'next-international'
+import { createI18n } from 'next-international';
 
-interface Locale extends BaseLocale {
-  'hello': string
-  'welcome': string
+type Locale = {
+  hello: string;
+  welcome: string;
+}
+
+type Locales = {
+  en: Locale;
+  fr: Locale;
 }
 
 export const {
   ...
-} = createI18n<Locale>({
+} = createI18n<any, Locales>({
   en: () => import('./en.json'),
   fr: () => import('./fr.json'),
 })
