@@ -1,0 +1,11 @@
+{
+  "name": "locales",
+  "typings": "server.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "react-server": "./server.ts",
+      "default": "./index.ts"
+    }
+  }
+}

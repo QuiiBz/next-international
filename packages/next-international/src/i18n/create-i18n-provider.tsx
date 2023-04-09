@@ -21,27 +21,27 @@ export function createI18nProvider<Locale extends BaseLocale>(
     fallbackLocale,
     children,
   }: I18nProviderProps<Locale>) {
-    const { locale, defaultLocale, locales: nextLocales } = useRouter();
+    // const { locale, defaultLocale, locales: nextLocales } = useRouter();
     const [clientLocale, setClientLocale] = useState<Locale>();
-    const initialLoadRef = useRef(true);
+    // const initialLoadRef = useRef(true);
 
-    useEffect(() => {
-      function checkConfigMatch([first, second]: [[string, string[]], [string, string[]]]) {
-        const notDefined = first[1].filter(locale => !second[1].includes(locale));
+    // useEffect(() => {
+    //   function checkConfigMatch([first, second]: [[string, string[]], [string, string[]]]) {
+    //     const notDefined = first[1].filter(locale => !second[1].includes(locale));
 
-        if (notDefined.length > 0) {
-          warn(
-            `The following locales are defined in '${first[0]}' but not in '${second[0]}': ${notDefined.join(', ')}`,
-          );
-        }
-      }
+    //     if (notDefined.length > 0) {
+    //       warn(
+    //         `The following locales are defined in '${first[0]}' but not in '${second[0]}': ${notDefined.join(', ')}`,
+    //       );
+    //     }
+    //   }
 
-      const createI18n = ['createI18n', Object.keys(locales)] as [string, string[]];
-      const nextConfig = ['next.config.js', nextLocales || []] as [string, string[]];
+    //   const createI18n = ['createI18n', Object.keys(locales)] as [string, string[]];
+    //   const nextConfig = ['next.config.js', nextLocales || []] as [string, string[]];
 
-      checkConfigMatch([createI18n, nextConfig]);
-      checkConfigMatch([nextConfig, createI18n]);
-    }, [nextLocales]);
+    //   checkConfigMatch([createI18n, nextConfig]);
+    //   checkConfigMatch([nextConfig, createI18n]);
+    // }, [nextLocales]);
 
     const loadLocale = useCallback((locale: string) => {
       locales[locale]().then(content => {
@@ -52,25 +52,26 @@ export function createI18nProvider<Locale extends BaseLocale>(
     useEffect(() => {
       // Initial page load
       // Load locale if no baseLocale provided from getLocaleProps
-      if (!baseLocale && locale && initialLoadRef.current) {
-        loadLocale(locale);
-      }
+      // if (!baseLocale && locale && initialLoadRef.current) {
+      //   loadLocale(locale);
+      // }
 
-      // Subsequent locale change
-      if (locale && !initialLoadRef.current) {
-        loadLocale(locale);
-      }
+      // // Subsequent locale change
+      // if (locale && !initialLoadRef.current) {
+      //   loadLocale(locale);
+      // }
 
-      initialLoadRef.current = false;
-    }, [baseLocale, loadLocale, locale]);
+      // initialLoadRef.current = false;
+      loadLocale(baseLocale);
+    }, [baseLocale, loadLocale /*, locale */]);
 
-    if (!locale || !defaultLocale) {
-      return error(`'i18n.defaultLocale' not defined in 'next.config.js'`);
-    }
+    // if (!locale || !defaultLocale) {
+    //   return error(`'i18n.defaultLocale' not defined in 'next.config.js'`);
+    // }
 
-    if (!nextLocales) {
-      return error(`'i18n.locales' not defined in 'next.config.js'`);
-    }
+    // if (!nextLocales) {
+    //   return error(`'i18n.locales' not defined in 'next.config.js'`);
+    // }
 
     if (!clientLocale && !baseLocale) {
       return fallback;
