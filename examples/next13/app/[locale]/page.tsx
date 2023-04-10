@@ -1,5 +1,5 @@
 import React from 'react';
-import { getI18n, getScopedI18n } from '../../locales/server';
+import { getI18n, getScopedI18n } from '@/locales/server';
 
 export function generateStaticParams() {
   return [

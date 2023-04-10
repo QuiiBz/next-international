@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { error, warn } from '../helpers/log';
 
 type I18nProviderProps<Locale extends BaseLocale> = {
-  locale: Locale;
+  locale: string;
   fallback?: ReactElement | null;
   fallbackLocale?: Locale;
   children: ReactNode;
@@ -80,7 +80,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
     return (
       <I18nContext.Provider
         value={{
-          localeContent: clientLocale || baseLocale,
+          localeContent: (clientLocale || baseLocale) as Locale,
           fallbackLocale,
         }}
       >
