@@ -10,9 +10,13 @@
       "default": "./dist/index.js"
     },
     "./package.json": "./package.json",
-    "./app": {
-      "types": "./dist/app/index.d.ts",
-      "default": "./dist/app/index.js"
+    "./client": {
+      "types": "./dist/app/client/index.d.ts",
+      "default": "./dist/app/client/index.js"
+    },
+    "./server": {
+      "types": "./dist/app/server/index.d.ts",
+      "default": "./dist/app/server/index.js"
     }
   },
   "keywords": [
@@ -33,12 +37,12 @@
   },
   "homepage": "https://github.com/QuiiBz/next-international#readme",
   "scripts": {
-    "build": "tsup src/index.ts src/app/index.ts --dts --minify",
-    "watch": "tsup src/index.ts src/app/index.ts --dts --watch"
+    "build": "tsup src/index.ts src/app/client/index.ts src/app/server/index.ts --dts --minify",
+    "watch": "tsup src/index.ts src/app/client/index.ts src/app/server/index.ts --dts --watch"
   },
   "devDependencies": {
     "@types/react": "^18.0.15",
-    "next": "12.2.2",
+    "next": "13.3.0",
     "react": "18.2.0",
     "tsup": "^6.1.3"
   },

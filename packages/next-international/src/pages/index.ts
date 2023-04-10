@@ -1,13 +1,13 @@
 import { createContext } from 'react';
 import { ImportedLocales, ExplicitLocales, GetLocaleType } from 'international-types';
 import type { LocaleContext } from '../types';
-import { createDefineLocale } from './create-define-locale';
-import { createGetLocaleProps } from './create-get-locale-static-props';
+import { createDefineLocale } from '../common/create-define-locale';
+import { createGetLocaleProps } from '../common/create-get-locale-static-props';
 import { createI18nProvider } from './create-i18n-provider';
 import { createUseChangeLocale } from './create-use-change-locale';
-import { createUsei18n } from './create-use-i18n';
-import { createScopedUsei18n } from './create-use-scoped-i18n';
-import { createUseCurrentLocale } from './create-use-current-locale';
+import { createUsei18n } from '../common/create-use-i18n';
+import { createScopedUsei18n } from '../common/create-use-scoped-i18n';
+import { createUseCurrentLocale } from '../common/create-use-current-locale';
 
 export function createI18n<Locales extends ImportedLocales, OtherLocales extends ExplicitLocales | null = null>(
   locales: Locales,
@@ -30,9 +30,6 @@ export function createI18n<Locales extends ImportedLocales, OtherLocales extends
     I18nProvider,
     useChangeLocale,
     defineLocale,
-    // We keep `getLocaleStaticProps` to keep backward compatibility,
-    // but it should be removed in the next major version.
-    getLocaleStaticProps: getLocaleProps,
     getLocaleProps,
     useCurrentLocale,
   };

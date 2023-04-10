@@ -1,7 +1,6 @@
-import React from 'react';
 import { useChangeLocale, useCurrentLocale, useI18n, useScopedI18n } from '../locales';
 
-const Home = () => {
+export default function Home() {
   const t = useI18n();
   const changeLocale = useChangeLocale();
   const t2 = useScopedI18n('scope.more');
@@ -9,7 +8,7 @@ const Home = () => {
 
   return (
     <div>
-      <h1>SSG</h1>
+      <h1>CSR</h1>
       <p>
         Current locale: <span>{locale}</span>
       </p>
@@ -61,9 +60,4 @@ const Home = () => {
       </button>
     </div>
   );
-};
-
-// Comment this to disable SSR of initial locale
-// export const getStaticProps: GetStaticProps = getLocaleProps();
-
-export default Home;
+}

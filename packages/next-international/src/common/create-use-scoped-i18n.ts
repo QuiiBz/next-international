@@ -1,7 +1,7 @@
 import { useContext, Context } from 'react';
 import type { BaseLocale, Scopes } from 'international-types';
 import type { LocaleContext } from '../types';
-import { createT } from './create-t';
+import { createT } from '../common/create-t';
 
 export function createScopedUsei18n<Locale extends BaseLocale>(I18nContext: Context<LocaleContext<Locale> | null>) {
   return function useScopedI18n<Scope extends Scopes<Locale> | undefined>(scope: Scope) {

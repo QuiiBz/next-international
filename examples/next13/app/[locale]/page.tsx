@@ -1,6 +1,6 @@
-import React from 'react';
 import { getI18n, getScopedI18n } from '@/locales/server';
 
+// Only needed for SSG
 export function generateStaticParams() {
   return [
     {
@@ -14,12 +14,11 @@ export function generateStaticParams() {
 
 export default async function Home({ params: { locale } }: { params: { locale: string } }) {
   const t = await getI18n(locale);
-  // const changeLocale = useChangeLocale();
   const t2 = await getScopedI18n(locale, 'scope.more');
 
   return (
     <div>
-      <h1>SSG</h1>
+      <h1>SSR / SSG</h1>
       <p>
         Current locale: <span>{locale}</span>
       </p>
@@ -63,12 +62,6 @@ export default async function Home({ params: { locale } }: { params: { locale: s
       </p>
       <p>{t2('and.more.test')}</p>
       <p>{t('missing.translation.in.fr')}</p>
-      {/* <button type="button" onClick={() => changeLocale('en')}>
-        EN
-      </button>
-      <button type="button" onClick={() => changeLocale('fr')}>
-        FR
-      </button> */}
     </div>
   );
 }
