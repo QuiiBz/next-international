@@ -83,7 +83,7 @@ importers:
   packages/next-international:
     specifiers:
       '@types/react': ^18.0.15
-      international-types: workspace:*
+      international-types: ^0.4.1
       next: 12.2.2
       react: 18.2.0
       tsup: ^6.1.3
