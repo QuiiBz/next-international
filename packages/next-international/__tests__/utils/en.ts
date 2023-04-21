@@ -10,4 +10,7 @@ export default {
   'namespace.subnamespace.user.description': '{name} is {years} years old',
   'only.exists.in.en': 'EN locale',
   'double.param': 'This {param} is used twice ({param})',
+  thing_zero: 'No things',
+  thing_one: 'One thing',
+  thing_other: '{count} {adjective} things',
 } as const;

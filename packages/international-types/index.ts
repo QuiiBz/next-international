@@ -3,11 +3,23 @@ export type BaseLocale = Record<string, LocaleValue>;
 export type ImportedLocales = Record<string, () => Promise<any>>;
 export type ExplicitLocales = Record<string, BaseLocale>;
 
+type PluralSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
+type RemovePluralSuffix<Key extends string> = Key extends `${infer Head}_${PluralSuffix}` ? Head : Key;
+
+export type IsPluralKey<Key extends string, Locale extends BaseLocale> = `${Key}_${PluralSuffix}` &
+  keyof Locale extends never
+  ? false
+  : true;
+
 export type LocaleKeys<
   Locale extends BaseLocale,
   Scope extends Scopes<Locale> | undefined,
   Key extends string = Extract<keyof Locale, string>,
-> = Scope extends undefined ? Key : Key extends `${Scope}.${infer Test}` ? Test : never;
+> = Scope extends undefined
+  ? RemovePluralSuffix<Key>
+  : Key extends `${Scope}.${infer Test}`
+  ? RemovePluralSuffix<Test>
+  : never;
 
 type Delimiter = `=${number}` | 'other';
 
@@ -48,7 +60,13 @@ export type ScopedValue<
   Locale extends BaseLocale,
   Scope extends Scopes<Locale> | undefined,
   Key extends LocaleKeys<Locale, Scope>,
-> = Scope extends undefined ? Locale[Key] : Locale[`${Scope}.${Key}`];
+> = Scope extends undefined
+  ? IsPluralKey<Key, Locale> extends true
+    ? Locale[`${Key}_${PluralSuffix}` & keyof Locale]
+    : Locale[Key]
+  : IsPluralKey<Key, Locale> extends true
+  ? Locale[`${Scope}.${Key}_${PluralSuffix}` & keyof Locale]
+  : Locale[`${Scope}.${Key}`];
 
 // From https://github.com/microsoft/TypeScript/issues/13298#issuecomment-885980381
 type UnionToIntersection<U> = (U extends never ? never : (arg: U) => never) extends (arg: infer I) => void ? I : never;
