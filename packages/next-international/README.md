@@ -15,6 +15,7 @@
 - [Examples](#examples)
   - [Scoped translations](#scoped-translations)
   - [Change and get current locale](#change-and-get-current-locale)
+  - [Plurals](#plurals)
   - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
   - [Use JSON files instead of TS for locales](#use-json-files-instead-of-ts-for-locales)
   - [Explicitly typing the locales](#explicitly-typing-the-locales)
@@ -26,7 +27,7 @@
 
 ## Features
 
-- **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params
+- **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params and plurals
 - **Small**: 1.2 KB gzipped (1.7 KB uncompressed), no dependencies
 - **Simple**: No webpack configuration, no CLI, just pure TypeScript
 - **SSR**: Load only the required locale, SSRed
@@ -201,6 +202,60 @@ function App() {
     <>
   )
 }
+```
+
+### Plurals
+
+To use plurals, add plural suffixes to your keys:
+
+```ts
+{
+  "cow#zero": "No cows",
+  "cow#one": "One cow",
+  "cow#other": "{count} cows",
+}
+```
+
+then use it like this:
+
+```tsx
+
+t('cow', { count: 0 }) // No cows
+t('cow', { count: 1 }) // One cow
+t('cow', { count: 2 }) // 2 cows
+// etc.
+```
+
+For each locale you should specify all needed plural suffixes, eg. for Polish you'd have:
+
+```tsx
+  'cow#zero': 'Zero krów',
+  'cow#one': 'Jedna krowa',
+  'cow#few': '{count} krowy',
+  'cow#many': '{count} krów',
+  'cow#other': '{count} krowy',
+
+```
+
+
+> Note, in English `zero` and `other` are the same, so you can omit `zero` and `other` will be used. 
+> However if you specify it, it will be used instead of `other`.
+
+`count` param is always added to a plural key, you always have to specify it, even if you don't use it directly in the translation.
+
+You can also use other params, as in other translations:
+
+```ts
+{
+  "cow#zero": "No cows",
+  "cow#one": "One cow",
+  "cow#other": "{count} cows, {name} has {count} cows",
+}
+```
+
+```tsx
+t('cow', { count: 0, name: 'John' }) // No cows
+t('cow', { count: 2, name: 'John' }) // 2 cows, John has 2 cows
 ```
 
 ### Fallback locale for missing translations
