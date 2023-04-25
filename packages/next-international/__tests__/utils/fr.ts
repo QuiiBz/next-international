@@ -4,7 +4,7 @@ export default {
   weather: "La météo d'aujourd'hui est {weather}",
   'user.description': '{name} a {years} ans',
   'namespace.hello': 'Bonjour',
-  thing_zero: 'Pas de choses',
-  thing_one: 'une chose',
-  thing_other: '{count} {adjective} choses',
+  'thing#zero': 'Pas de choses',
+  'thing#one': 'une chose',
+  'thing#other': '{count} {adjective} choses',
 } as const;

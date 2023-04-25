@@ -1,6 +1,6 @@
 import React, { Context, ReactElement, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import type { LocaleContext, Locales } from '../types';
-import type { BaseLocale } from 'international-types';
+import type { BaseLocale, LocaleValue } from 'international-types';
 import { useRouter } from 'next/router';
 import { error, warn } from '../helpers/log';
 
@@ -20,7 +20,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
     fallback = null,
     fallbackLocale,
     children,
-  }: I18nProviderProps<Locale>) {
+  }: I18nProviderProps<{ [k in keyof Locale]: LocaleValue }>) {
     const { locale, defaultLocale, locales: nextLocales } = useRouter();
     const [clientLocale, setClientLocale] = useState<Locale>();
     const initialLoadRef = useRef(true);
@@ -79,8 +79,8 @@ export function createI18nProvider<Locale extends BaseLocale>(
     return (
       <I18nContext.Provider
         value={{
-          localeContent: clientLocale || baseLocale,
-          fallbackLocale,
+          localeContent: clientLocale || (baseLocale as Locale),
+          fallbackLocale: fallbackLocale as Locale,
         }}
       >
         {children}

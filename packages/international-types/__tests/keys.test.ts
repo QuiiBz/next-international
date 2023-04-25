@@ -46,12 +46,12 @@ describe('keys', () => {
         hello: 'Hello';
         'scope.nested.demo': 'Nested scope';
         'scope.nested.another.demo': 'Another nested scope';
-        'scope.nested.hello_zero': 'Hello 0';
-        'scope.nested.hello_one': 'Hello 1';
-        'scope.nested.hello_two': 'Hello 2';
-        'scope.nested.hello_few': 'Hello few';
-        'scope.nested.hello_many': 'Hello many';
-        'scope.nested.hello_other': 'Hello other';
+        'scope.nested.hello#zero': 'Hello 0';
+        'scope.nested.hello#one': 'Hello 1';
+        'scope.nested.hello#two': 'Hello 2';
+        'scope.nested.hello#few': 'Hello few';
+        'scope.nested.hello#many': 'Hello many';
+        'scope.nested.hello#other': 'Hello other';
       },
       'scope.nested'
     >;

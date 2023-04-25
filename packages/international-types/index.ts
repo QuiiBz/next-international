@@ -4,12 +4,28 @@ export type ImportedLocales = Record<string, () => Promise<any>>;
 export type ExplicitLocales = Record<string, BaseLocale>;
 
 type PluralSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
-type RemovePluralSuffix<Key extends string> = Key extends `${infer Head}_${PluralSuffix}` ? Head : Key;
+export const PLURAL_DELIMITER = '#';
+type PluralDelimiter = typeof PLURAL_DELIMITER;
+type RemovePluralSuffix<Key extends string> = Key extends `${infer Head}${PluralDelimiter}${PluralSuffix}` ? Head : Key;
 
-export type IsPluralKey<Key extends string, Locale extends BaseLocale> = `${Key}_${PluralSuffix}` &
+export type IsPluralKey<Key extends string, Locale extends BaseLocale> = `${Key}${PluralDelimiter}${PluralSuffix}` &
   keyof Locale extends never
   ? false
   : true;
+
+type addCount<T> = T extends [] ? [{ count: number }] : T extends [infer R] ? [{ count: number } & R] : never;
+
+export type CreateParamsType<
+  T,
+  Locale extends BaseLocale,
+  Scope extends Scopes<Locale> | undefined,
+  Key extends LocaleKeys<Locale, Scope>,
+  Value extends LocaleValue = ScopedValue<Locale, Scope, Key>,
+> = IsPluralKey<Key, Locale> extends true
+  ? addCount<Params<Value>['length'] extends 0 ? [] : [T]>
+  : Params<Value>['length'] extends 0
+  ? []
+  : [T];
 
 export type LocaleKeys<
   Locale extends BaseLocale,
@@ -21,24 +37,9 @@ export type LocaleKeys<
   ? RemovePluralSuffix<Test>
   : never;
 
-type Delimiter = `=${number}` | 'other';
-
-type ExtractParams<Value extends LocaleValue> = Value extends ''
-  ? []
-  : Value extends `${string}{${infer Param}}${infer Tail}`
-  ? [Param, ...ExtractParams<Tail>]
-  : [];
-
 export type Params<Value extends LocaleValue> = Value extends ''
   ? []
-  : // Plural with 3 cases
-  Value extends `{${infer Param}, plural, ${Delimiter} {${infer Content}} ${Delimiter} {${infer Content2}} ${Delimiter} {${infer Content3}}}`
-  ? [Param, ...ExtractParams<Content>, ...ExtractParams<Content2>, ...ExtractParams<Content3>]
-  : // Plural with 2 cases
-  Value extends `{${infer Param}, plural, ${Delimiter} {${infer Content}} ${Delimiter} {${infer Content2}}}`
-  ? [Param, ...ExtractParams<Content>, ...ExtractParams<Content2>]
-  : // Simple cases (e.g `This is a {param}`)
-  Value extends `${string}{${infer Param}}${infer Tail}`
+  : Value extends `${string}{${infer Param}}${infer Tail}`
   ? [Param, ...Params<Tail>]
   : [];
 
@@ -62,10 +63,10 @@ export type ScopedValue<
   Key extends LocaleKeys<Locale, Scope>,
 > = Scope extends undefined
   ? IsPluralKey<Key, Locale> extends true
-    ? Locale[`${Key}_${PluralSuffix}` & keyof Locale]
+    ? Locale[`${Key}${PluralDelimiter}${PluralSuffix}` & keyof Locale]
     : Locale[Key]
   : IsPluralKey<Key, Locale> extends true
-  ? Locale[`${Scope}.${Key}_${PluralSuffix}` & keyof Locale]
+  ? Locale[`${Scope}.${Key}${PluralDelimiter}${PluralSuffix}` & keyof Locale]
   : Locale[`${Scope}.${Key}`];
 
 // From https://github.com/microsoft/TypeScript/issues/13298#issuecomment-885980381

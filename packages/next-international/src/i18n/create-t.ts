@@ -1,52 +1,39 @@
 import { isValidElement, cloneElement, ReactNode } from 'react';
 import type {
   BaseLocale,
-  IsPluralKey,
+  CreateParamsType,
   LocaleKeys,
   LocaleValue,
-  Params,
   ParamsObject,
   ScopedValue,
   Scopes,
 } from 'international-types';
+import { PLURAL_DELIMITER } from 'international-types';
 import type { ReactParamsObject, LocaleContext, LocaleMap } from '../types';
-
-type addCount<T> = T extends [] ? [{ count: number }] : T extends [infer R] ? [{ count: number } & R] : never;
 
 export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> | undefined>(
   context: LocaleContext<Locale>,
   scope: Scope | undefined,
+  locale: string | undefined,
 ) {
   const { localeContent } = context;
   const pluralKeys = new Set(
     Object.keys(localeContent)
-      .filter(key => key.endsWith('_other'))
-      .map(key => key.replace('_other', '')),
+      .filter(key => key.endsWith(`${PLURAL_DELIMITER}other`))
+      .map(key => key.replace(`${PLURAL_DELIMITER}other`, '')),
   );
 
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
-    ...params: IsPluralKey<Key, Locale> extends true
-      ? addCount<Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value>]>
-      : Params<Value>['length'] extends 0
-      ? []
-      : [ParamsObject<Value>]
+    ...params: CreateParamsType<ParamsObject<Value>, Locale, Scope, Key, Value>
   ): string;
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
-    ...params: IsPluralKey<Key, Locale> extends true
-      ? addCount<Params<Value>['length'] extends 0 ? [] : [ReactParamsObject<Value>]>
-      : Params<Value>['length'] extends 0
-      ? []
-      : [ReactParamsObject<Value>]
+    ...params: CreateParamsType<ReactParamsObject<Value>, Locale, Scope, Key, Value>
   ): React.ReactNode;
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
-    ...params: IsPluralKey<Key, Locale> extends true
-      ? addCount<Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value> | ReactParamsObject<Value>]>
-      : Params<Value>['length'] extends 0
-      ? []
-      : [ParamsObject<Value> | ReactParamsObject<Value>]
+    ...params: CreateParamsType<ParamsObject<Value> | ReactParamsObject<Value>, Locale, Scope, Key, Value>
   ) {
     const { localeContent, fallbackLocale } = context;
 
@@ -55,11 +42,10 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
 
     if (pluralKeys.has(key) && paramObject && 'count' in paramObject) {
       const count = paramObject.count ?? 0;
-      const pr = new Intl.PluralRules(); // FIXME: pass current locale
+      const pr = new Intl.PluralRules(locale);
       const suffix = count === 0 ? 'zero' : pr.select(count);
-      console.log(count, suffix);
 
-      const pluralKey = `${key}_${suffix}`;
+      const pluralKey = `${key}${PLURAL_DELIMITER}${suffix}`;
 
       value = (
         ((scope ? localeContent[`${scope}.${pluralKey}`] : localeContent[pluralKey]) ||
