@@ -22,6 +22,7 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
       .filter(key => key.endsWith(`${PLURAL_DELIMITER}other`))
       .map(key => key.replace(`${PLURAL_DELIMITER}other`, '')),
   );
+  const pluralRules = new Intl.PluralRules(locale);
 
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
@@ -37,30 +38,35 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
   ) {
     const { localeContent, fallbackLocale } = context;
 
-    let value: string | undefined;
     const paramObject = params[0];
+    const keysToCheck: string[] = [];
 
     if (pluralKeys.has(key) && paramObject && 'count' in paramObject) {
       const count = paramObject.count ?? 0;
-      const pr = new Intl.PluralRules(locale);
-      const suffix = count === 0 ? 'zero' : pr.select(count);
-
+      const suffix = count === 0 ? 'zero' : pluralRules.select(count);
       const pluralKey = `${key}${PLURAL_DELIMITER}${suffix}`;
 
-      value = (
-        ((scope ? localeContent[`${scope}.${pluralKey}`] : localeContent[pluralKey]) ||
-          (scope ? fallbackLocale?.[`${scope}.${pluralKey}`] : fallbackLocale?.[pluralKey]) ||
-          (scope ? localeContent[`${scope}.${key}`] : localeContent[key]) ||
-          (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]) ||
-          key) as string
-      ).toString();
+      keysToCheck.push(pluralKey);
+      if (scope) {
+        keysToCheck.push(`${scope}.${pluralKey}`);
+      }
     } else {
-      value = (
-        ((scope ? localeContent[`${scope}.${key}`] : localeContent[key]) ||
-          (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]) ||
-          key) as string
-      ).toString();
+      keysToCheck.push(key);
+      if (scope) {
+        keysToCheck.push(`${scope}.${key}`);
+      }
     }
+
+    const value =
+      keysToCheck
+        .map(key => localeContent[key])
+        .find(value => value !== undefined)
+        ?.toString() ??
+      keysToCheck
+        .map(key => fallbackLocale?.[key])
+        .find(value => value !== undefined)
+        ?.toString() ??
+      key;
 
     if (!paramObject) {
       return value;
