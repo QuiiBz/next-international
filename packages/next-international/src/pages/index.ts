@@ -7,7 +7,7 @@ import { createI18nProvider } from './create-i18n-provider';
 import { createUseChangeLocale } from './create-use-change-locale';
 import { createUsei18n } from '../common/create-use-i18n';
 import { createScopedUsei18n } from '../common/create-use-scoped-i18n';
-import { createUseCurrentLocale } from '../common/create-use-current-locale';
+import { createUseCurrentLocale } from './create-use-current-locale';
 
 export function createI18n<Locales extends ImportedLocales, OtherLocales extends ExplicitLocales | null = null>(
   locales: Locales,

@@ -8,7 +8,7 @@ import { createScopedUsei18n } from '../../common/create-use-scoped-i18n';
 import { createUseChangeLocale } from './create-use-change-locale';
 import { createDefineLocale } from '../../common/create-define-locale';
 import { createGetLocaleProps } from '../../common/create-get-locale-static-props';
-import { createUseCurrentLocale } from '../../common/create-use-current-locale';
+import { createUseCurrentLocale } from './create-use-current-locale';
 
 export function createI18nClient<Locales extends ImportedLocales, OtherLocales extends ExplicitLocales | null = null>(
   locales: Locales,
@@ -23,7 +23,7 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
   const useChangeLocale = createUseChangeLocale<LocalesKeys>(Object.keys(locales));
   const defineLocale = createDefineLocale<Locale>();
   const getLocaleProps = createGetLocaleProps(locales);
-  const useCurrentLocale = createUseCurrentLocale<LocalesKeys>();
+  const useCurrentLocale = createUseCurrentLocale<LocalesKeys>(Object.keys(locales));
 
   return {
     useI18n,

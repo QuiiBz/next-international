@@ -1,6 +1,6 @@
 import React, { Context, ReactElement, ReactNode, useCallback, useEffect, useState } from 'react';
-import type { LocaleContext, Locales } from '../../types';
-import type { BaseLocale } from 'international-types';
+import type { LocaleContext } from '../../types';
+import type { BaseLocale, ImportedLocales } from 'international-types';
 
 type I18nProviderProps<Locale extends BaseLocale> = {
   locale: string;
@@ -11,7 +11,7 @@ type I18nProviderProps<Locale extends BaseLocale> = {
 
 export function createI18nProvider<Locale extends BaseLocale>(
   I18nContext: Context<LocaleContext<Locale> | null>,
-  locales: Locales,
+  locales: ImportedLocales,
 ) {
   return function I18nAppProvider({
     locale: baseLocale,
@@ -31,7 +31,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
       loadLocale(baseLocale);
     }, [baseLocale, loadLocale]);
 
-    if (!clientLocale && !baseLocale) {
+    if (!clientLocale && fallback) {
       return fallback;
     }
 
