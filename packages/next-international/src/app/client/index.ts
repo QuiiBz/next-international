@@ -16,14 +16,16 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
   type Locale = OtherLocales extends ExplicitLocales ? GetLocaleType<OtherLocales> : GetLocaleType<Locales>;
   type LocalesKeys = OtherLocales extends ExplicitLocales ? keyof OtherLocales : keyof Locales;
 
+  const localesKeys = Object.keys(locales) as LocalesKeys[];
+
   const I18nContext = createContext<LocaleContext<Locale> | null>(null);
   const I18nProvider = createI18nProvider(I18nContext, locales);
   const useI18n = createUsei18n(I18nContext);
   const useScopedI18n = createScopedUsei18n(I18nContext);
-  const useChangeLocale = createUseChangeLocale<LocalesKeys>(Object.keys(locales));
+  const useChangeLocale = createUseChangeLocale<LocalesKeys>(localesKeys);
   const defineLocale = createDefineLocale<Locale>();
   const getLocaleProps = createGetLocaleProps(locales);
-  const useCurrentLocale = createUseCurrentLocale<LocalesKeys>(Object.keys(locales));
+  const useCurrentLocale = createUseCurrentLocale<LocalesKeys>(localesKeys);
 
   return {
     useI18n,

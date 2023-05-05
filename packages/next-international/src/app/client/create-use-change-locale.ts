@@ -1,6 +1,6 @@
 import { useRouter, usePathname } from 'next/navigation';
 
-export function createUseChangeLocale<LocalesKeys>(locales: string[]) {
+export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[]) {
   return function useChangeLocale() {
     const { push } = useRouter();
     const path = usePathname();
