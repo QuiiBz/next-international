@@ -19,7 +19,7 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
   const I18nProvider = createI18nProvider(I18nContext, locales);
   const useI18n = createUsei18n(I18nContext);
   const useScopedI18n = createScopedUsei18n(I18nContext);
-  const useChangeLocale = createUseChangeLocale<LocalesKeys>();
+  const useChangeLocale = createUseChangeLocale<LocalesKeys>(Object.keys(locales));
   const defineLocale = createDefineLocale<Locale>();
   const getLocaleProps = createGetLocaleProps(locales);
   const useCurrentLocale = createUseCurrentLocale<LocalesKeys>();

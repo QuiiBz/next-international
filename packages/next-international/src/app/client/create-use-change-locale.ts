@@ -1,13 +1,18 @@
 import { useRouter, usePathname } from 'next/navigation';
 
-export function createUseChangeLocale<LocalesKeys>() {
+export function createUseChangeLocale<LocalesKeys>(locales: string[]) {
   return function useChangeLocale() {
     const { push } = useRouter();
     const path = usePathname();
 
+    let pathWithoutLocale = path;
+
+    locales.forEach(locale => {
+      pathWithoutLocale = pathWithoutLocale.replace(`/${locale}`, '');
+    });
+
     return function changeLocale(newLocale: LocalesKeys) {
-      // @ts-expect-error TODO
-      push(path, undefined, { locale: newLocale as unknown as string, shallow: true });
+      push(`/${newLocale}${pathWithoutLocale}`);
     };
   };
 }
