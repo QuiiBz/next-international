@@ -1,3 +1,4 @@
+import 'client-only';
 import type { ExplicitLocales, GetLocaleType, ImportedLocales } from 'international-types';
 import type { LocaleContext } from '../../types';
 import { createI18nProvider } from './create-i18n-provider';

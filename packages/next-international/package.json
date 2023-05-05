@@ -51,6 +51,8 @@
     "react": "^18.0.0 || ^17.0.0"
   },
   "dependencies": {
-    "international-types": "^0.4.1"
+    "client-only": "^0.0.1",
+    "international-types": "^0.4.1",
+    "server-only": "^0.0.1"
   }
 }
