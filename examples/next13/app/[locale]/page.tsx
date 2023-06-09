@@ -1,4 +1,6 @@
 import { getI18n, getScopedI18n } from '@/locales/server';
+import { I18nServerContext } from 'next-international/server';
+import { useContext } from 'react';
 
 // Only needed for SSG
 export function generateStaticParams() {
@@ -12,16 +14,15 @@ export function generateStaticParams() {
   ];
 }
 
-export default async function Home({ params: { locale } }: { params: { locale: string } }) {
+async function Content() {
+  const locale = useContext(I18nServerContext);
   const t = await getI18n(locale);
   const t2 = await getScopedI18n(locale, 'scope.more');
 
   return (
     <div>
       <h1>SSR / SSG</h1>
-      <p>
-        Current locale: <span>{locale}</span>
-      </p>
+      <p>{/* Current locale: <span>{locale}</span> */}</p>
       <p>Hello: {t('hello')}</p>
       <p>
         Hello:{' '}
@@ -64,4 +65,8 @@ export default async function Home({ params: { locale } }: { params: { locale: s
       <p>{t('missing.translation.in.fr')}</p>
     </div>
   );
+}
+
+export default function Home() {
+  return <Content />;
 }

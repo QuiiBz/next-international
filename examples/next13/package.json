@@ -9,13 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next-international": "workspace:*",
     "@types/node": "^18.0.4",
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "18.0.11",
+    "@types/react": "^18.2.9",
+    "@types/react-dom": "18.2.4",
     "eslint": "8.19.0",
-    "eslint-config-next": "13.3.0",
-    "next": "13.3.0",
+    "eslint-config-next": "13.4.4",
+    "next": "13.4.4",
+    "next-international": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "^5.0.4"
