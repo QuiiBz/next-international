@@ -12,24 +12,24 @@
 
 - [Features](#features)
 - [Usage](#usage)
+  - [Pages Router](#pages-router)
+  - [App Router](#app-router)
 - [Examples](#examples)
   - [Scoped translations](#scoped-translations)
   - [Change and get current locale](#change-and-get-current-locale)
   - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
-  - [Use JSON files instead of TS for locales](#use-json-files-instead-of-ts-for-locales)
-  - [Explicitly typing the locales](#explicitly-typing-the-locales)
   - [Load initial locales client-side](#load-initial-locales-client-side)
-  - [Type-safety on locales files](#type-safety-on-locales-files)
   - [Use the types for my own library](#use-the-types-for-my-own-library)
   - [Testing](#testing)
 - [License](#license)
 
 ## Features
 
-- **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params
-- **Small**: 1.2 KB gzipped (1.7 KB uncompressed), no dependencies
-- **Simple**: No webpack configuration, no CLI, just pure TypeScript
-- **SSR**: Load only the required locale, SSRed
+- **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params, type-safe `changeLocale()`...
+- **Small**: No dependencies, lazy-loaded
+- **Simple**: No Webpack configuration, no CLI, no code generation, just pure TypeScript
+- **SSR/SSG/CSR**: Load only the required locale, client-side and server-side
+- **Pages or App Router**: With support for React Server Components
 
 > **Note**: You can now build on top of the types used by next-international using [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types)!
 
@@ -39,17 +39,18 @@
 pnpm install next-international
 ```
 
-1. Make sure that you've followed [Next.js Internationalized Routing](https://nextjs.org/docs/advanced-features/i18n-routing), and that `strict` is set to `true` in your `tsconfig.json`
+Make sure that `strict` is set to `true` in your `tsconfig.json`, then follow the guide for the [Pages Router](#pages-router) or the [App Router](#app-router).
 
-2. Create `locales/index.ts` with your locales:
+### Pages Router
+
+1. Make sure that you've set up correctly the [`i18n` key inside `next.config.js`](https://nextjs.org/docs/pages/building-your-application/routing/internationalization), then create `locales/index.ts` with your locales:
 
 ```ts
 import { createI18n } from 'next-international'
 
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n({
+export const { useI18n, useScopedI18n, I18nProvider, getLocaleProps } = createI18n({
   en: () => import('./en'),
-  fr: () => import('./fr'),
-
+  fr: () => import('./fr')
 })
 ```
 
@@ -58,33 +59,36 @@ Each locale file should export a default object (don't forget `as const`):
 ```ts
 // locales/en.ts
 export default {
-  hello: 'Hello',
-  welcome: 'Hello {name}!',
-} as const;
+  'hello': 'Hello',
+  'hello.world': 'Hello world!',
+  'welcome': 'Hello {name}!'
+} as const
 ```
 
-3. Wrap your whole app with `I18nProvider` inside `_app.tsx`:
+2. Wrap your whole app with `I18nProvider` inside `_app.tsx`:
 
 ```tsx
 // pages/_app.tsx
 import { I18nProvider } from '../locales'
+import { AppProps } from 'next/app'
 
-function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <I18nProvider locale={pageProps.locale}>
       <Component {...pageProps} />
     </I18nProvider>
-  );
+  )
 }
 ```
 
-4. Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps` (this will allows SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
+3. Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps` (this will allow to SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
 
 ```ts
+// pages/index.tsx
 export const getStaticProps = getLocaleProps()
 
 // or with an existing `getStaticProps` function:
-export const getStaticProps = getLocaleProps((ctx) => {
+export const getStaticProps = getLocaleProps(ctx => {
   // your existing code
   return {
     ...
@@ -95,10 +99,11 @@ export const getStaticProps = getLocaleProps((ctx) => {
 If you already have `getServerSideProps` on this page, you can't use `getStaticProps`. In this case, you can still use `getLocaleProps` the same way:
 
 ```ts
+// pages/index.tsx
 export const getServerSideProps = getLocaleProps()
 
 // or with an existing `getServerSideProps` function:
-export const getServerSideProps = getLocaleProps((ctx) => {
+export const getServerSideProps = getLocaleProps(ctx => {
   // your existing code
   return {
     ...
@@ -106,20 +111,157 @@ export const getServerSideProps = getLocaleProps((ctx) => {
 })
 ```
 
-5. Use `useI18n`:
+4. Use `useI18n` and `useScopedI18n()`:
 
 ```tsx
-import { useI18n } from '../locales';
+import { useI18n, useScopedI18n } from '../locales'
 
-function App() {
-  const t = useI18n();
+export default function Page() {
+  const t = useI18n()
+  const scopedT = useScopedI18n('hello')
+
   return (
     <div>
       <p>{t('hello')}</p>
+
+      {/* Both are equivalent: */}
+      <p>{t('hello.world')}</p>
+      <p>{scopedT('world')}</p>
+
       <p>{t('welcome', { name: 'John' })}</p>
       <p>{t('welcome', { name: <strong>John</strong> })}</p>
     </div>
-  );
+  )
+}
+```
+
+### App Router
+
+1. Create `locales/client.ts` and `locales/server.ts` with your locales:
+
+```ts
+// locales/client.ts
+import { createI18nClient } from 'next-international/client'
+
+export const { useI18n, useScopedI18n, I18nProviderClient } = createI18nClient({
+  en: () => import('./en'),
+  fr: () => import('./fr')
+})
+
+// locales/server.ts
+import { createI18nServer } from 'next-international/server'
+
+export const { getI18n, getScopedI18n, I18nProviderServer, getStaticParams } = createI18nServer({
+  en: () => import('./en'),
+  fr: () => import('./fr')
+})
+```
+
+Each locale file should export a default object (don't forget `as const`):
+
+```ts
+// locales/en.ts
+export default {
+  'hello': 'Hello',
+  'hello.world': 'Hello world!',
+  'welcome': 'Hello {name}!'
+} as const
+```
+
+2. Move all your routes inside an `app/[locale]/` folder, and wrap your whole app with `I18nProviderServer` inside `app/[locale]/layout.tsx`:
+
+```tsx
+// app/[locale]/layout.tsx
+import { ReactElement } from 'react'
+import { I18nProviderServer } from '../../locales/server'
+
+export default function RootLayout({
+  children,
+  params
+}: {
+  children: ReactElement
+  params: { locale: string }
+}) {
+  return (
+    <I18nProviderServer locale={params.locale}>
+      {children}
+    </I18nProviderServer>
+  )
+}
+```
+
+3. For Client Components, wrap the lowest parts of your app with `I18nProviderClient` inside a layout:
+
+```tsx
+// app/[locale]/client/layout.tsx
+import { ReactElement } from 'react'
+import { I18nProviderClient } from '../../locales/client'
+
+export default function SubLayout({
+  children,
+  params
+}: {
+  children: ReactElement
+  params: { locale: string }
+}) {
+  return (
+    <I18nProviderClient locale={params.locale}>
+      {children}
+    </I18nProviderClient>
+  )
+}
+```
+
+4. If you want to support SSG with `output: export`, add `getStaticParams` to your pages:
+
+```ts
+// app/[locale]/page.tsx
+export const generateStaticParams = getStaticParams()
+```
+
+5. Use `useI18n` and `useScopedI18n()` / `getI18n` and `getScopedI18n()` inside your components:
+
+```tsx
+// Client Component
+import { useI18n, useScopedI18n } from '../locales/client'
+
+export default function Page() {
+  const t = useI18n()
+  const scopedT = useScopedI18n('hello')
+
+  return (
+    <div>
+      <p>{t('hello')}</p>
+
+      {/* Both are equivalent: */}
+      <p>{t('hello.world')}</p>
+      <p>{scopedT('world')}</p>
+
+      <p>{t('welcome', { name: 'John' })}</p>
+      <p>{t('welcome', { name: <strong>John</strong> })}</p>
+    </div>
+  )
+}
+
+// Server Component
+import { getI18n, getScopedI18n } from '../locales/server'
+
+export default async function Page() {
+  const t = await getI18n()
+  const scopedT = await getScopedI18n('hello')
+
+  return (
+    <div>
+      <p>{t('hello')}</p>
+
+      {/* Both are equivalent: */}
+      <p>{t('hello.world')}</p>
+      <p>{scopedT('world')}</p>
+
+      <p>{t('welcome', { name: 'John' })}</p>
+      <p>{t('welcome', { name: <strong>John</strong> })}</p>
+    </div>
+  )
 }
 ```
 
@@ -127,16 +269,21 @@ function App() {
 
 ### Scoped translations
 
-When you have a lot of keys, you may notice in a file that you always use and such duplicate the same scope:
+When you have a lot of keys, you may notice in a file that you always use and duplicate the same scope:
 
 ```ts
 // We always repeat `pages.settings`
-t('pages.settings.title');
-t('pages.settings.description', { identifier });
-t('pages.settings.cta');
+t('pages.settings.title')
+t('pages.settings.description', { identifier })
+t('pages.settings.cta')
 ```
 
-We can avoid this using the `useScopedI18n` hook. Export it from `createI18n`:
+We can avoid this using the `useScopedI18n` hook / `getScopedI18n` method. And of course, the scoped key, subsequent keys and params will still be 100% type-safe.
+
+<details>
+<summary>Pages Router</summary>
+
+Export `useScopedI18n` from `createI18n`:
 
 ```ts
 // locales/index.ts
@@ -150,11 +297,11 @@ export const {
 
 Then use it in your component:
 
-```ts
-import { useScopedI18n } from '../locales';
+```tsx
+import { useScopedI18n } from '../locales'
 
 function App() {
-  const t = useScopedI18n('pages.settings');
+  const t = useScopedI18n('pages.settings')
 
   return (
     <div>
@@ -162,13 +309,75 @@ function App() {
       <p>{t('description', { identifier })}</p>
       <p>{t('cta')}</p>
     </div>
-  );
+  )
 }
 ```
 
-And of course, the scoped key, subsequents keys and params will still be 100% type-safe.
+</details>
 
-### Change and get current locale
+<details>
+<summary>App Router</summary>
+
+Export `useScopedI18n` from `createI18nClient` and `getScopedI18n` from `createI18nServer`:
+
+```ts
+// locales/client.ts
+export const {
+  useScopedI18n,
+  ...
+} = createI18nClient({
+  ...
+})
+
+// locales/server.ts
+export const {
+  getScopedI18n,
+  ...
+} = createI18nServer({
+  ...
+})
+```
+
+Then use it in your components:
+
+```tsx
+// Client Component
+import { useScopedI18n } from '../locales/client'
+
+function App() {
+  const t = useScopedI18n('pages.settings')
+
+  return (
+    <div>
+      <p>{t('title')}</p>
+      <p>{t('description', { identifier })}</p>
+      <p>{t('cta')}</p>
+    </div>
+  )
+}
+
+// Server component
+import { getScopedI18n } from '../locales/server'
+
+async function App() {
+  const t = await getScopedI18n('pages.settings')
+
+  return (
+    <div>
+      <p>{t('title')}</p>
+      <p>{t('description', { identifier })}</p>
+      <p>{t('cta')}</p>
+    </div>
+  )
+}
+```
+
+</details>
+
+### Change and get the current locale
+
+<details>
+<summary>Pages Router</summary>
 
 Export `useChangeLocale` and `useCurrentLocale` from `createI18n`:
 
@@ -183,7 +392,7 @@ export const {
 })
 ```
 
-Then use this as a hook:
+Then use it as a hook:
 
 ```tsx
 import { useChangeLocale, useCurrentLocale } from '../locales'
@@ -191,21 +400,82 @@ import { useChangeLocale, useCurrentLocale } from '../locales'
 function App() {
   const changeLocale = useChangeLocale()
   const locale = useCurrentLocale()
-  //    ^ typed as 'en' | 'fr'
 
   return (
     <>
-    <p>Current locale: <span>{locale}</span></p>
-    <button onClick={() => changeLocale('en')}>English</button>
-    <button onClick={() => changeLocale('fr')}>French</button>
+      <p>Current locale: <span>{locale}</span></p>
+      <button onClick={() => changeLocale('en')}>English</button>
+      <button onClick={() => changeLocale('fr')}>French</button>
     <>
   )
 }
 ```
 
+</details>
+
+
+<details>
+<summary>App Router</summary>
+
+You can only change the current locale from a Client Component. Export `useChangeLocale` and `useCurrentLocale` from `createI18nClient` / `getCurrentLocale` from `createI18nServer`:
+
+```ts
+// locales/client.ts
+export const {
+  useChangeLocale,
+  useCurrentLocale,
+  ...
+} = createI18nClient({
+  ...
+})
+
+// locales/server.ts
+export const {
+  getCurrentLocale,
+  ...
+} = createI18nServer({
+  ...
+})
+```
+
+Then use these hooks:
+
+```tsx
+// Client Component
+import { useChangeLocale, useCurrentLocale } from '../locales/client'
+
+function App() {
+  const changeLocale = useChangeLocale()
+  const locale = useCurrentLocale()
+
+  return (
+    <>
+      <p>Current locale: <span>{locale}</span></p>
+      <button onClick={() => changeLocale('en')}>English</button>
+      <button onClick={() => changeLocale('fr')}>French</button>
+    <>
+  )
+}
+```
+
+```tsx
+// Server Component
+import { getCurrentLocale } from '../locales/server'
+
+function App() {
+  const locale = getCurrentLocale()
+
+  return (
+    <p>Current locale: <span>{locale}</span></p>
+  )
+}
+```
+
+</details>
+
 ### Fallback locale for missing translations
 
-It's common to have missing translations in an application. By default, next-international outputs the key when no translation is found for the current locale, to avoid sending to users uncessary data.
+It's common to have missing translations in an application. By default, next-international outputs the key when no translation is found for the current locale, to avoid sending users unnecessary data.
 
 You can provide a fallback locale that will be used for all missing translations:
 
@@ -217,48 +487,6 @@ import en from '../locales/en';
 <I18nProvider locale={pageProps.locale} fallbackLocale={en}>
   ...
 </I18nProvider>;
-```
-
-### Use JSON files instead of TS for locales
-
-Currently, this breaks the parameters type-safety, so we recommend using the TS syntax. See this issue: https://github.com/microsoft/TypeScript/issues/32063.
-
-You can still get type-safety by [explicitly typing the locales](#explicitly-typing-the-locales)
-
-```ts
-// locales/index.ts
-import { createI18n } from 'next-international'
-
-export const { useI18n, I18nProvider, getLocaleProps } = createI18n({
-  en: () => import('./en.json'),
-  fr: () => import('./fr.json'),
-});
-```
-
-### Explicitly typing the locales
-
-If you want to explicitly type the locale, you can create an interface that extends `BaseLocale` and use it as the generic in `createI18n`:
-
-```ts
-// locales/index.ts
-import { createI18n } from 'next-international';
-
-type Locale = {
-  hello: string;
-  welcome: string;
-}
-
-type Locales = {
-  en: Locale;
-  fr: Locale;
-}
-
-export const {
-  ...
-} = createI18n<any, Locales>({
-  en: () => import('./en.json'),
-  fr: () => import('./fr.json'),
-})
 ```
 
 ### Load initial locales client-side
@@ -275,30 +503,6 @@ You can also provide a fallback component while waiting for the initial locale t
 </I18nProvider>
 ```
 
-### Type-safety on locales files
-
-Using `defineLocale`, you can make sure all your locale files implements all the keys of the base locale:
-
-```ts
-// locales/index.ts
-export const {
-  defineLocale
-  ...
-} = createI18n({
-  ...
-})
-```
-
-It's a simple wrapper function around other locales:
-
-```ts
-// locales/fr.ts
-export default defineLocale({
-  hello: 'Bonjour',
-  welcome: 'Bonjour {name}!',
-});
-```
-
 ### Use the types for my own library
 
 We also provide a separate package called [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types) that contains the utility types for next-international. You can build a library on top of it and get the same awesome type-safety.
@@ -307,45 +511,48 @@ We also provide a separate package called [international-types](https://github.c
 
 In case you want to make tests with next-international, you will need to create a custom render. The following example uses `@testing-library` and `Vitest`, but should work with `Jest` too.
 
+<details>
+<summary>Testing example</summary>
+
 ```tsx
 // customRender.tsx
-import { cleanup, render } from '@testing-library/react';
-import { afterEach } from 'vitest';
+import { ReactElement } from 'react'
+import { cleanup, render } from '@testing-library/react'
+import { afterEach } from 'vitest'
 
 afterEach(() => {
-  cleanup();
-});
+  cleanup()
+})
 
-const customRender = (ui: React.ReactElement, options = {}) =>
+const customRender = (ui: ReactElement, options = {}) =>
   render(ui, {
     // wrap provider(s) here if needed
     wrapper: ({ children }) => children,
     ...options,
-  });
+  })
 
-export * from '@testing-library/react';
-export { default as userEvent } from '@testing-library/user-event';
-// override render export
-export { customRender as render };
+export * from '@testing-library/react'
+export { default as userEvent } from '@testing-library/user-event'
+export { customRender as render }
 ```
 
-You will also need a locale created, or one for testing purposes.
+You will also need your locales files, or one for testing purposes.
 
 ```ts
 // en.ts
 export default {
   hello: 'Hello',
-} as const;
+} as const
 ```
 
-Then, you can later use it in your tests like this.
+Then, you can later use it in your tests:
 
 ```tsx
 // *.test.tsx
-import { describe, vi } from 'vitest';
-import { createI18n } from 'next-international';
-import { render, screen, waitFor } from './customRender'; // Our custom render function.
-import en from './en'; // Your locales.
+import { describe, vi } from 'vitest'
+import { createI18n } from 'next-international'
+import { render, screen, waitFor } from './customRender' // Our custom render function.
+import en from './en' // Your locales.
 
 // Don't forget to mock the "next/router", not doing this may lead to some console errors.
 beforeEach(() => {
@@ -355,40 +562,41 @@ beforeEach(() => {
       defaultLocale: 'en',
       locales: ['en', 'fr'],
     })),
-  }));
-});
+  }))
+})
 
 afterEach(() => {
-  vi.clearAllMocks();
-});
+  vi.clearAllMocks()
+})
 
 describe('Example test', () => {
   it('just an example', async () => {
-    const { useI18n, I18nProvider } = createI18n<typeof import('./en')>({
+    const { useI18n, I18nProvider } = createI18n({
       en: () => import('./en'),
-      // Other locales you might have.
-    });
+    })
 
     function App() {
-      const t = useI18n();
+      const t = useI18n()
 
-      return <p>{t('hello')}</p>;
+      return <p>{t('hello')}</p>
     }
 
     render(
       <I18nProvider locale={en}>
         <App />
-      </I18nProvider>,
-    );
+      </I18nProvider>
+    )
 
-    expect(screen.queryByText('Hello')).not.toBeInTheDocument();
+    expect(screen.queryByText('Hello')).not.toBeInTheDocument()
 
     await waitFor(() => {
-      expect(screen.getByText('Hello')).toBeInTheDocument();
-    });
-  });
-});
+      expect(screen.getByText('Hello')).toBeInTheDocument()
+    })
+  })
+})
 ```
+
+</details>
 
 ## License
 
