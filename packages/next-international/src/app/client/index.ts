@@ -7,7 +7,6 @@ import { createUsei18n } from '../../common/create-use-i18n';
 import { createScopedUsei18n } from '../../common/create-use-scoped-i18n';
 import { createUseChangeLocale } from './create-use-change-locale';
 import { createDefineLocale } from '../../common/create-define-locale';
-import { createGetLocaleProps } from '../../common/create-get-locale-static-props';
 import { createUseCurrentLocale } from './create-use-current-locale';
 
 export function createI18nClient<Locales extends ImportedLocales, OtherLocales extends ExplicitLocales | null = null>(
@@ -25,7 +24,6 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
   const useScopedI18n = createScopedUsei18n(I18nClientContext);
   const useChangeLocale = createUseChangeLocale<LocalesKeys>(localesKeys);
   const defineLocale = createDefineLocale<Locale>();
-  const getLocaleProps = createGetLocaleProps(locales);
   const useCurrentLocale = createUseCurrentLocale<LocalesKeys>(localesKeys);
 
   return {
@@ -35,7 +33,6 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
     I18nClientContext,
     useChangeLocale,
     defineLocale,
-    getLocaleProps,
     useCurrentLocale,
   };
 }

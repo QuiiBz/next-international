@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import { ImportedLocales, ExplicitLocales, GetLocaleType } from 'international-types';
 import type { LocaleContext } from '../types';
 import { createDefineLocale } from '../common/create-define-locale';
-import { createGetLocaleProps } from '../common/create-get-locale-static-props';
+import { createGetLocaleProps } from './create-get-locale-props';
 import { createI18nProvider } from './create-i18n-provider';
 import { createUseChangeLocale } from './create-use-change-locale';
 import { createUsei18n } from '../common/create-use-i18n';
