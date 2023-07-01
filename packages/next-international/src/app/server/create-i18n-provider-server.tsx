@@ -1,9 +1,8 @@
-import { cache } from 'react';
-import { ReactNode } from 'react';
+import { ReactElement, cache } from 'react';
 
 type I18nContextProps = {
   locale: string;
-  children: ReactNode;
+  children: ReactElement;
 };
 
 const localeCache = cache<() => { current: string | undefined }>(() => ({ current: undefined }));

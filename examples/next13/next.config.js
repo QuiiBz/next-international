@@ -4,7 +4,8 @@ const nextConfig = {
     appDir: true,
   },
   transpilePackages: ['next-international', 'international-types'],
-  output: 'export',
+  // Uncomment to use SSG
+  // output: 'export',
 };
 
 module.exports = nextConfig;

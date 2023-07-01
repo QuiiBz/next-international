@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { I18nProviderServer } from '@/locales/server';
 import './globals.css';
 
@@ -10,14 +11,13 @@ export default function RootLayout({
   children,
   params: { locale },
 }: {
-  children: React.ReactNode;
+  children: ReactElement;
   params: { locale: string };
 }) {
   return (
     <html lang="en">
       <body>
         <I18nProviderServer locale={locale}>{children}</I18nProviderServer>
-        {/* {children} */}
       </body>
     </html>
   );
