@@ -9,11 +9,11 @@ type I18nProviderProps<Locale extends BaseLocale> = {
   children: ReactNode;
 };
 
-export function createI18nProvider<Locale extends BaseLocale>(
-  I18nContext: Context<LocaleContext<Locale> | null>,
+export function createI18nProviderClient<Locale extends BaseLocale>(
+  I18nClientContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
 ) {
-  return function I18nAppProvider({
+  return function I18nProviderClient({
     locale: baseLocale,
     fallback = null,
     fallbackLocale,
@@ -36,14 +36,14 @@ export function createI18nProvider<Locale extends BaseLocale>(
     }
 
     return (
-      <I18nContext.Provider
+      <I18nClientContext.Provider
         value={{
           localeContent: (clientLocale || baseLocale) as Locale,
           fallbackLocale,
         }}
       >
         {children}
-      </I18nContext.Provider>
+      </I18nClientContext.Provider>
     );
   };
 }

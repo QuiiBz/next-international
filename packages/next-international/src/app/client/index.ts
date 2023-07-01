@@ -1,7 +1,7 @@
 import 'client-only';
 import type { ExplicitLocales, GetLocaleType, ImportedLocales } from 'international-types';
 import type { LocaleContext } from '../../types';
-import { createI18nProvider } from './create-i18n-provider';
+import { createI18nProviderClient } from './create-i18n-provider-client';
 import { createContext } from 'react';
 import { createUsei18n } from '../../common/create-use-i18n';
 import { createScopedUsei18n } from '../../common/create-use-scoped-i18n';
@@ -18,10 +18,11 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
 
   const localesKeys = Object.keys(locales) as LocalesKeys[];
 
-  const I18nContext = createContext<LocaleContext<Locale> | null>(null);
-  const I18nProvider = createI18nProvider(I18nContext, locales);
-  const useI18n = createUsei18n(I18nContext);
-  const useScopedI18n = createScopedUsei18n(I18nContext);
+  const I18nClientContext = createContext<LocaleContext<Locale> | null>(null);
+
+  const I18nProviderClient = createI18nProviderClient(I18nClientContext, locales);
+  const useI18n = createUsei18n(I18nClientContext);
+  const useScopedI18n = createScopedUsei18n(I18nClientContext);
   const useChangeLocale = createUseChangeLocale<LocalesKeys>(localesKeys);
   const defineLocale = createDefineLocale<Locale>();
   const getLocaleProps = createGetLocaleProps(locales);
@@ -30,7 +31,8 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
   return {
     useI18n,
     useScopedI18n,
-    I18nProvider,
+    I18nProviderClient,
+    I18nClientContext,
     useChangeLocale,
     defineLocale,
     getLocaleProps,

@@ -1,4 +1,4 @@
-import { I18nContext } from '@/locales/server';
+import { I18nProviderServer } from '@/locales/server';
 import './globals.css';
 
 export const metadata = {
@@ -16,7 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <I18nContext locale={locale}>{children}</I18nContext>
+        <I18nProviderServer locale={locale}>{children}</I18nProviderServer>
+        {/* {children} */}
       </body>
     </html>
   );
