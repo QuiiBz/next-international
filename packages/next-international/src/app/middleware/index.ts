@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export function createI18nMiddleware<Locales extends string[]>(locales: Locales, defaultLocale: Locales[number]) {
+export function createI18nMiddleware<Locales extends readonly string[]>(
+  locales: Locales,
+  defaultLocale: Locales[number],
+) {
   return function I18nMiddleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
     const pathnameIsMissingLocale = locales.every(
