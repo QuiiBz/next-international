@@ -1,11 +1,11 @@
-import * as tsd from 'vite-plugin-vitest-typescript-assert/tsd';
 import type { LocaleValue, ParamsObject } from '../index';
+import { assertType } from 'vitest';
 
 describe('param', () => {
   it('should extract param', () => {
     const value = {} as ParamsObject<'Hello {world}'>;
 
-    tsd.expectType<{
+    assertType<{
       world: LocaleValue;
     }>(value);
   });
@@ -13,7 +13,7 @@ describe('param', () => {
   it('should extract multiple params', () => {
     const value = {} as ParamsObject<'{username}: {age}'>;
 
-    tsd.expectType<{
+    assertType<{
       username: LocaleValue;
       age: LocaleValue;
     }>(value);
@@ -22,7 +22,7 @@ describe('param', () => {
   it('should extract params from plural', () => {
     const value = {} as ParamsObject<'{value, plural, =1 {1 item left} other {Many items left}}'>;
 
-    tsd.expectType<{
+    assertType<{
       value: LocaleValue;
     }>(value);
   });
@@ -30,7 +30,7 @@ describe('param', () => {
   it('should extract two params from plural', () => {
     const value = {} as ParamsObject<'{value, plural, =1 {{items} item left} other {{items} items left}}'>;
 
-    tsd.expectType<{
+    assertType<{
       value: LocaleValue;
       items: LocaleValue;
     }>(value);
@@ -40,7 +40,7 @@ describe('param', () => {
     const value =
       {} as ParamsObject<'{value, plural, =0 {{items} left} =1 {{items} item left} other {{items} items left}}'>;
 
-    tsd.expectType<{
+    assertType<{
       value: LocaleValue;
       items: LocaleValue;
     }>(value);
@@ -50,7 +50,7 @@ describe('param', () => {
     const value =
       {} as ParamsObject<'{value, plural, =0 {{items} left} =1 {{items} item left} other {You have too many {custom}}}'>;
 
-    tsd.expectType<{
+    assertType<{
       value: LocaleValue;
       items: LocaleValue;
       custom: LocaleValue;
@@ -61,7 +61,7 @@ describe('param', () => {
     const value =
       {} as ParamsObject<'{count, plural, =1 {The {serverName} server could not be delivered because the {serverModel} is out of stock. You will not be billed for this order} other {The {serverName} servers could not be delivered because the {serverModel} are out of stock. You will not be billed for this order}}'>;
 
-    tsd.expectType<{
+    assertType<{
       count: LocaleValue;
       serverName: LocaleValue;
       serverModel: LocaleValue;

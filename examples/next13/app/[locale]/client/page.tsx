@@ -1,6 +1,6 @@
 'use client';
 
-import { useI18n, useScopedI18n, useChangeLocale, useCurrentLocale } from '@/locales/client';
+import { useI18n, useScopedI18n, useChangeLocale, useCurrentLocale } from '../../../locales/client';
 
 export default function Client() {
   const t = useI18n();

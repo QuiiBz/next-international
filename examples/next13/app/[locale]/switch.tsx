@@ -1,6 +1,6 @@
 'use client';
 
-import { useChangeLocale } from '@/locales/client';
+import { useChangeLocale } from '../../locales/client';
 
 export function Switch() {
   const changeLocale = useChangeLocale();

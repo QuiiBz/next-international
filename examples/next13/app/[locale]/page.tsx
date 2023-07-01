@@ -1,4 +1,4 @@
-import { getI18n, getScopedI18n, getCurrentLocale } from '@/locales/server';
+import { getI18n, getScopedI18n, getCurrentLocale } from '../../locales/server';
 import { Switch } from './switch';
 
 // Only needed for SSG

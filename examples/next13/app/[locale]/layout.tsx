@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { I18nProviderServer } from '@/locales/server';
+import { I18nProviderServer } from '../../locales/server';
 import './globals.css';
 
 export const metadata = {
