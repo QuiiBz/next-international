@@ -54,7 +54,31 @@ importers:
       vite: 4.3.9
       vitest: 0.32.2_jsdom@20.0.0
 
-  examples/next:
+  examples/next-app:
+    specifiers:
+      '@types/node': ^18.0.4
+      '@types/react': ^18.2.9
+      '@types/react-dom': 18.2.4
+      eslint: 8.19.0
+      eslint-config-next: 13.4.4
+      next: 13.4.4
+      next-international: workspace:*
+      react: 18.2.0
+      react-dom: 18.2.0
+      typescript: ^5.1.6
+    dependencies:
+      '@types/node': 18.0.5
+      '@types/react': 18.2.9
+      '@types/react-dom': 18.2.4
+      eslint: 8.19.0
+      eslint-config-next: 13.4.4_56xobxvnjrpldyxc4xuzsealei
+      next: 13.4.4_biqbaboplfbrettd7655fr4n2y
+      next-international: link:../../packages/next-international
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      typescript: 5.1.6
+
+  examples/next-pages:
     specifiers:
       '@types/node': ^18.0.4
       '@types/react': ^18.2.9
@@ -77,30 +101,6 @@ importers:
       eslint: 8.19.0
       eslint-config-next: 13.4.4_56xobxvnjrpldyxc4xuzsealei
       next-transpile-modules: 9.1.0
-      typescript: 5.1.6
-
-  examples/next13:
-    specifiers:
-      '@types/node': ^18.0.4
-      '@types/react': ^18.2.9
-      '@types/react-dom': 18.2.4
-      eslint: 8.19.0
-      eslint-config-next: 13.4.4
-      next: 13.4.4
-      next-international: workspace:*
-      react: 18.2.0
-      react-dom: 18.2.0
-      typescript: ^5.1.6
-    dependencies:
-      '@types/node': 18.0.5
-      '@types/react': 18.2.9
-      '@types/react-dom': 18.2.4
-      eslint: 8.19.0
-      eslint-config-next: 13.4.4_56xobxvnjrpldyxc4xuzsealei
-      next: 13.4.4_biqbaboplfbrettd7655fr4n2y
-      next-international: link:../../packages/next-international
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
       typescript: 5.1.6
 
   packages/international-types:
@@ -790,7 +790,7 @@ packages:
   /@swc/helpers/0.5.1:
     resolution: {integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==}
     dependencies:
-      tslib: 2.4.0
+      tslib: 2.6.0
 
   /@testing-library/dom/9.3.1:
     resolution: {integrity: sha512-0DGPd9AR3+iDTjGoMpxIkAsUihHZ3Ai6CneU6bRRrffXMgzCdlNk43jTrD2/5LT6CBb3MWTP8v510JzYtahD2w==}
@@ -2191,7 +2191,7 @@ packages:
       doctrine: 2.1.0
       eslint: 8.19.0
       estraverse: 5.3.0
-      jsx-ast-utils: 3.3.2
+      jsx-ast-utils: 3.3.4
       minimatch: 3.1.2
       object.entries: 1.1.6
       object.fromentries: 2.0.6
@@ -3057,6 +3057,7 @@ packages:
     dependencies:
       array-includes: 3.1.6
       object.assign: 4.1.4
+    dev: true
 
   /jsx-ast-utils/3.3.4:
     resolution: {integrity: sha512-fX2TVdCViod6HwKEtSWGHs57oFhVfCMwieb9PuRDgjDPh5XeqJiHFFFJCHxU5cnTc3Bu/GRL+kPiFmw8XWOfKw==}
@@ -4323,6 +4324,7 @@ packages:
 
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
+    dev: true
 
   /tslib/2.6.0:
     resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==}

@@ -41,6 +41,8 @@ pnpm install next-international
 
 Make sure that `strict` is set to `true` in your `tsconfig.json`, then follow the guide for the [Pages Router](#pages-router) or the [App Router](#app-router).
 
+You can also find complete examples inside the [examples/next-pages](./examples/next-pages/) and [examples/next-app](./examples/next-app/) directories.
+
 ### Pages Router
 
 1. Make sure that you've set up correctly the [`i18n` key inside `next.config.js`](https://nextjs.org/docs/pages/building-your-application/routing/internationalization), then create `locales/index.ts` with your locales:
