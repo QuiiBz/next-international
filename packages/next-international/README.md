@@ -219,6 +219,24 @@ export default function SubLayout({
 export const generateStaticParams = getStaticParams()
 ```
 
+5. Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale:
+
+```ts
+// middleware.ts
+import { createI18nMiddleware } from 'next-international/middleware'
+import { NextRequest } from 'next/server'
+
+const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr')
+
+export function middleware(request: NextRequest) {
+  return I18nMiddleware(request)
+}
+
+export const config = {
+  matcher: ['/((?!_next).*)']
+}
+```
+
 5. Use `useI18n` and `useScopedI18n()` / `getI18n` and `getScopedI18n()` inside your components:
 
 ```tsx
