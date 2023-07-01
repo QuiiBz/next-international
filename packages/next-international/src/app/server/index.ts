@@ -1,4 +1,5 @@
 import 'server-only';
+
 import type { ExplicitLocales, GetLocaleType, ImportedLocales } from 'international-types';
 import { createGetI18n } from './create-get-i18n';
 import { createGetScopedI18n } from './create-get-scoped-i18n';
