@@ -11,11 +11,12 @@ export function createI18nServer<Locales extends ImportedLocales, OtherLocales e
   locales: Locales,
 ) {
   type Locale = OtherLocales extends ExplicitLocales ? GetLocaleType<OtherLocales> : GetLocaleType<Locales>;
+  type LocalesKeys = OtherLocales extends ExplicitLocales ? keyof OtherLocales : keyof Locales;
 
   const I18nProviderServer = createI18nProviderServer();
   const getI18n = createGetI18n<Locale>(locales);
   const getScopedI18n = createGetScopedI18n<Locales, Locale>(locales);
-  const getCurrentLocale = createGetCurrentLocale();
+  const getCurrentLocale = createGetCurrentLocale<LocalesKeys>();
   const getStaticParams = createGetStaticParams(locales);
 
   return {
