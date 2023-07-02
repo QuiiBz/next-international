@@ -1,7 +1,7 @@
 import { getCurrentLocale as getCurrentLocaleFromCache } from './create-i18n-provider-server';
 
-export function createGetCurrentLocale() {
+export function createGetCurrentLocale<LocalesKeys>(): () => LocalesKeys {
   return function getCurrentLocale() {
-    return getCurrentLocaleFromCache();
+    return getCurrentLocaleFromCache() as LocalesKeys;
   };
 }
