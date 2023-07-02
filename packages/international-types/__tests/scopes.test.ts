@@ -1,4 +1,5 @@
-import * as tsd from 'vite-plugin-vitest-typescript-assert/tsd';
+import { assertType } from 'vitest';
+
 import type { Scopes } from '../';
 
 describe('scopes', () => {
@@ -8,7 +9,7 @@ describe('scopes', () => {
       'hello.world': 'Hello World';
     }>;
 
-    tsd.expectType<'hello'>(value);
+    assertType<'hello'>(value);
   });
 
   it('should return the nested scopes', () => {
@@ -19,6 +20,6 @@ describe('scopes', () => {
       'scope.another.demo': 'Another nested scope';
     }>;
 
-    tsd.expectType<'hello' | 'scope' | 'scope.another'>(value);
+    assertType<'hello' | 'scope' | 'scope.another'>(value);
   });
 });

@@ -1,17 +1,20 @@
-import React from 'react';
-import { useChangeLocale, useCurrentLocale, useI18n, useScopedI18n } from '../locales';
+import { getI18n, getScopedI18n, getCurrentLocale, getStaticParams } from '../../locales/server';
+import { Switch } from './switch';
 
-const Home = () => {
-  const t = useI18n();
-  const changeLocale = useChangeLocale();
-  const t2 = useScopedI18n('scope.more');
-  const locale = useCurrentLocale();
+// Only needed for SSG
+export const generateStaticParams = getStaticParams();
+
+async function Content() {
+  const t = await getI18n();
+  const t2 = await getScopedI18n('scope.more');
+  const locale = getCurrentLocale();
 
   return (
     <div>
-      <h1>SSG</h1>
+      <h1>SSR / SSG</h1>
       <p>
-        Current locale: <span>{locale}</span>
+        Current locale:
+        <span>{locale}</span>
       </p>
       <p>Hello: {t('hello')}</p>
       <p>
@@ -53,17 +56,11 @@ const Home = () => {
       </p>
       <p>{t2('and.more.test')}</p>
       <p>{t('missing.translation.in.fr')}</p>
-      <button type="button" onClick={() => changeLocale('en')}>
-        EN
-      </button>
-      <button type="button" onClick={() => changeLocale('fr')}>
-        FR
-      </button>
+      <Switch />
     </div>
   );
-};
+}
 
-// Comment this to disable SSR of initial locale
-// export const getStaticProps: GetStaticProps = getLocaleProps();
-
-export default Home;
+export default function Home() {
+  return <Content />;
+}

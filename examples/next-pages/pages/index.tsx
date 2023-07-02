@@ -1,15 +1,17 @@
-import React from 'react';
-import { GetServerSideProps } from 'next';
-import { getLocaleProps, useChangeLocale, useI18n, useScopedI18n } from '../locales';
+import { useChangeLocale, useCurrentLocale, useI18n, useScopedI18n } from '../locales';
 
-const Home = () => {
+export default function Home() {
   const t = useI18n();
   const changeLocale = useChangeLocale();
   const t2 = useScopedI18n('scope.more');
+  const locale = useCurrentLocale();
 
   return (
     <div>
-      <h1>SSR</h1>
+      <h1>CSR</h1>
+      <p>
+        Current locale: <span>{locale}</span>
+      </p>
       <p>Hello: {t('hello')}</p>
       <p>
         Hello:{' '}
@@ -30,10 +32,22 @@ const Home = () => {
           name: 'Doe',
         })}
       </p>
+      <p>
+        Hello (with React components):{' '}
+        {t('about.you', {
+          age: <strong>23</strong>,
+          name: 'Doe',
+        })}
+      </p>
       <p>{t2('test')}</p>
       <p>
         {t2('param', {
           param: 'test',
+        })}
+      </p>
+      <p>
+        {t2('param', {
+          param: <strong>test</strong>,
         })}
       </p>
       <p>{t2('and.more.test')}</p>
@@ -46,9 +60,4 @@ const Home = () => {
       </button>
     </div>
   );
-};
-
-// Comment this to disable SSR of initial locale
-export const getServerSideProps: GetServerSideProps = getLocaleProps();
-
-export default Home;
+}

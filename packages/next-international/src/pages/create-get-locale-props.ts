@@ -1,8 +1,8 @@
-import type { Locales } from '../types';
+import type { ImportedLocales } from 'international-types';
 import type { GetStaticProps, GetServerSideProps } from 'next';
 import { error } from '../helpers/log';
 
-export function createGetLocaleProps(locales: Locales) {
+export function createGetLocaleProps(locales: ImportedLocales) {
   return function getLocaleProps<
     T extends { [key: string]: any },
     GetProps extends GetStaticProps<T> | GetServerSideProps<T>,

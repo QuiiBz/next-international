@@ -1,4 +1,4 @@
-import * as tsd from 'vite-plugin-vitest-typescript-assert/tsd';
+import { assertType } from 'vitest';
 import type { LocaleKeys } from '../';
 
 describe('keys', () => {
@@ -11,7 +11,7 @@ describe('keys', () => {
       undefined
     >;
 
-    tsd.expectType<'hello' | 'hello.world'>(value);
+    assertType<'hello' | 'hello.world'>(value);
   });
 
   it('should return the keys with scope', () => {
@@ -24,7 +24,7 @@ describe('keys', () => {
       'scope'
     >;
 
-    tsd.expectType<'demo' | 'another.demo'>(value);
+    assertType<'demo' | 'another.demo'>(value);
   });
 
   it('should return the keys with nested scope', () => {
@@ -37,6 +37,6 @@ describe('keys', () => {
       'scope.nested'
     >;
 
-    tsd.expectType<'demo' | 'another.demo'>(value);
+    assertType<'demo' | 'another.demo'>(value);
   });
 });

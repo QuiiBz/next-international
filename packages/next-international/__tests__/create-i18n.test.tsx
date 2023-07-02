@@ -1,6 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
+import { assertType, describe, expect, it, vi } from 'vitest';
 import { createI18n } from '../src';
-import * as tsd from 'vite-plugin-vitest-typescript-assert/tsd';
 import React from 'react';
 import { render } from './utils';
 import en from './utils/en';
@@ -30,9 +29,6 @@ describe('createI18n', () => {
 
     expect(result.I18nProvider).toBeDefined();
 
-    expect(result.getLocaleStaticProps).toBeDefined();
-    expect(result.getLocaleStaticProps).toBeInstanceOf(Function);
-
     expect(result.getLocaleProps).toBeDefined();
     expect(result.getLocaleProps).toBeInstanceOf(Function);
 
@@ -56,10 +52,10 @@ describe('createI18n', () => {
       const changeLocale = useChangeLocale();
       const t = useI18n();
 
-      tsd.expectType<() => 'en' | 'fr'>(useCurrentLocale);
-      tsd.expectType<(newLocale: 'en' | 'fr') => void>(useChangeLocale());
+      assertType<() => 'en' | 'fr'>(useCurrentLocale);
+      assertType<(newLocale: 'en' | 'fr') => void>(useChangeLocale());
 
-      tsd.expectType<string>(useI18n()('hello'));
+      assertType<string>(useI18n()('hello'));
 
       //@ts-expect-error invalid key should give error
       useI18n()('asdfasdf');
@@ -101,10 +97,10 @@ describe('createI18n', () => {
       const changeLocale = useChangeLocale();
       const t = useI18n();
 
-      tsd.expectType<'en' | 'fr'>(useCurrentLocale());
-      tsd.expectType<(newLocale: 'en' | 'fr') => void>(useChangeLocale());
+      assertType<'en' | 'fr'>(useCurrentLocale());
+      assertType<(newLocale: 'en' | 'fr') => void>(useChangeLocale());
 
-      tsd.expectType<string>(useI18n()('welcome'));
+      assertType<string>(useI18n()('welcome'));
 
       //@ts-expect-error invalid key should give error
       useI18n()('asdfasdf');
