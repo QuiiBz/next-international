@@ -30,7 +30,10 @@
     "internationalization"
   ],
   "files": [
-    "dist"
+    "dist",
+    "client.d.ts",
+    "server.d.ts",
+    "middleware.d.ts"
   ],
   "repository": {
     "type": "git",
