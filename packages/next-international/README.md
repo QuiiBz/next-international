@@ -218,6 +218,8 @@ export default function SubLayout({
 
 ```ts
 // app/[locale]/page.tsx
+import { ..., getStaticParams } from '../../locales/server'
+
 export const generateStaticParams = getStaticParams()
 ```
 
@@ -243,7 +245,7 @@ export const config = {
 
 ```tsx
 // Client Component
-import { useI18n, useScopedI18n } from '../locales/client'
+import { useI18n, useScopedI18n } from '../../locales/client'
 
 export default function Page() {
   const t = useI18n()
@@ -264,7 +266,7 @@ export default function Page() {
 }
 
 // Server Component
-import { getI18n, getScopedI18n } from '../locales/server'
+import { getI18n, getScopedI18n } from '../../locales/server'
 
 export default async function Page() {
   const t = await getI18n()
@@ -320,7 +322,7 @@ Then use it in your component:
 ```tsx
 import { useScopedI18n } from '../locales'
 
-function App() {
+export default function Page() {
   const t = useScopedI18n('pages.settings')
 
   return (
@@ -362,9 +364,9 @@ Then use it in your components:
 
 ```tsx
 // Client Component
-import { useScopedI18n } from '../locales/client'
+import { useScopedI18n } from '../../locales/client'
 
-function App() {
+export default function Page() {
   const t = useScopedI18n('pages.settings')
 
   return (
@@ -377,9 +379,9 @@ function App() {
 }
 
 // Server component
-import { getScopedI18n } from '../locales/server'
+import { getScopedI18n } from '../../locales/server'
 
-async function App() {
+export default async function Page() {
   const t = await getScopedI18n('pages.settings')
 
   return (
@@ -417,7 +419,7 @@ Then use it as a hook:
 ```tsx
 import { useChangeLocale, useCurrentLocale } from '../locales'
 
-function App() {
+export default function Page() {
   const changeLocale = useChangeLocale()
   const locale = useCurrentLocale()
 
@@ -462,9 +464,9 @@ Then use these hooks:
 
 ```tsx
 // Client Component
-import { useChangeLocale, useCurrentLocale } from '../locales/client'
+import { useChangeLocale, useCurrentLocale } from '../../locales/client'
 
-function App() {
+export default function Page() {
   const changeLocale = useChangeLocale()
   const locale = useCurrentLocale()
 
@@ -480,9 +482,9 @@ function App() {
 
 ```tsx
 // Server Component
-import { getCurrentLocale } from '../locales/server'
+import { getCurrentLocale } from '../../locales/server'
 
-function App() {
+export default function Page() {
   const locale = getCurrentLocale()
 
   return (
@@ -501,12 +503,12 @@ You can provide a fallback locale that will be used for all missing translations
 
 ```tsx
 // pages/_app.tsx
-import { I18nProvider } from '../locales';
-import en from '../locales/en';
+import { I18nProvider } from '../locales'
+import en from '../locales/en'
 
 <I18nProvider locale={pageProps.locale} fallbackLocale={en}>
   ...
-</I18nProvider>;
+</I18nProvider>
 ```
 
 ### Load initial locales client-side
