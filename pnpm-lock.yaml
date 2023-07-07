@@ -110,7 +110,7 @@ importers:
     specifiers:
       '@types/react': ^18.2.9
       client-only: ^0.0.1
-      international-types: ^0.5.1
+      international-types: ^0.5.2
       next: 13.4.9
       react: 18.2.0
       server-only: ^0.0.1
