@@ -170,29 +170,7 @@ export default {
 } as const
 ```
 
-2. Move all your routes inside an `app/[locale]/` folder, and wrap your whole app with `I18nProviderServer` inside `app/[locale]/layout.tsx`:
-
-```tsx
-// app/[locale]/layout.tsx
-import { ReactElement } from 'react'
-import { I18nProviderServer } from '../../locales/server'
-
-export default function RootLayout({
-  children,
-  params
-}: {
-  children: ReactElement
-  params: { locale: string }
-}) {
-  return (
-    <I18nProviderServer locale={params.locale}>
-      {children}
-    </I18nProviderServer>
-  )
-}
-```
-
-3. For Client Components, wrap the lowest parts of your app with `I18nProviderClient` inside a layout:
+2. Move all your routes inside an `app/[locale]/` folder. For Client Components, wrap the lowest parts of your app with `I18nProviderClient` inside a layout:
 
 ```tsx
 // app/[locale]/client/layout.tsx
@@ -214,7 +192,7 @@ export default function SubLayout({
 }
 ```
 
-4. If you want to support SSG with `output: export`, add `getStaticParams` to your pages:
+3. (WIP) If you want to support SSG with `output: export`, add `getStaticParams` to your pages:
 
 ```ts
 // app/[locale]/page.tsx
@@ -223,7 +201,7 @@ import { ..., getStaticParams } from '../../locales/server'
 export const generateStaticParams = getStaticParams()
 ```
 
-5. Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale:
+4. Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale:
 
 ```ts
 // middleware.ts
