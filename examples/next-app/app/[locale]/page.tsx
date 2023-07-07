@@ -1,10 +1,9 @@
 import { getI18n, getScopedI18n, getCurrentLocale, getStaticParams } from '../../locales/server';
-import { Switch } from './switch';
 
 // Only needed for SSG
-export const generateStaticParams = getStaticParams();
+// export const generateStaticParams = getStaticParams();
 
-async function Content() {
+export default async function Home() {
   const t = await getI18n();
   const t2 = await getScopedI18n('scope.more');
   const locale = getCurrentLocale();
@@ -56,11 +55,6 @@ async function Content() {
       </p>
       <p>{t2('and.more.test')}</p>
       <p>{t('missing.translation.in.fr')}</p>
-      <Switch />
     </div>
   );
-}
-
-export default function Home() {
-  return <Content />;
 }

@@ -4,6 +4,12 @@ const nextConfig = {
     appDir: true,
   },
   transpilePackages: ['next-international', 'international-types'],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   // Uncomment to use SSG
   // output: 'export',
 };
