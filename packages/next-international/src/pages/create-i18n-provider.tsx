@@ -11,6 +11,17 @@ type I18nProviderProps<Locale extends BaseLocale> = {
   children: ReactNode;
 };
 
+const flatten = <Locale extends BaseLocale>(locale: Locale, prefix = ''): Locale =>
+  Object.entries(locale).reduce(
+    (prev, [name, value]) => ({
+      ...prev,
+      ...(typeof value === 'string'
+        ? { [prefix + name]: value }
+        : flatten(value as unknown as Locale, `${prefix}${name}.`)),
+    }),
+    {} as Locale,
+  );
+
 export function createI18nProvider<Locale extends BaseLocale>(
   I18nContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
@@ -45,7 +56,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
 
     const loadLocale = useCallback((locale: string) => {
       locales[locale]().then(content => {
-        setClientLocale(content.default as Locale);
+        setClientLocale(flatten(content.default));
       });
     }, []);
 
