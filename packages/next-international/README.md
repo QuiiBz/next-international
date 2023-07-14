@@ -16,6 +16,7 @@
   - [App Router](#app-router)
 - [Examples](#examples)
   - [Scoped translations](#scoped-translations)
+  - [Nested objects locales](#nested-objects-locales)
   - [Change and get current locale](#change-and-get-current-locale)
   - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
   - [Load initial locales client-side](#load-initial-locales-client-side)
@@ -373,6 +374,33 @@ export default async function Page() {
 ```
 
 </details>
+
+### Nested objects locales
+
+You can write locales using nested objects instead of the default dot notation. You can use the syntax you prefer without updating anything else:
+
+```ts
+// locales/en.ts
+export default {
+  hello: 'Hello',
+  hello: {
+    world: 'Hello world!',
+    nested: {
+      translations: 'Translations'
+    }
+  }
+} as const
+```
+
+It's the equivalent of the following:
+
+```ts
+export default {
+  'hello': 'Hello',
+  'hello.world': 'Hello world!',
+  'hello.nested.translations': 'Translations'
+} as const
+```
 
 ### Change and get the current locale
 
