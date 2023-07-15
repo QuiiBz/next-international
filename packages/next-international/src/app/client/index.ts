@@ -1,5 +1,5 @@
 import 'client-only';
-import type { ExplicitLocales, GetLocaleType, ImportedLocales } from 'international-types';
+import type { ExplicitLocales, FlattenLocale, GetLocaleType, ImportedLocales } from 'international-types';
 import type { LocaleContext } from '../../types';
 import { createI18nProviderClient } from './create-i18n-provider-client';
 import { createContext } from 'react';
@@ -12,11 +12,14 @@ import { createUseCurrentLocale } from './create-use-current-locale';
 export function createI18nClient<Locales extends ImportedLocales, OtherLocales extends ExplicitLocales | null = null>(
   locales: Locales,
 ) {
-  type Locale = OtherLocales extends ExplicitLocales ? GetLocaleType<OtherLocales> : GetLocaleType<Locales>;
+  type TempLocale = OtherLocales extends ExplicitLocales ? GetLocaleType<OtherLocales> : GetLocaleType<Locales>;
+  type Locale = TempLocale extends Record<string, string> ? TempLocale : FlattenLocale<TempLocale>;
+
   type LocalesKeys = OtherLocales extends ExplicitLocales ? keyof OtherLocales : keyof Locales;
 
   const localesKeys = Object.keys(locales) as LocalesKeys[];
 
+  // @ts-expect-error deep type
   const I18nClientContext = createContext<LocaleContext<Locale> | null>(null);
 
   const I18nProviderClient = createI18nProviderClient(I18nClientContext, locales);
