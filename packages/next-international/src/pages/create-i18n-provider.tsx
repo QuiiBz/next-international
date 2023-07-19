@@ -3,6 +3,7 @@ import type { LocaleContext } from '../types';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 import { useRouter } from 'next/router';
 import { error, warn } from '../helpers/log';
+import { flattenLocale } from '../common/flatten-locale';
 
 type I18nProviderProps<Locale extends BaseLocale> = {
   locale: Locale;
@@ -10,17 +11,6 @@ type I18nProviderProps<Locale extends BaseLocale> = {
   fallbackLocale?: Locale;
   children: ReactNode;
 };
-
-const flatten = <Locale extends BaseLocale>(locale: Locale, prefix = ''): Locale =>
-  Object.entries(locale).reduce(
-    (prev, [name, value]) => ({
-      ...prev,
-      ...(typeof value === 'string'
-        ? { [prefix + name]: value }
-        : flatten(value as unknown as Locale, `${prefix}${name}.`)),
-    }),
-    {} as Locale,
-  );
 
 export function createI18nProvider<Locale extends BaseLocale>(
   I18nContext: Context<LocaleContext<Locale> | null>,
@@ -56,7 +46,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
 
     const loadLocale = useCallback((locale: string) => {
       locales[locale]().then(content => {
-        setClientLocale(flatten(content.default));
+        setClientLocale(flattenLocale(content.default));
       });
     }, []);
 
