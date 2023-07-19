@@ -1,6 +1,7 @@
 import React, { Context, ReactElement, ReactNode, useCallback, useEffect, useState } from 'react';
 import type { LocaleContext } from '../../types';
 import type { BaseLocale, ImportedLocales } from 'international-types';
+import { flattenLocale } from '../../common/flatten-locale';
 
 type I18nProviderProps<Locale extends BaseLocale> = {
   locale: string;
@@ -23,7 +24,7 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
 
     const loadLocale = useCallback((locale: string) => {
       locales[locale]().then(content => {
-        setClientLocale(content.default as Locale);
+        setClientLocale(flattenLocale(content.default));
       });
     }, []);
 
