@@ -384,7 +384,6 @@ You can write locales using nested objects instead of the default dot notation. 
 ```ts
 // locales/en.ts
 export default {
-  hello: 'Hello',
   hello: {
     world: 'Hello world!',
     nested: {
@@ -398,13 +397,12 @@ It's the equivalent of the following:
 
 ```ts
 export default {
-  'hello': 'Hello',
   'hello.world': 'Hello world!',
   'hello.nested.translations': 'Translations'
 } as const
 ```
 
-### Change and get the current locale
+### Change and get current locale
 
 <details>
 <summary>Pages Router</summary>
