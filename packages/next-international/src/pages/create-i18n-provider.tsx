@@ -1,4 +1,4 @@
-import React, { Context, ReactElement, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import React, { Context, ReactElement, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { LocaleContext } from '../types';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 import { useRouter } from 'next/router';
@@ -65,6 +65,14 @@ export function createI18nProvider<Locale extends BaseLocale>(
       initialLoadRef.current = false;
     }, [baseLocale, loadLocale, locale]);
 
+    const value = useMemo(
+      () => ({
+        localeContent: (clientLocale || baseLocale) as Locale,
+        fallbackLocale: fallbackLocale ? flattenLocale(fallbackLocale) : undefined,
+      }),
+      [clientLocale, baseLocale, fallbackLocale],
+    );
+
     if (!locale || !defaultLocale) {
       return error(`'i18n.defaultLocale' not defined in 'next.config.js'`);
     }
@@ -77,15 +85,6 @@ export function createI18nProvider<Locale extends BaseLocale>(
       return fallback;
     }
 
-    return (
-      <I18nContext.Provider
-        value={{
-          localeContent: (clientLocale || baseLocale) as Locale,
-          fallbackLocale,
-        }}
-      >
-        {children}
-      </I18nContext.Provider>
-    );
+    return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
   };
 }
