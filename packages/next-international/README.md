@@ -154,7 +154,7 @@ export const { useI18n, useScopedI18n, I18nProviderClient } = createI18nClient({
 // locales/server.ts
 import { createI18nServer } from 'next-international/server'
 
-export const { getI18n, getScopedI18n, I18nProviderServer, getStaticParams } = createI18nServer({
+export const { getI18n, getScopedI18n, getStaticParams } = createI18nServer({
   en: () => import('./en'),
   fr: () => import('./fr')
 })
@@ -224,6 +224,7 @@ export const config = {
 
 ```tsx
 // Client Component
+'use client'
 import { useI18n, useScopedI18n } from '../../locales/client'
 
 export default function Page() {
@@ -343,6 +344,7 @@ Then use it in your components:
 
 ```tsx
 // Client Component
+'use client'
 import { useScopedI18n } from '../../locales/client'
 
 export default function Page() {
@@ -357,7 +359,7 @@ export default function Page() {
   )
 }
 
-// Server component
+// Server Component
 import { getScopedI18n } from '../../locales/server'
 
 export default async function Page() {
@@ -469,6 +471,7 @@ export const {
 Then use these hooks:
 
 ```tsx
+'use client'
 // Client Component
 import { useChangeLocale, useCurrentLocale } from '../../locales/client'
 
