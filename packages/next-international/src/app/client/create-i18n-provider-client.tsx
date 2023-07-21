@@ -3,10 +3,10 @@ import type { LocaleContext } from '../../types';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 import { flattenLocale } from '../../common/flatten-locale';
 
-type I18nProviderProps<Locale extends BaseLocale> = {
+type I18nProviderProps = {
   locale: string;
   fallback?: ReactElement | null;
-  fallbackLocale?: Locale;
+  fallbackLocale?: Record<string, unknown>;
   children: ReactNode;
 };
 
@@ -19,12 +19,12 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
     fallback = null,
     fallbackLocale,
     children,
-  }: I18nProviderProps<Locale>) {
+  }: I18nProviderProps) {
     const [clientLocale, setClientLocale] = useState<Locale>();
 
     const loadLocale = useCallback((locale: string) => {
       locales[locale]().then(content => {
-        setClientLocale(flattenLocale(content.default));
+        setClientLocale(flattenLocale<Locale>(content.default));
       });
     }, []);
 
@@ -35,7 +35,7 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
     const value = useMemo(
       () => ({
         localeContent: (clientLocale || baseLocale) as Locale,
-        fallbackLocale: fallbackLocale ? flattenLocale(fallbackLocale) : undefined,
+        fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
       }),
       [clientLocale, baseLocale, fallbackLocale],
     );
