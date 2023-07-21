@@ -22,7 +22,7 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
   // @ts-expect-error deep type
   const I18nClientContext = createContext<LocaleContext<Locale> | null>(null);
 
-  const I18nProviderClient = createI18nProviderClient(I18nClientContext, locales);
+  const I18nProviderClient = createI18nProviderClient<Locale>(I18nClientContext, locales);
   const useI18n = createUsei18n(I18nClientContext);
   const useScopedI18n = createScopedUsei18n(I18nClientContext);
   const useChangeLocale = createUseChangeLocale<LocalesKeys>(localesKeys);

@@ -8,7 +8,7 @@ import { flattenLocale } from '../common/flatten-locale';
 type I18nProviderProps<Locale extends BaseLocale> = {
   locale: Locale;
   fallback?: ReactElement | null;
-  fallbackLocale?: Locale;
+  fallbackLocale?: Record<string, unknown>;
   children: ReactNode;
 };
 
@@ -46,7 +46,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
 
     const loadLocale = useCallback((locale: string) => {
       locales[locale]().then(content => {
-        setClientLocale(flattenLocale(content.default));
+        setClientLocale(flattenLocale<Locale>(content.default));
       });
     }, []);
 
@@ -68,7 +68,7 @@ export function createI18nProvider<Locale extends BaseLocale>(
     const value = useMemo(
       () => ({
         localeContent: (clientLocale || baseLocale) as Locale,
-        fallbackLocale: fallbackLocale ? flattenLocale(fallbackLocale) : undefined,
+        fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
       }),
       [clientLocale, baseLocale, fallbackLocale],
     );
