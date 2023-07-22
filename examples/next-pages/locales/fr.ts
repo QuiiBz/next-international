@@ -11,4 +11,6 @@ export default defineLocale({
   'scope.more.param': 'Un scope avec un {param}',
   'scope.more.and.more.test': 'Un scope',
   'missing.translation.in.fr': '', // Comment to test locale fallback
+  'cows#one': 'Une vache',
+  'cows#other': '{count} vaches',
 });

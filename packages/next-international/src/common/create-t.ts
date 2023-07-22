@@ -1,9 +1,9 @@
 import { isValidElement, cloneElement, ReactNode } from 'react';
 import type {
   BaseLocale,
+  CreateParams,
   LocaleKeys,
   LocaleValue,
-  Params,
   ParamsObject,
   ScopedValue,
   Scopes,
@@ -11,29 +11,41 @@ import type {
 import type { ReactParamsObject, LocaleContext, LocaleMap } from '../types';
 
 export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> | undefined>(
-  context: LocaleContext<Locale> | null,
+  context: LocaleContext<Locale>,
   scope: Scope | undefined,
 ) {
+  const { localeContent, fallbackLocale } = context;
+
+  const pluralKeys = new Set(
+    Object.keys(localeContent)
+      .filter(key => key.includes('#'))
+      .map(key => key.split('#')[0]),
+  );
+  const pluralRules = new Intl.PluralRules(context.locale);
+
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
-    ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value>]
+    ...params: CreateParams<ParamsObject<Value>, Locale, Scope, Key, Value>
   ): string;
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
-    ...params: Params<Value>['length'] extends 0 ? [] : [ReactParamsObject<Value>]
+    ...params: CreateParams<ReactParamsObject<Value>, Locale, Scope, Key, Value>
   ): React.ReactNode;
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
-    ...params: Params<Value>['length'] extends 0 ? [] : [ParamsObject<Value> | ReactParamsObject<Value>]
+    ...params: CreateParams<ParamsObject<Value> | ReactParamsObject<Value>, Locale, Scope, Key, Value>
   ) {
-    const { localeContent, fallbackLocale } = context as LocaleContext<Locale>;
+    const paramObject = params[0];
+
+    if (paramObject && 'count' in paramObject && pluralKeys.has(key)) {
+      key = `${key}#${pluralRules.select(paramObject.count)}` as Key;
+    }
 
     const value = (
       (scope ? localeContent[`${scope}.${key}`] : localeContent[key]) ||
       (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]) ||
       key
     )?.toString();
-    const paramObject = params[0];
 
     if (!paramObject) {
       return value;

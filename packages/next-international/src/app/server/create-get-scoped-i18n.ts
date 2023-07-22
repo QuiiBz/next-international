@@ -12,6 +12,7 @@ export function createGetScopedI18n<Locales extends ImportedLocales, Locale exte
       {
         localeContent: flattenLocale((await locales[locale]()).default),
         fallbackLocale: undefined,
+        locale,
       } as LocaleContext<Locale>,
       scope,
     );

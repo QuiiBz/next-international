@@ -9,6 +9,8 @@ export default {
   'scope.more.param': 'A scope with {param}',
   'scope.more.and.more.test': 'A scope',
   'missing.translation.in.fr': 'This should work',
+  'cows#one': 'A cow',
+  'cows#other': '{count} cows',
 } as const;
 
 // We can also write locales using nested objects
@@ -37,4 +39,6 @@ export default {
 //       },
 //     },
 //   },
+//   'cows#one': 'A cow',
+//   'cows#other': '{count} cows',
 // } as const;

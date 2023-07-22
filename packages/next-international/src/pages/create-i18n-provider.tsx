@@ -69,8 +69,9 @@ export function createI18nProvider<Locale extends BaseLocale>(
       () => ({
         localeContent: (clientLocale || baseLocale) as Locale,
         fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
+        locale: locale ?? defaultLocale ?? '',
       }),
-      [clientLocale, baseLocale, fallbackLocale],
+      [clientLocale, baseLocale, fallbackLocale, locale, defaultLocale],
     );
 
     if (!locale || !defaultLocale) {

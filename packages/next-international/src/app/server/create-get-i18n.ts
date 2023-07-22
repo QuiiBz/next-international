@@ -12,6 +12,7 @@ export function createGetI18n<Locale extends BaseLocale>(locales: ImportedLocale
       {
         localeContent: flattenLocale((await locales[locale]()).default),
         fallbackLocale: undefined,
+        locale,
       } as LocaleContext<Locale>,
       undefined,
     );
