@@ -8,14 +8,14 @@ jobs:
   lint:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: pnpm/action-setup@v2.2.2
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
       with:
-        version: 7
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
+        version: 8
+    - name: Use Node.js 20
+      uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 20
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
@@ -24,14 +24,14 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: pnpm/action-setup@v2.2.2
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
       with:
-        version: 7
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
+        version: 8
+    - name: Use Node.js 20
+      uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 20
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
@@ -40,14 +40,14 @@ jobs:
   typecheck:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: pnpm/action-setup@v2.2.2
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
       with:
-        version: 7
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
+        version: 8
+    - name: Use Node.js 20
+      uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 20
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
