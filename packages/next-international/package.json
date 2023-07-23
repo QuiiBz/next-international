@@ -53,10 +53,6 @@
     "react": "18.2.0",
     "tsup": "^6.1.3"
   },
-  "peerDependencies": {
-    "next": "^13.0.0 || ^12.0.0 || ^11.0.0",
-    "react": "^18.0.0 || ^17.0.0"
-  },
   "dependencies": {
     "client-only": "^0.0.1",
     "international-types": "^0.6.2",
