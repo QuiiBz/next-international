@@ -10,9 +10,10 @@ type I18nProviderProps = {
   children: ReactNode;
 };
 
-export function createI18nProviderClient<Locale extends BaseLocale>(
+export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>(
   I18nClientContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
+  useCurrentLocale: () => LocalesKeys,
 ) {
   return function I18nProviderClient({
     locale: baseLocale,
@@ -20,6 +21,7 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
     fallbackLocale,
     children,
   }: I18nProviderProps) {
+    const locale = useCurrentLocale();
     const [clientLocale, setClientLocale] = useState<Locale>();
 
     const loadLocale = useCallback((locale: string) => {
@@ -36,8 +38,9 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
       () => ({
         localeContent: (clientLocale || baseLocale) as Locale,
         fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
+        locale: locale as string,
       }),
-      [clientLocale, baseLocale, fallbackLocale],
+      [clientLocale, baseLocale, fallbackLocale, locale],
     );
 
     if (!clientLocale && fallback) {

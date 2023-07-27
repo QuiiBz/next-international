@@ -1,6 +1,7 @@
 import type { BaseLocale, LocaleValue, Params } from 'international-types';
 
 export type LocaleContext<Locale extends BaseLocale> = {
+  locale: string;
   localeContent: Locale;
   fallbackLocale?: Locale;
 };

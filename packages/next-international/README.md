@@ -16,6 +16,7 @@
   - [App Router](#app-router)
 - [Examples](#examples)
   - [Scoped translations](#scoped-translations)
+  - [Plurals](#plurals)
   - [Nested objects locales](#nested-objects-locales)
   - [Change and get current locale](#change-and-get-current-locale)
   - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
@@ -26,7 +27,7 @@
 
 ## Features
 
-- **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params, type-safe `changeLocale()`...
+- **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params, type-safe plurals, type-safe `changeLocale()`...
 - **Small**: No dependencies, lazy-loaded
 - **Simple**: No Webpack configuration, no CLI, no code generation, just pure TypeScript
 - **SSR/SSG/CSR**: Load only the required locale, client-side and server-side
@@ -376,6 +377,37 @@ export default async function Page() {
 ```
 
 </details>
+
+### Plurals
+
+Plural translations work out of the box without any external dependencies, using the [`Intl.PluralRules`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules) API, which is supported in all browsers and Node.js.
+
+To declare plural translations, append `#` followed by `zero`, `one`, `two`, `few`, `many` or `other`:
+
+```ts
+// locales/en.ts
+export default {
+  'cows#one': 'A cow',
+  'cows#other': '{count} cows'
+} as const
+```
+
+The correct translation will then be determined automatically using a mandatory `count` parameter. This works with the Pages Router, App Router in both Client and Server Components, and with [scoped translations](#scoped-translations):
+
+```tsx
+export default function Page() {
+  const t = useI18n()
+
+  return (
+    <div>
+      {/* Output: A cow */}
+      <p>{t('cows', { count: 1 })}</p>
+      {/* Output: 3 cows */}
+      <p>{t('cows', { count: 3 })}</p>
+    </div>
+  )
+}
+```
 
 ### Nested objects locales
 
