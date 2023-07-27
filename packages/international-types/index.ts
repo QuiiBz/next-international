@@ -56,10 +56,10 @@ export type ScopedValue<
   Key extends LocaleKeys<Locale, Scope>,
 > = Scope extends undefined
   ? IsPlural<Key, Locale> extends true
-    ? Locale[`${Key}#${PluralSuffix}` & keyof Locale]
+    ? Locale[`${Key}#${PluralSuffix}`]
     : Locale[Key]
   : IsPlural<Key, Locale> extends true
-  ? Locale[`${Scope}.${Key}#${PluralSuffix}` & keyof Locale]
+  ? Locale[`${Scope}.${Key}#${PluralSuffix}`]
   : Locale[`${Scope}.${Key}`];
 
 // From https://github.com/microsoft/TypeScript/issues/13298#issuecomment-885980381
