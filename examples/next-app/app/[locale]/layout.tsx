@@ -15,13 +15,16 @@ export default function RootLayout({ children }: { children: ReactElement }) {
         <Switch />
         <ul>
           <li>
-            <Link href="/">Go to /</Link>
+            <Link href="/">Go to / (SSR/SSG + RSC)</Link>
           </li>
           <li>
-            <Link href="/subpage">Go to /subpage</Link>
+            <Link href="/subpage">Go to /subpage (SSR/SSG + RSC)</Link>
           </li>
           <li>
-            <Link href="/client">Go to /client</Link>
+            <Link href="/ssr">Go to /ssr (SSR + CSR)</Link>
+          </li>
+          <li>
+            <Link href="/client">Go to /client (CSR)</Link>
           </li>
         </ul>
         {children}
