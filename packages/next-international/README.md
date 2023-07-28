@@ -392,7 +392,13 @@ export default {
 } as const
 ```
 
-The correct translation will then be determined automatically using a mandatory `count` parameter. This works with the Pages Router, App Router in both Client and Server Components, and with [scoped translations](#scoped-translations):
+The correct translation will then be determined automatically using a mandatory `count` parameter. The value of `count `is determined by the union of all suffixes, enabling type safety:
+- `zero` only allows `0`
+- `one` only allows `1`
+- `two` only allows `2`
+- `few`, `many` and `other` allow `number`
+
+This works with the Pages Router, App Router in both Client and Server Components, and with [scoped translations](#scoped-translations):
 
 ```tsx
 export default function Page() {
