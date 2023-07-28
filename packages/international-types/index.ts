@@ -110,11 +110,27 @@ export type FlattenLocale<Locale extends Record<string, unknown>> = {
 type PluralSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
 
 type RemovePlural<Key extends string> = Key extends `${infer Head}#${PluralSuffix}` ? Head : Key;
+type GetPlural<Key extends string, Locale extends BaseLocale> = `${Key}#${PluralSuffix}` &
+  keyof Locale extends infer PluralKey
+  ? PluralKey extends `${string}#${infer Plural extends PluralSuffix}`
+    ? Plural
+    : never
+  : never;
 type IsPlural<Key extends string, Locale extends BaseLocale> = `${Key}#${PluralSuffix}` & keyof Locale extends never
   ? false
   : true;
 
-type AddCount<T> = T extends [] ? [{ count: number }] : T extends [infer R] ? [{ count: number } & R] : never;
+type GetCountUnion<
+  Key extends string,
+  Locale extends BaseLocale,
+  Plural extends PluralSuffix = GetPlural<Key, Locale>,
+> = Plural extends 'zero' ? 0 : Plural extends 'one' ? 1 : Plural extends 'two' ? 2 : number;
+
+type AddCount<T, Key extends string, Locale extends BaseLocale> = T extends []
+  ? [{ count: GetCountUnion<Key, Locale> }]
+  : T extends [infer R]
+  ? [{ count: GetCountUnion<Key, Locale> } & R]
+  : never;
 
 export type CreateParams<
   T,
@@ -123,7 +139,7 @@ export type CreateParams<
   Key extends LocaleKeys<Locale, Scope>,
   Value extends LocaleValue = ScopedValue<Locale, Scope, Key>,
 > = IsPlural<Key, Locale> extends true
-  ? AddCount<GetParams<Value>['length'] extends 0 ? [] : [T]>
+  ? AddCount<GetParams<Value>['length'] extends 0 ? [] : [T], Key, Locale>
   : GetParams<Value>['length'] extends 0
   ? []
   : [T];
