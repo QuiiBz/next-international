@@ -36,16 +36,23 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
     ...params: CreateParams<ParamsObject<Value> | ReactParamsObject<Value>, Locale, Scope, Key, Value>
   ) {
     const paramObject = params[0];
+    let isPlural = false;
 
     if (paramObject && 'count' in paramObject && pluralKeys.has(key)) {
       key = `${key}#${pluralRules.select(paramObject.count)}` as Key;
+      isPlural = true;
     }
 
-    const value = (
+    let value =
       (scope ? localeContent[`${scope}.${key}`] : localeContent[key]) ||
-      (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]) ||
-      key
-    )?.toString();
+      (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]);
+
+    if (!value && isPlural) {
+      const baseKey = key.split('#')[0] as Key;
+      value = (localeContent[`${baseKey}#other`] || fallbackLocale?.[`${baseKey}#other`] || key)?.toString();
+    } else {
+      value = (value || key)?.toString();
+    }
 
     if (!paramObject) {
       return value;
