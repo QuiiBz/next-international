@@ -159,7 +159,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       international-types:
-        specifier: ^0.6.2
+        specifier: ^0.7.0
         version: link:../international-types
       server-only:
         specifier: ^0.0.1

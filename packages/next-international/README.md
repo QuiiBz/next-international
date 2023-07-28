@@ -392,7 +392,7 @@ export default {
 } as const
 ```
 
-The correct translation will then be determined automatically using a mandatory `count` parameter. The value of `count `is determined by the union of all suffixes, enabling type safety:
+The correct translation will then be determined automatically using a mandatory `count` parameter. The value of `count` is determined by the union of all suffixes, enabling type safety:
 - `zero` only allows `0`
 - `one` only allows `1`
 - `two` only allows `2`
