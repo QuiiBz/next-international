@@ -50,6 +50,7 @@ You can also find complete examples inside the [examples/next-pages](./examples/
 1. Make sure that you've set up correctly the [`i18n` key inside `next.config.js`](https://nextjs.org/docs/pages/building-your-application/routing/internationalization), then create `locales/index.ts` with your locales:
 
 ```ts
+// locales/index.ts
 import { createI18n } from 'next-international'
 
 export const { useI18n, useScopedI18n, I18nProvider, getLocaleProps } = createI18n({
@@ -118,7 +119,11 @@ export const getServerSideProps = getLocaleProps(ctx => {
 4. Use `useI18n` and `useScopedI18n()`:
 
 ```tsx
+// pages/index.ts
 import { useI18n, useScopedI18n } from '../locales'
+
+// export const getStaticProps = ...
+// export const getServerSideProps = ...
 
 export default function Page() {
   const t = useI18n()
@@ -435,6 +440,7 @@ export default {
 It's the equivalent of the following:
 
 ```ts
+// locales/en.ts
 export default {
   'hello.world': 'Hello world!',
   'hello.nested.translations': 'Translations'
@@ -508,8 +514,8 @@ export const {
 Then use these hooks:
 
 ```tsx
-'use client'
 // Client Component
+'use client'
 import { useChangeLocale, useCurrentLocale } from '../../locales/client'
 
 export default function Page() {
@@ -524,9 +530,7 @@ export default function Page() {
     <>
   )
 }
-```
 
-```tsx
 // Server Component
 import { getCurrentLocale } from '../../locales/server'
 
