@@ -393,10 +393,11 @@ export default {
 ```
 
 The correct translation will then be determined automatically using a mandatory `count` parameter. The value of `count` is determined by the union of all suffixes, enabling type safety:
-- `zero` only allows `0`
-- `one` only allows `1`
-- `two` only allows `2`
-- `few`, `many` and `other` allow `number`
+
+- `zero` allows 0
+- `one` autocompletes 1, 21, 31, 41... but allows any number
+- `two` autocompletes 2, 22, 32, 42... but allows any number
+- `few`, `many` and `other` allow any number
 
 This works with the Pages Router, App Router in both Client and Server Components, and with [scoped translations](#scoped-translations):
 
