@@ -1,13 +1,15 @@
 import { cookies, headers } from 'next/headers';
 import { cache } from 'react';
 
+import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
+
 export const getLocaleCache = cache(() => {
   let locale: string | undefined | null;
 
-  locale = headers().get('X-Next-Locale');
+  locale = headers().get(LOCALE_HEADER);
 
   if (!locale) {
-    locale = cookies().get('Next-Locale')?.value;
+    locale = cookies().get(LOCALE_COOKIE)?.value;
   }
 
   if (!locale) {
