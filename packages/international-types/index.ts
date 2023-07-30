@@ -124,12 +124,50 @@ type GetCountUnion<
   Key extends string,
   Locale extends BaseLocale,
   Plural extends PluralSuffix = GetPlural<Key, Locale>,
-> = Plural extends 'zero' ? 0 : Plural extends 'one' ? 1 : Plural extends 'two' ? 2 : number;
+> = Plural extends 'zero'
+  ? 0
+  : Plural extends 'one'
+  ? // eslint-disable-next-line @typescript-eslint/ban-types
+    1 | 21 | 31 | 41 | 51 | 61 | 71 | 81 | 91 | 101 | (number & {})
+  : Plural extends 'two'
+  ? // eslint-disable-next-line @typescript-eslint/ban-types
+    2 | 22 | 32 | 42 | 52 | 62 | 72 | 82 | 92 | 102 | (number & {})
+  : number;
 
 type AddCount<T, Key extends string, Locale extends BaseLocale> = T extends []
-  ? [{ count: GetCountUnion<Key, Locale> }]
+  ? [
+      {
+        /**
+         * The `count` depends on the plural tags defined in your locale,
+         * and the current locale rules.
+         *
+         * - `zero` allows 0
+         * - `one` autocompletes 1, 21, 31, 41... but allows any number
+         * - `two` autocompletes 2, 22, 32, 42... but allows any number
+         * - `few`, `many` and `other` allow any number
+         *
+         * @see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
+         */
+        count: GetCountUnion<Key, Locale>;
+      },
+    ]
   : T extends [infer R]
-  ? [{ count: GetCountUnion<Key, Locale> } & R]
+  ? [
+      {
+        /**
+         * The `count` depends on the plural tags defined in your locale,
+         * and the current locale rules.
+         *
+         * - `zero` allows 0
+         * - `one` autocompletes 1, 21, 31, 41... but allows any number
+         * - `two` autocompletes 2, 22, 32, 42... but allows any number
+         * - `few`, `many` and `other` allow any number
+         *
+         * @see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
+         */
+        count: GetCountUnion<Key, Locale>;
+      } & R,
+    ]
   : never;
 
 export type CreateParams<
