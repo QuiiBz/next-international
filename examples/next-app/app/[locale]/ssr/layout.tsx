@@ -11,7 +11,7 @@ export default async function Layout({
 }) {
   const resource = await resources[locale]().then(content => content.default);
   return (
-    <I18nProviderClient locale={locale} resource={resource}>
+    <I18nProviderClient locale={locale} fallbackLocale={resource}>
       {children}
     </I18nProviderClient>
   );

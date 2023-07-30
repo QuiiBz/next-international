@@ -10,7 +10,7 @@ export default function Client() {
 
   return (
     <div>
-      <h1>SSR + Client Component (No flash)</h1>
+      <h1>SSR + Client Component</h1>
       <p>
         Current locale:
         <span>{locale}</span>

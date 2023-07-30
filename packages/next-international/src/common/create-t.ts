@@ -15,9 +15,9 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
   scope: Scope | undefined,
 ) {
   const { localeContent, fallbackLocale } = context;
-
+  const content = fallbackLocale && typeof localeContent === 'string' ? fallbackLocale : localeContent;
   const pluralKeys = new Set(
-    Object.keys(localeContent)
+    Object.keys(content)
       .filter(key => key.includes('#'))
       .map(key => key.split('#')[0]),
   );
@@ -43,13 +43,11 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
       isPlural = true;
     }
 
-    let value =
-      (scope ? localeContent[`${scope}.${key}`] : localeContent[key]) ||
-      (scope ? fallbackLocale?.[`${scope}.${key}`] : fallbackLocale?.[key]);
+    let value = scope ? content[`${scope}.${key}`] : content[key];
 
     if (!value && isPlural) {
       const baseKey = key.split('#')[0] as Key;
-      value = (localeContent[`${baseKey}#other`] || fallbackLocale?.[`${baseKey}#other`] || key)?.toString();
+      value = (content[`${baseKey}#other`] || key)?.toString();
     } else {
       value = (value || key)?.toString();
     }
