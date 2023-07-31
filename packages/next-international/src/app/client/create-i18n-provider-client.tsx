@@ -1,21 +1,21 @@
 import React, { Context, ReactElement, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 
-import type { I18NProviderConfig, LocaleContext } from '../../types';
+import type { I18nProviderConfig, LocaleContext } from '../../types';
 import { flattenLocale } from '../../common/flatten-locale';
 
 type I18nProviderProps = {
   locale: string;
   fallback?: ReactElement | null;
   fallbackLocale?: Record<string, unknown>;
-  config?: I18NProviderConfig;
+  config?: I18nProviderConfig;
   children: ReactNode;
 };
 
 export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>(
   I18nClientContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
-  useCurrentLocale: (config?: I18NProviderConfig) => LocalesKeys,
+  useCurrentLocale: (config?: I18nProviderConfig) => LocalesKeys,
 ) {
   return function I18nProviderClient({
     locale: baseLocale,

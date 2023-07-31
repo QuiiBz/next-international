@@ -1,12 +1,12 @@
 import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
 
-import type { I18NProviderConfig } from '../../types';
+import type { I18nProviderConfig } from '../../types';
 
 const DEFAULT_SEGMENT_NAME = 'locale';
 
 export function createUseCurrentLocale<LocalesKeys>(locales: LocalesKeys[]): () => LocalesKeys {
-  return function useCurrentLocale(config?: I18NProviderConfig) {
+  return function useCurrentLocale(config?: I18nProviderConfig) {
     const params = useParams();
     const segment = params[config?.segmentName ?? DEFAULT_SEGMENT_NAME];
 

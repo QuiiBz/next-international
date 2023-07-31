@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
-import type { I18NMiddlewareConfig } from '../../types';
+import type { I18nMiddlewareConfig } from '../../types';
+import { warn } from '../../helpers/log';
 
 const DEFAULT_STRATEGY = 'redirect';
 
 export function createI18nMiddleware<Locales extends readonly string[]>(
   locales: Locales,
   defaultLocale: Locales[number],
-  config?: I18NMiddlewareConfig,
+  config?: I18nMiddlewareConfig,
 ) {
   return function I18nMiddleware(request: NextRequest) {
     const requestUrl = request.nextUrl.clone();
 
-    const locale = localeFromRequest(request, locales, config?.contentNegotiator) ?? defaultLocale;
+    const locale = localeFromRequest(request) ?? defaultLocale;
 
     if (noLocalePrefix(locales, requestUrl.pathname)) {
       const mappedUrl = requestUrl.clone();
@@ -27,7 +28,9 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
         const response = NextResponse.rewrite(mappedUrl);
         return addLocaleToResponse(response, locale);
       } else {
-        throw new Error(`Invalid urlMappingStrategy: ${strategy}`);
+        warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
+        const response = NextResponse.redirect(mappedUrl);
+        return addLocaleToResponse(response, locale);
       }
     }
 
@@ -36,14 +39,10 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
   };
 }
 
-function localeFromRequest(
-  request: NextRequest,
-  locales: readonly string[],
-  contentNegotiator?: (request: NextRequest, locales: readonly string[]) => string | null,
-) {
+function localeFromRequest(request: NextRequest) {
   let locale = request.cookies.get(LOCALE_COOKIE)?.value ?? null;
   if (!locale) {
-    locale = contentNegotiator ? contentNegotiator(request, locales) : negotiateAcceptLanguage(request);
+    locale = negotiateAcceptLanguage(request);
   }
   return locale;
 }
