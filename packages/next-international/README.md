@@ -578,7 +578,7 @@ You can also provide a fallback component while waiting for the initial locale t
 
 ### Rewrite the URL to hide the locale
 
-You might have noticed that by default, next-international shows the locale in the URL (e.g `/en/products`). This is helpful for users, but you can transparently rewrite the URL to hide the locale (e.g `/products`).
+You might have noticed that by default, next-international redirects and shows the locale in the URL (e.g `/en/products`). This is helpful for users, but you can transparently rewrite the URL to hide the locale (e.g `/products`).
 
 Navigate to the `middleware.ts` file and set the `urlMappingStrategy` to `rewrite` (the default is `redirect`):
 
