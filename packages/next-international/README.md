@@ -584,13 +584,9 @@ Navigate to the `middleware.ts` file and set the `urlMappingStrategy` to `rewrit
 
 ```ts
 // middleware.ts
-// ...
-
 const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr', {
     urlMappingStrategy: 'rewrite'
 })
-
-// ...
 ```
 
 ### Use the types for my own library
