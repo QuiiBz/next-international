@@ -4,7 +4,7 @@ import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
 import type { I18nMiddlewareConfig } from '../../types';
 import { warn } from '../../helpers/log';
 
-const DEFAULT_STRATEGY = 'redirect';
+const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig['urlMappingStrategy']> = 'redirect';
 
 export function createI18nMiddleware<Locales extends readonly string[]>(
   locales: Locales,
@@ -21,21 +21,28 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
       mappedUrl.pathname = `/${locale}${mappedUrl.pathname}`;
 
       const strategy = config?.urlMappingStrategy ?? DEFAULT_STRATEGY;
-      if (strategy === 'redirect') {
-        const response = NextResponse.redirect(mappedUrl);
-        return addLocaleToResponse(response, locale);
-      } else if (strategy === 'rewrite') {
+
+      if (strategy === 'rewrite') {
         const response = NextResponse.rewrite(mappedUrl);
         return addLocaleToResponse(response, locale);
       } else {
-        warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
+        if (strategy !== 'redirect') {
+          warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
+        }
+
         const response = NextResponse.redirect(mappedUrl);
         return addLocaleToResponse(response, locale);
       }
     }
 
     const response = NextResponse.next();
-    return addLocaleToResponse(response, locale);
+    const requestLocale = request.nextUrl.pathname.split('/')?.[1] ?? locale;
+
+    if (locales.includes(requestLocale)) {
+      return addLocaleToResponse(response, requestLocale);
+    }
+
+    return response;
   };
 }
 
