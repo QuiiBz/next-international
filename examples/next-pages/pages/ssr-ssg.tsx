@@ -54,6 +54,16 @@ export default function SSR() {
           count: 2,
         })}
       </p>
+      <p>
+        {t2('stars', {
+          count: 1,
+        })}
+      </p>
+      <p>
+        {t2('stars', {
+          count: 2,
+        })}
+      </p>
       <button type="button" onClick={() => changeLocale('en')}>
         EN
       </button>
