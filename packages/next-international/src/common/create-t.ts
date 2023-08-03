@@ -18,12 +18,8 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
   // If there is no localeContent (e.g. on initial render on the client-side), we use the fallback locale
   // otherwise, we use the fallback locale as a fallback for missing keys in the current locale
   const content =
-    fallbackLocale && typeof localeContent === 'string'
-      ? fallbackLocale
-      : {
-          ...(fallbackLocale ?? {}),
-          ...localeContent,
-        };
+    fallbackLocale && typeof localeContent === 'string' ? fallbackLocale : Object.assign(localeContent, fallbackLocale);
+
   const pluralKeys = new Set(
     Object.keys(content)
       .filter(key => key.includes('#'))
