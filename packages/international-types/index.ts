@@ -55,10 +55,10 @@ export type ScopedValue<
   Scope extends Scopes<Locale> | undefined,
   Key extends LocaleKeys<Locale, Scope>,
 > = Scope extends undefined
-  ? IsPlural<Key, Locale> extends true
+  ? IsPlural<Key, Scope, Locale> extends true
     ? Locale[`${Key}#${PluralSuffix}`]
     : Locale[Key]
-  : IsPlural<Key, Locale> extends true
+  : IsPlural<Key, Scope, Locale> extends true
   ? Locale[`${Scope}.${Key}#${PluralSuffix}`]
   : Locale[`${Scope}.${Key}`];
 
@@ -110,20 +110,40 @@ export type FlattenLocale<Locale extends Record<string, unknown>> = {
 type PluralSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
 
 type RemovePlural<Key extends string> = Key extends `${infer Head}#${PluralSuffix}` ? Head : Key;
-type GetPlural<Key extends string, Locale extends BaseLocale> = `${Key}#${PluralSuffix}` &
-  keyof Locale extends infer PluralKey
+
+type GetPlural<
+  Key extends string,
+  Scope extends Scopes<Locale> | undefined,
+  Locale extends BaseLocale,
+> = Scope extends undefined
+  ? `${Key}#${PluralSuffix}` & keyof Locale extends infer PluralKey
+    ? PluralKey extends `${string}#${infer Plural extends PluralSuffix}`
+      ? Plural
+      : never
+    : never
+  : `${Scope}.${Key}#${PluralSuffix}` & keyof Locale extends infer PluralKey
   ? PluralKey extends `${string}#${infer Plural extends PluralSuffix}`
     ? Plural
     : never
   : never;
-type IsPlural<Key extends string, Locale extends BaseLocale> = `${Key}#${PluralSuffix}` & keyof Locale extends never
+
+type IsPlural<
+  Key extends string,
+  Scope extends Scopes<Locale> | undefined,
+  Locale extends BaseLocale,
+> = Scope extends undefined
+  ? `${Key}#${PluralSuffix}` & keyof Locale extends never
+    ? false
+    : true
+  : `${Scope}.${Key}#${PluralSuffix}` & keyof Locale extends never
   ? false
   : true;
 
 type GetCountUnion<
   Key extends string,
+  Scope extends Scopes<Locale> | undefined,
   Locale extends BaseLocale,
-  Plural extends PluralSuffix = GetPlural<Key, Locale>,
+  Plural extends PluralSuffix = GetPlural<Key, Scope, Locale>,
 > = Plural extends 'zero'
   ? 0
   : Plural extends 'one'
@@ -134,7 +154,7 @@ type GetCountUnion<
     2 | 22 | 32 | 42 | 52 | 62 | 72 | 82 | 92 | 102 | (number & {})
   : number;
 
-type AddCount<T, Key extends string, Locale extends BaseLocale> = T extends []
+type AddCount<T, Key extends string, Scope extends Scopes<Locale> | undefined, Locale extends BaseLocale> = T extends []
   ? [
       {
         /**
@@ -148,7 +168,7 @@ type AddCount<T, Key extends string, Locale extends BaseLocale> = T extends []
          *
          * @see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
          */
-        count: GetCountUnion<Key, Locale>;
+        count: GetCountUnion<Key, Scope, Locale>;
       },
     ]
   : T extends [infer R]
@@ -165,7 +185,7 @@ type AddCount<T, Key extends string, Locale extends BaseLocale> = T extends []
          *
          * @see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
          */
-        count: GetCountUnion<Key, Locale>;
+        count: GetCountUnion<Key, Scope, Locale>;
       } & R,
     ]
   : never;
@@ -176,8 +196,8 @@ export type CreateParams<
   Scope extends Scopes<Locale> | undefined,
   Key extends LocaleKeys<Locale, Scope>,
   Value extends LocaleValue = ScopedValue<Locale, Scope, Key>,
-> = IsPlural<Key, Locale> extends true
-  ? AddCount<GetParams<Value>['length'] extends 0 ? [] : [T], Key, Locale>
+> = IsPlural<Key, Scope, Locale> extends true
+  ? AddCount<GetParams<Value>['length'] extends 0 ? [] : [T], Key, Scope, Locale>
   : GetParams<Value>['length'] extends 0
   ? []
   : [T];

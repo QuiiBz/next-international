@@ -21,6 +21,7 @@
   - [Change and get current locale](#change-and-get-current-locale)
   - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
   - [Load initial locales client-side](#load-initial-locales-client-side)
+  - [Rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale)
   - [Use the types for my own library](#use-the-types-for-my-own-library)
   - [Testing](#testing)
 - [License](#license)
@@ -208,7 +209,7 @@ import { ..., getStaticParams } from '../../locales/server'
 export const generateStaticParams = getStaticParams()
 ```
 
-4. Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale:
+4. Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale. You can also [rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale):
 
 ```ts
 // middleware.ts
@@ -543,6 +544,14 @@ export default function Page() {
 }
 ```
 
+If you have set a [`basePath`](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) option inside `next.config.js`, you'll also need to set it here:
+
+```ts
+const changeLocale = useChangeLocale({
+  basePath: '/your-base-path'
+})
+```
+
 </details>
 
 ### Fallback locale for missing translations
@@ -573,6 +582,19 @@ You can also provide a fallback component while waiting for the initial locale t
 <I18nProvider locale={pageProps.locale} fallback={<p>Loading locales...</p>}>
   ...
 </I18nProvider>
+```
+
+### Rewrite the URL to hide the locale
+
+You might have noticed that by default, next-international redirects and shows the locale in the URL (e.g `/en/products`). This is helpful for users, but you can transparently rewrite the URL to hide the locale (e.g `/products`).
+
+Navigate to the `middleware.ts` file and set the `urlMappingStrategy` to `rewrite` (the default is `redirect`):
+
+```ts
+// middleware.ts
+const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr', {
+    urlMappingStrategy: 'rewrite'
+})
 ```
 
 ### Use the types for my own library

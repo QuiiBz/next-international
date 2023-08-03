@@ -4,7 +4,9 @@ import { useI18n, useScopedI18n, useChangeLocale, useCurrentLocale } from '../..
 
 export default function Client() {
   const t = useI18n();
-  const changeLocale = useChangeLocale();
+  const changeLocale = useChangeLocale({
+    // basePath: '/base',
+  });
   const t2 = useScopedI18n('scope.more');
   const locale = useCurrentLocale();
 
@@ -62,6 +64,16 @@ export default function Client() {
       </p>
       <p>
         {t('cows', {
+          count: 2,
+        })}
+      </p>
+      <p>
+        {t2('stars', {
+          count: 1,
+        })}
+      </p>
+      <p>
+        {t2('stars', {
           count: 2,
         })}
       </p>
