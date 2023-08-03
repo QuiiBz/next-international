@@ -12,7 +12,7 @@ export default {
   'scope.more.and.more.test': 'Un scope',
   'scope.more.stars#one': '1 étoile sur GitHub',
   'scope.more.stars#other': '{count} étoiles sur GitHub',
-  'missing.translation.in.fr': '', // Comment to test locale fallback
+  // 'missing.translation.in.fr': '',
   'cows#one': 'Une vache',
   'cows#other': '{count} vaches',
 } as const;
