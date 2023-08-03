@@ -44,9 +44,13 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
     const paramObject = params[0];
     let isPlural = false;
 
-    if (paramObject && 'count' in paramObject && pluralKeys.has(key)) {
-      key = `${key}#${pluralRules.select(paramObject.count)}` as Key;
-      isPlural = true;
+    if (paramObject && 'count' in paramObject) {
+      const isPluralKey = scope ? pluralKeys.has(`${scope}.${key}`) : pluralKeys.has(key);
+
+      if (isPluralKey) {
+        key = `${key}#${pluralRules.select(paramObject.count)}` as Key;
+        isPlural = true;
+      }
     }
 
     let value = scope ? content[`${scope}.${key}`] : content[key];
