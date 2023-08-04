@@ -35,7 +35,14 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
       }
     }
 
-    const response = NextResponse.next();
+    const requestHeaders = new Headers(request.headers);
+
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
+
     const requestLocale = request.nextUrl.pathname.split('/')?.[1] ?? locale;
 
     if (locales.includes(requestLocale)) {
