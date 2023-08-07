@@ -14,7 +14,7 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
   return function I18nMiddleware(request: NextRequest) {
     const requestUrl = request.nextUrl.clone();
 
-    const locale = localeFromRequest(request) ?? defaultLocale;
+    const locale = localeFromRequest(locales, request) ?? defaultLocale;
 
     if (noLocalePrefix(locales, requestUrl.pathname)) {
       const mappedUrl = requestUrl.clone();
@@ -46,11 +46,17 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
   };
 }
 
-function localeFromRequest(request: NextRequest) {
+function localeFromRequest(locales: readonly string[], request: NextRequest) {
   let locale = request.cookies.get(LOCALE_COOKIE)?.value ?? null;
+
   if (!locale) {
     locale = negotiateAcceptLanguage(request);
   }
+
+  if (!locale || !locales.includes(locale)) {
+    locale = null;
+  }
+
   return locale;
 }
 
