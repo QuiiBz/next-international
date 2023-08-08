@@ -77,9 +77,9 @@ t('')
 import type { LocaleKeys, BaseLocale, Scopes, ScopedValue, CreateParams, ParamsObject } from 'international-types'
 
 type Locale = {
-  param: 'This is a {value}';
-  'hello.people': 'Hello {name}! You are {age} years old.';
-};
+  param: 'This is a {value}'
+  'hello.people': 'Hello {name}! You are {age} years old.'
+}
 
 function scopedT<Locale extends BaseLocale, Scope extends Scopes<Locale> | undefined>(scope?: Scope) {
   return function t<Key extends LocaleKeys<Locale, Scope>, Value extends ScopedValue<Locale, Scope, Key>>(
@@ -87,21 +87,21 @@ function scopedT<Locale extends BaseLocale, Scope extends Scopes<Locale> | undef
     ...params: CreateParams<ParamsObject<Value>, Locale, Scope, Key, Value>
   ) {
     // ...
-  };
+  }
 }
 
 const t = scopedT<Locale, undefined>();
 
 t('param', {
-  value: '',
+  value: ''
   // value is required
-});
+})
 
 t('hello.people', {
   name: '',
-  age: '',
+  age: ''
   // name and age are required
-});
+})
 ```
 
 ## License
