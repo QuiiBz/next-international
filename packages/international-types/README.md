@@ -58,7 +58,7 @@ type Locale = {
 }
 
 function scopedT<Scope extends Scopes<Locale>>(scope: Scope) {
-  function t<Key extends LocaleKeys<Locale, Scope>>(key: Key) {
+  return function t<Key extends LocaleKeys<Locale, Scope>>(key: Key) {
     // ...
   }
 }
@@ -74,30 +74,34 @@ t('')
 ### Type-safe params
 
 ```ts
-import type { LocaleKeys, LocaleValue } from 'international-types'
+import type { LocaleKeys, BaseLocale, Scopes, ScopedValue, CreateParams, ParamsObject } from 'international-types'
 
 type Locale = {
-  param: 'This is a {value}'
-  'hello.people': 'Hello {name}! You are {age} years old.'
+  param: 'This is a {value}';
+  'hello.people': 'Hello {name}! You are {age} years old.';
+};
+
+function scopedT<Locale extends BaseLocale, Scope extends Scopes<Locale> | undefined>(scope?: Scope) {
+  return function t<Key extends LocaleKeys<Locale, Scope>, Value extends ScopedValue<Locale, Scope, Key>>(
+    key: Key,
+    ...params: CreateParams<ParamsObject<Value>, Locale, Scope, Key, Value>
+  ) {
+    // ...
+  };
 }
 
-function t<
-  Key extends LocaleKeys<Locale, undefined>,
-  Value extends LocaleValue = ScopedValue<Locale, undefined, Key>,
->(key: Key, param: ParamsObject<Value>) {
-  // ...
-}
+const t = scopedT<Locale, undefined>();
 
 t('param', {
-  value: ''
+  value: '',
   // value is required
-})
+});
 
 t('hello.people', {
   name: '',
-  age: ''
+  age: '',
   // name and age are required
-})
+});
 ```
 
 ## License
