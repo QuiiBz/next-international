@@ -692,6 +692,10 @@ describe('Example test', () => {
 
 </details>
 
+## Sponsors
+
+![Sponsors](./assets/sponsors.svg)
+
 ## License
 
 [MIT](./LICENSE)
