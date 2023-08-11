@@ -694,7 +694,7 @@ describe('Example test', () => {
 
 ## Sponsors
 
-![Sponsors](https://github.com/QuiiBz/next-international/blob/main/assets/sponsors.png)
+![Sponsors](https://github.com/QuiiBz/next-international/blob/main/assets/sponsors.svg)
 
 ## License
 
