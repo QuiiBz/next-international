@@ -22,7 +22,7 @@
   - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
   - [Load initial locales client-side](#load-initial-locales-client-side)
   - [Rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale)
-  - [Override the user's locale resolution](#override-the-user-s-locale-resolution)
+  - [Override the user's locale resolution](#override-the-users-locale-resolution)
   - [Use the types for my own library](#use-the-types-for-my-own-library)
   - [Testing](#testing)
 - [License](#license)
