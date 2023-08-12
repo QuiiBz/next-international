@@ -14,7 +14,11 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
   return function I18nMiddleware(request: NextRequest) {
     const requestUrl = request.nextUrl.clone();
 
-    const locale = localeFromRequest(locales, request) ?? defaultLocale;
+    let locale = localeFromRequest(locales, request) ?? defaultLocale;
+
+    if (config?.forceDefaultLocale) {
+      locale = defaultLocale;
+    }
 
     if (noLocalePrefix(locales, requestUrl.pathname)) {
       const mappedUrl = requestUrl.clone();

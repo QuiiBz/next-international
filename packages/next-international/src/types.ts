@@ -41,4 +41,11 @@ export type I18nMiddlewareConfig = {
    * @default redirect
    */
   urlMappingStrategy?: 'redirect' | 'rewrite';
+
+  /**
+   * Force to use the default locale instead of trying to extract the user's preferred locale.
+   *
+   * @default false
+   */
+  forceDefaultLocale?: boolean;
 };
