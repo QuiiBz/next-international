@@ -37,7 +37,7 @@
 
 > **Note**: You can now build on top of the types used by next-international using [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types)!
 
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);border-radius:2px;" width="800" height="450" src="https://codesandbox.io/p/sandbox/jovial-paper-skkprk?embed=1" allowfullscreen></iframe>
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/jovial-paper-skkprk?file=%2Fapp%2F%5Blocale%5D%2Fpage.tsx%3A1%2C1)
 
 ## Usage
 
