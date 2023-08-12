@@ -4,17 +4,17 @@ import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
 import type { I18nMiddlewareConfig } from '../../types';
 import { warn } from '../../helpers/log';
 
-const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig['urlMappingStrategy']> = 'redirect';
+const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig<[]>['urlMappingStrategy']> = 'redirect';
 
 export function createI18nMiddleware<Locales extends readonly string[]>(
   locales: Locales,
   defaultLocale: Locales[number],
-  config?: I18nMiddlewareConfig,
+  config?: I18nMiddlewareConfig<Locales>,
 ) {
   return function I18nMiddleware(request: NextRequest) {
     const requestUrl = request.nextUrl.clone();
 
-    const locale = localeFromRequest(locales, request) ?? defaultLocale;
+    const locale = localeFromRequest(locales, request, config?.resolveLocaleFromRequest) ?? defaultLocale;
 
     if (noLocalePrefix(locales, requestUrl.pathname)) {
       const mappedUrl = requestUrl.clone();
@@ -46,11 +46,17 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
   };
 }
 
-function localeFromRequest(locales: readonly string[], request: NextRequest) {
+function localeFromRequest<Locales extends readonly string[]>(
+  locales: Locales,
+  request: NextRequest,
+  resolveLocaleFromRequest: NonNullable<
+    I18nMiddlewareConfig<Locales>['resolveLocaleFromRequest']
+  > = defaultResolveLocaleFromRequest,
+) {
   let locale = request.cookies.get(LOCALE_COOKIE)?.value ?? null;
 
   if (!locale) {
-    locale = negotiateAcceptLanguage(request);
+    locale = resolveLocaleFromRequest(request);
   }
 
   if (!locale || !locales.includes(locale)) {
@@ -60,11 +66,11 @@ function localeFromRequest(locales: readonly string[], request: NextRequest) {
   return locale;
 }
 
-function negotiateAcceptLanguage(request: NextRequest) {
+const defaultResolveLocaleFromRequest: NonNullable<I18nMiddlewareConfig<any>['resolveLocaleFromRequest']> = request => {
   const header = request.headers.get('Accept-Language');
   const locale = header?.split(',')?.[0]?.split('-')?.[0];
   return locale ?? null;
-}
+};
 
 function noLocalePrefix(locales: readonly string[], pathname: string) {
   return locales.every(locale => !pathname.startsWith(`/${locale}`));
