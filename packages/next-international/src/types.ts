@@ -1,4 +1,5 @@
 import type { BaseLocale, LocaleValue, Params } from 'international-types';
+import type { NextRequest } from 'next/server';
 
 export type LocaleContext<Locale extends BaseLocale> = {
   locale: string;
@@ -30,7 +31,7 @@ export type I18nChangeLocaleConfig = {
   basePath?: string;
 };
 
-export type I18nMiddlewareConfig = {
+export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
   /**
    * When a url is not prefixed with a locale, this setting determines whether the middleware should perform a *redirect* or *rewrite* to the default locale.
    *
@@ -41,4 +42,11 @@ export type I18nMiddlewareConfig = {
    * @default redirect
    */
   urlMappingStrategy?: 'redirect' | 'rewrite';
+
+  /**
+   * Override the resolution of a locale from a `Request`, which by default will try to extract it from the `Accept-Language` header. This can be useful to force the use of a specific locale regardless of the `Accept-Language` header.
+   *
+   * @description This function will only be called if the user doesn't already have a `Next-Locale` cookie.
+   */
+  resolveLocaleFromRequest?: (request: NextRequest) => Locales[number] | null;
 };

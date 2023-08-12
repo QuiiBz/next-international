@@ -22,6 +22,7 @@
   - [Fallback locale for missing translations](#fallback-locale-for-missing-translations)
   - [Load initial locales client-side](#load-initial-locales-client-side)
   - [Rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale)
+  - [Override the user's locale resolution](#override-the-user-s-locale-resolution)
   - [Use the types for my own library](#use-the-types-for-my-own-library)
   - [Testing](#testing)
 - [License](#license)
@@ -593,7 +594,23 @@ Navigate to the `middleware.ts` file and set the `urlMappingStrategy` to `rewrit
 ```ts
 // middleware.ts
 const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr', {
-    urlMappingStrategy: 'rewrite'
+  urlMappingStrategy: 'rewrite'
+})
+```
+
+### Override the user's locale resolution
+
+If needed, you can override the resolution of a locale from a `Request`, which by default will try to extract it from the `Accept-Language` header. This can be useful to force the use of a specific locale regardless of the `Accept-Language` header. Note that this function will only be called if the user doesn't already have a `Next-Locale` cookie.
+
+Navigate to the `middleware.ts` file and implement a new `resolveLocaleFromRequest` function:
+
+```ts
+// middleware.ts
+const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr', {
+  resolveLocaleFromRequest: request => {
+    // Do your logic here to resolve the locale
+    return 'fr'
+  }
 })
 ```
 
