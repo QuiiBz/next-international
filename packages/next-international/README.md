@@ -37,6 +37,8 @@
 
 > **Note**: You can now build on top of the types used by next-international using [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types)!
 
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/jovial-paper-skkprk?file=%2Fapp%2F%5Blocale%5D%2Fpage.tsx%3A1%2C1)
+
 ## Usage
 
 ```bash
