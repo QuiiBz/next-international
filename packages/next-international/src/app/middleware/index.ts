@@ -73,7 +73,9 @@ const defaultResolveLocaleFromRequest: NonNullable<I18nMiddlewareConfig<any>['re
 };
 
 function noLocalePrefix(locales: readonly string[], pathname: string) {
-  return locales.every(locale => !pathname.startsWith(`/${locale}`));
+  return locales.every(locale => {
+    return !(pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
+  });
 }
 
 function addLocaleToResponse(response: NextResponse, locale: string) {
