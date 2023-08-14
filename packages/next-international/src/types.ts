@@ -32,6 +32,8 @@ export type I18nChangeLocaleConfig = {
 };
 
 export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
+  locales: Locales;
+  defaultLocale: Locales[number];
   /**
    * When a url is not prefixed with a locale, this setting determines whether the middleware should perform a *redirect* or *rewrite* to the default locale.
    *
