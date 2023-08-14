@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "13.4.9",
+    "next": "13.4.13",
     "next-international": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -17,8 +17,8 @@
   "devDependencies": {
     "@types/node": "^18.0.4",
     "@types/react": "^18.2.9",
-    "eslint": "8.19.0",
-    "eslint-config-next": "13.4.9",
+    "eslint": "8.47.0",
+    "eslint-config-next": "13.4.13",
     "next-transpile-modules": "^9.0.0",
     "typescript": "^5.1.6"
   }
