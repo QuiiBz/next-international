@@ -1,0 +1,55 @@
+---
+title: Get Started
+description: TODO
+next: false
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+import { LinkCard, CardGrid } from '@astrojs/starlight/components'
+
+- **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params, type-safe plurals, type-safe `changeLocale()`...
+- **Small**: No dependencies, lazy-loaded
+- **Simple**: No Webpack configuration, no CLI, no code generation, just pure TypeScript
+- **SSR/SSG/CSR**: Load only the required locale, client-side and server-side
+- **Pages or App Router**: With support for React Server Components
+
+Try it live on CodeSandbox:
+
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/jovial-paper-skkprk?file=%2Fapp%2F%5Blocale%5D%2Fpage.tsx%3A1%2C1)
+
+## Installation
+
+<Tabs>
+    <TabItem label="pnpm">
+        ```bash
+        pnpm install next-international
+        ```
+    </TabItem>
+    <TabItem label="yarn">
+        ```bash
+        yarn add next-international
+        ```
+    </TabItem>
+    <TabItem label="npm">
+        ```bash
+        npm install next-international
+        ```
+    </TabItem>
+</Tabs>
+
+## TypeScript config
+
+Make sure that `strict` is set to `true` in your `tsconfig.json`. This will allow next-international to provide the best in-class developer experience.
+
+## Setup
+
+next-international supports both the App Router and Pages Router of Next.js. The APIs are very similar, but each have specificities. Follow the one you're using:
+
+<CardGrid>
+	<LinkCard title="App Router documentation" href="/app/setup" />
+	<LinkCard title="Pages Router documentation" href="/pages/setup" />
+</CardGrid>
+
+## Examples
+
+You can find complete examples inside the [examples/next-pages](https://github.com/QuiiBz/next-international/tree/main/examples/next-pages/) and [examples/next-app](https://github.com/QuiiBz/next-international/tree/main/examples/next-app/) directories of the GitHub repository.

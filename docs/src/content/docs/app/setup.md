@@ -1,0 +1,136 @@
+---
+title: Setup
+description: TODO
+sidebar:
+    order: 1
+---
+
+Make sure you've following the [Get Started](/get-started) documentation before continuing!
+
+1. Create `locales/client.ts` and `locales/server.ts` with your locales:
+
+```ts
+// locales/client.ts
+import { createI18nClient } from 'next-international/client'
+
+export const { useI18n, useScopedI18n, I18nProviderClient } = createI18nClient({
+  en: () => import('./en'),
+  fr: () => import('./fr')
+})
+
+// locales/server.ts
+import { createI18nServer } from 'next-international/server'
+
+export const { getI18n, getScopedI18n, getStaticParams } = createI18nServer({
+  en: () => import('./en'),
+  fr: () => import('./fr')
+})
+```
+
+Each locale file should export a default object (don't forget `as const`):
+
+```ts
+// locales/en.ts
+export default {
+  'hello': 'Hello',
+  'hello.world': 'Hello world!',
+  'welcome': 'Hello {name}!'
+} as const
+```
+
+2. Move all your routes inside an `app/[locale]/` folder. For Client Components, wrap the lowest parts of your app with `I18nProviderClient` inside a layout:
+
+```tsx
+// app/[locale]/client/layout.tsx
+import { ReactElement } from 'react'
+import { I18nProviderClient } from '../../locales/client'
+
+export default function SubLayout({
+  children,
+  params
+}: {
+  children: ReactElement
+  params: { locale: string }
+}) {
+  return (
+    <I18nProviderClient locale={params.locale}>
+      {children}
+    </I18nProviderClient>
+  )
+}
+```
+
+3. (WIP) If you want to support SSG with `output: export`, add `getStaticParams` to your pages:
+
+```ts
+// app/[locale]/page.tsx
+import { ..., getStaticParams } from '../../locales/server'
+
+export const generateStaticParams = getStaticParams()
+```
+
+4. Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale. You can also [rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale):
+
+```ts
+// middleware.ts
+import { createI18nMiddleware } from 'next-international/middleware'
+import { NextRequest } from 'next/server'
+
+const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr')
+
+export function middleware(request: NextRequest) {
+  return I18nMiddleware(request)
+}
+
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
+}
+```
+
+5. Use `useI18n` and `useScopedI18n()` / `getI18n` and `getScopedI18n()` inside your components:
+
+```tsx
+// Client Component
+'use client'
+import { useI18n, useScopedI18n } from '../../locales/client'
+
+export default function Page() {
+  const t = useI18n()
+  const scopedT = useScopedI18n('hello')
+
+  return (
+    <div>
+      <p>{t('hello')}</p>
+
+      {/* Both are equivalent: */}
+      <p>{t('hello.world')}</p>
+      <p>{scopedT('world')}</p>
+
+      <p>{t('welcome', { name: 'John' })}</p>
+      <p>{t('welcome', { name: <strong>John</strong> })}</p>
+    </div>
+  )
+}
+
+// Server Component
+import { getI18n, getScopedI18n } from '../../locales/server'
+
+export default async function Page() {
+  const t = await getI18n()
+  const scopedT = await getScopedI18n('hello')
+
+  return (
+    <div>
+      <p>{t('hello')}</p>
+
+      {/* Both are equivalent: */}
+      <p>{t('hello.world')}</p>
+      <p>{scopedT('world')}</p>
+
+      <p>{t('welcome', { name: 'John' })}</p>
+      <p>{t('welcome', { name: <strong>John</strong> })}</p>
+    </div>
+  )
+}
+```
+
