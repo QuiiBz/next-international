@@ -1,0 +1,15 @@
+{
+  "index": "Get Started",
+   "-- App Router": {
+    "type": "separator",
+    "title": "App Router"
+  },
+  "app-setup": "Setup",
+  "app-get-change-locale": "Get and change the locale",
+   "-- Pages Router": {
+    "type": "separator",
+    "title": "Pages Router"
+  },
+  "pages-setup": "Setup",
+  "pages-get-change-locale": "Get and change the locale"
+}
