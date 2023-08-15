@@ -1,13 +1,14 @@
----
-title: Setup
-description: TODO
-sidebar:
-    order: 1
----
+import { Callout, Steps } from 'nextra/components'
 
-Make sure you've following the [Get Started](/get-started) documentation before continuing!
+<Callout type="info" emoji="ℹ️">
+  Make sure you've followed the [Get Started](/get-started) documentation before continuing!
+</Callout>
 
-1. Create `locales/client.ts` and `locales/server.ts` with your locales:
+<Steps>
+
+### Create locale files
+
+Create `locales/client.ts` and `locales/server.ts` with your locales:
 
 ```ts
 // locales/client.ts
@@ -38,7 +39,9 @@ export default {
 } as const
 ```
 
-2. Move all your routes inside an `app/[locale]/` folder. For Client Components, wrap the lowest parts of your app with `I18nProviderClient` inside a layout:
+### Move your existing files
+
+Move all your routes inside an `app/[locale]/` folder. For Client Components, wrap the lowest parts of your app with `I18nProviderClient` inside a layout:
 
 ```tsx
 // app/[locale]/client/layout.tsx
@@ -60,7 +63,9 @@ export default function SubLayout({
 }
 ```
 
-3. (WIP) If you want to support SSG with `output: export`, add `getStaticParams` to your pages:
+### Setup SSG (WIP)
+
+If you want to support SSG with `output: export`, add `getStaticParams` to your pages:
 
 ```ts
 // app/[locale]/page.tsx
@@ -69,7 +74,9 @@ import { ..., getStaticParams } from '../../locales/server'
 export const generateStaticParams = getStaticParams()
 ```
 
-4. Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale. You can also [rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale):
+### Setup middleware
+
+Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale. You can also [rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale):
 
 ```ts
 // middleware.ts
@@ -87,7 +94,9 @@ export const config = {
 }
 ```
 
-5. Use `useI18n` and `useScopedI18n()` / `getI18n` and `getScopedI18n()` inside your components:
+### Translate
+
+Use `useI18n` and `useScopedI18n()` / `getI18n` and `getScopedI18n()` inside your components:
 
 ```tsx
 // Client Component
@@ -134,3 +143,4 @@ export default async function Page() {
 }
 ```
 
+</Steps>

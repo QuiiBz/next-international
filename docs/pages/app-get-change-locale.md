@@ -1,14 +1,6 @@
----
-title: Get and change the current locale
-description: TODO
-next: false
-sidebar:
-    order: 2
----
-
 You can only change the current locale from a Client Component. Export `useChangeLocale` and `useCurrentLocale` from `createI18nClient`, and export `getCurrentLocale` from `createI18nServer`:
 
-```ts
+```ts {3,4,12}
 // locales/client.ts
 export const {
   useChangeLocale,
@@ -29,7 +21,7 @@ export const {
 
 Then use these hooks:
 
-```tsx
+```tsx {6,7,11-13,22,25}
 // Client Component
 'use client'
 import { useChangeLocale, useCurrentLocale } from '../../locales/client'
@@ -61,7 +53,7 @@ export default function Page() {
 
 If you have set a [`basePath`](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) option inside `next.config.js`, you'll also need to set it here:
 
-```ts
+```ts {2}
 const changeLocale = useChangeLocale({
   basePath: '/your-base-path'
 })

@@ -1,14 +1,14 @@
----
-title: Setup
-description: TODO
-prev: false
-sidebar:
-    order: 1
----
+import { Callout, Steps } from 'nextra/components'
 
-Make sure you've following the [Get Started](/get-started) documentation before continuing!
+<Callout type="info" emoji="ℹ️">
+  Make sure you've followed the [Get Started](/get-started) documentation before continuing!
+</Callout>
 
-1. Make sure that you've set up correctly the [`i18n` key inside `next.config.js`](https://nextjs.org/docs/pages/building-your-application/routing/internationalization), then create `locales/index.ts` with your locales:
+<Steps>
+
+### Create locale filesMake
+
+Make sure that you've set up correctly the [`i18n` key inside `next.config.js`](https://nextjs.org/docs/pages/building-your-application/routing/internationalization), then create `locales/index.ts` with your locales:
 
 ```ts
 // locales/index.ts
@@ -31,7 +31,9 @@ export default {
 } as const
 ```
 
-2. Wrap your whole app with `I18nProvider` inside `_app.tsx`:
+### Setup provider
+
+Wrap your whole app with `I18nProvider` inside `_app.tsx`:
 
 ```tsx
 // pages/_app.tsx
@@ -47,7 +49,9 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 ```
 
-3. Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps` (this will allow to SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
+### Setup SSG or SSR
+
+Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps` (this will allow to SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
 
 ```ts
 // pages/index.tsx
@@ -77,7 +81,9 @@ export const getServerSideProps = getLocaleProps(ctx => {
 })
 ```
 
-4. Use `useI18n` and `useScopedI18n()`:
+### Translate
+
+Use `useI18n` and `useScopedI18n()`:
 
 ```tsx
 // pages/index.ts
@@ -105,3 +111,4 @@ export default function Page() {
 }
 ```
 
+</Steps>

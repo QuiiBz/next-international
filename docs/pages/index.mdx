@@ -1,11 +1,4 @@
----
-title: Get Started
-description: TODO
-next: false
----
-
-import { Tabs, TabItem } from '@astrojs/starlight/components'
-import { LinkCard, CardGrid } from '@astrojs/starlight/components'
+import { Tabs, Tab, Cards, Card } from 'nextra/components'
 
 - **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params, type-safe plurals, type-safe `changeLocale()`...
 - **Small**: No dependencies, lazy-loaded
@@ -19,22 +12,22 @@ Try it live on CodeSandbox:
 
 ## Installation
 
-<Tabs>
-    <TabItem label="pnpm">
-        ```bash
-        pnpm install next-international
-        ```
-    </TabItem>
-    <TabItem label="yarn">
-        ```bash
-        yarn add next-international
-        ```
-    </TabItem>
-    <TabItem label="npm">
-        ```bash
-        npm install next-international
-        ```
-    </TabItem>
+<Tabs items={['pnpm', 'npm', 'yarn']}>
+  <Tab>
+    ```bash
+    pnpm install next-international
+    ```
+  </Tab>
+  <Tab>
+    ```bash
+    npm install next-international
+    ```
+  </Tab>
+  <Tab>
+    ```bash
+    yarn add next-international
+    ```
+  </Tab>
 </Tabs>
 
 ## TypeScript config
@@ -45,11 +38,12 @@ Make sure that `strict` is set to `true` in your `tsconfig.json`. This will allo
 
 next-international supports both the App Router and Pages Router of Next.js. The APIs are very similar, but each have specificities. Follow the one you're using:
 
-<CardGrid>
-	<LinkCard title="App Router documentation" href="/app/setup" />
-	<LinkCard title="Pages Router documentation" href="/pages/setup" />
-</CardGrid>
+<Cards>
+  <Card title="App Router documentation" href="/app/setup" />
+  <Card title="Pages Router documentation" href="/pages/setup" />
+</Cards>
 
 ## Examples
 
 You can find complete examples inside the [examples/next-pages](https://github.com/QuiiBz/next-international/tree/main/examples/next-pages/) and [examples/next-app](https://github.com/QuiiBz/next-international/tree/main/examples/next-app/) directories of the GitHub repository.
+

@@ -1,13 +1,6 @@
----
-title: Get and change the current locale
-description: TODO
-sidebar:
-    order: 2
----
-
 Export `useChangeLocale` and `useCurrentLocale` from `createI18n`:
 
-```ts
+```ts {3,4}
 // locales/index.ts
 export const {
   useChangeLocale,
@@ -20,7 +13,7 @@ export const {
 
 Then use it as a hook:
 
-```tsx
+```tsx {4,5,9-11}
 import { useChangeLocale, useCurrentLocale } from '../locales'
 
 export default function Page() {
