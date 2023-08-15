@@ -49,6 +49,8 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 ```
 
+You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop that will be used if a key has not been translated.
+
 ### Setup SSG or SSR
 
 Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps` (this will allow to SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):

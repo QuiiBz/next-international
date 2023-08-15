@@ -63,6 +63,8 @@ export default function SubLayout({
 }
 ```
 
+You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop that will be used if a key has not been translated.
+
 ### Setup SSG (WIP)
 
 If you want to support SSG with `output: export`, add `getStaticParams` to your pages:
