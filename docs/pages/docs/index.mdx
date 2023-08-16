@@ -1,10 +1,5 @@
 import { Tabs, Tab, Cards, Card } from 'nextra/components'
-
-<p align="center">
-  <img alt="" height="100px" src="/logo-black.png" />
-  <br />
-  <span>Type-safe internationalization (i18n) for Next.js</span>
-</p>
+import { AppIcon, PagesIcon } from '../../components/icons'
 
 ## Features
 
@@ -12,7 +7,7 @@ import { Tabs, Tab, Cards, Card } from 'nextra/components'
 - **Small**: No dependencies, lazy-loaded
 - **Simple**: No Webpack configuration, no CLI, no code generation, just pure TypeScript
 - **SSR/SSG/CSR**: Load only the required locale, client-side and server-side
-- **Pages or App Router**: With support for React Server Components
+- <strong style={{ display: 'inline-flex', gap: '8px', verticalAlign: 'top' }}><AppIcon /> App or <PagesIcon /> Pages Router</strong>: With support for React Server Components
 
 Try it live on CodeSandbox:
 
@@ -44,11 +39,11 @@ Make sure that `strict` is set to `true` in your `tsconfig.json`. This will allo
 
 ## Setup
 
-next-international supports both the App Router and Pages Router of Next.js. The APIs are very similar, but each have specificities. Follow the one you're using:
+next-international supports both the App Router and Pages Router of Next.js. The APIs are very similar, but each have small specificities. Follow the one you're using:
 
 <Cards>
-  <Card title="App Router documentation" href="/docs/app-setup" />
-  <Card title="Pages Router documentation" href="/docs/pages-setup" />
+  <Card icon={<AppIcon />} title="App Router" href="/docs/app-setup" />
+  <Card icon={<PagesIcon />} title="Pages Router" href="/docs/pages-setup" />
 </Cards>
 
 ## Examples

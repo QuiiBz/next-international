@@ -21,7 +21,7 @@
 - **Small**: No dependencies, lazy-loaded
 - **Simple**: No Webpack configuration, no CLI, no code generation, just pure TypeScript
 - **SSR/SSG/CSR**: Load only the required locale, client-side and server-side
-- **Pages or App Router**: With support for React Server Components
+- **App or Pages Router**: With support for React Server Components
 
 > **Note**: You can now build on top of the types used by next-international using [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types)!
 
