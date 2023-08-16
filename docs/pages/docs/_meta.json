@@ -2,6 +2,7 @@
   "index": "Get Started",
   "writing-locales": "Writing locales",
   "testing": "Testing",
+  "examples": "Examples",
    "-- App Router": {
     "type": "separator",
     "title": "App Router"
