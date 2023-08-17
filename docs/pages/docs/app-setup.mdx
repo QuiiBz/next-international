@@ -73,7 +73,9 @@ If you want to support SSG with `output: export`, add `getStaticParams` to your 
 // app/[locale]/page.tsx
 import { ..., getStaticParams } from '../../locales/server'
 
-export const generateStaticParams = getStaticParams()
+export function generateStaticParams() {
+  return getStaticParams()
+}
 ```
 
 ### Setup middleware
