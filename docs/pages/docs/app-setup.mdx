@@ -87,7 +87,10 @@ Add a `middleware.ts` file at the root of your app, that will redirect the user 
 import { createI18nMiddleware } from 'next-international/middleware'
 import { NextRequest } from 'next/server'
 
-const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr')
+const I18nMiddleware = createI18nMiddleware(
+  locales: ['en', 'fr'],
+  defaultLocale: 'fr'
+)
 
 export function middleware(request: NextRequest) {
   return I18nMiddleware(request)
