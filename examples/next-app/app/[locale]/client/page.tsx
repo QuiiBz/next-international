@@ -4,9 +4,7 @@ import { useI18n, useScopedI18n, useChangeLocale, useCurrentLocale } from '../..
 
 export default function Client() {
   const t = useI18n();
-  const changeLocale = useChangeLocale({
-    // basePath: '/base',
-  });
+  const changeLocale = useChangeLocale();
   const t2 = useScopedI18n('scope.more');
   const locale = useCurrentLocale();
 
