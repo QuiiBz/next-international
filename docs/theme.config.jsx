@@ -24,4 +24,7 @@ export default {
     )
   },
   darkMode: false,
+  nextThemes: {
+    enableSystem: false,
+  },
 };
