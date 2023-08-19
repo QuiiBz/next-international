@@ -51,11 +51,16 @@ export default function Page() {
 }
 ```
 
-If you have set a [`basePath`](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) option inside `next.config.js`, you'll also need to set it here:
+If you have set a [`basePath`](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) option inside `next.config.js`, you'll also need to set it inside `createI18nClient`:
 
-```ts {2}
-const changeLocale = useChangeLocale({
-  basePath: '/your-base-path'
+```ts {7}
+// locales/client.ts
+export const {
+  ...
+} = createI18nClient({
+  ...
+}, {
+  basePath: '/base'
 })
 ```
 
