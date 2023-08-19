@@ -26,5 +26,7 @@ export default {
   darkMode: false,
   nextThemes: {
     enableSystem: false,
+    defaultTheme: 'light',
+    forcedTheme: 'light',
   },
 };
