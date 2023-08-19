@@ -6,21 +6,17 @@ import { warn } from '../../helpers/log';
 
 const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig<[]>['urlMappingStrategy']> = 'redirect';
 
-export function createI18nMiddleware<Locales extends readonly string[]>(
-  locales: Locales,
-  defaultLocale: Locales[number],
-  config?: I18nMiddlewareConfig<Locales>,
-) {
+export function createI18nMiddleware<const Locales extends readonly string[]>(config: I18nMiddlewareConfig<Locales>) {
   return function I18nMiddleware(request: NextRequest) {
     const requestUrl = request.nextUrl.clone();
 
-    const locale = localeFromRequest(locales, request, config?.resolveLocaleFromRequest) ?? defaultLocale;
+    const locale = localeFromRequest(config.locales, request, config.resolveLocaleFromRequest) ?? config.defaultLocale;
 
-    if (noLocalePrefix(locales, requestUrl.pathname)) {
+    if (noLocalePrefix(config.locales, requestUrl.pathname)) {
       const mappedUrl = requestUrl.clone();
       mappedUrl.pathname = `/${locale}${mappedUrl.pathname}`;
 
-      const strategy = config?.urlMappingStrategy ?? DEFAULT_STRATEGY;
+      const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
 
       if (strategy === 'rewrite') {
         const response = NextResponse.rewrite(mappedUrl);
@@ -38,7 +34,7 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
     const response = NextResponse.next();
     const requestLocale = request.nextUrl.pathname.split('/')?.[1] ?? locale;
 
-    if (locales.includes(requestLocale)) {
+    if (config.locales.includes(requestLocale)) {
       return addLocaleToResponse(response, requestLocale);
     }
 
