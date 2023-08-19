@@ -547,14 +547,6 @@ export default function Page() {
 }
 ```
 
-If you have set a [`basePath`](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) option inside `next.config.js`, you'll also need to set it here:
-
-```ts
-const changeLocale = useChangeLocale({
-  basePath: '/your-base-path'
-})
-```
-
 </details>
 
 ### Fallback locale for missing translations

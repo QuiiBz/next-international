@@ -3,9 +3,7 @@
 import { useChangeLocale } from '../../locales/client';
 
 export function Switch() {
-  const changeLocale = useChangeLocale({
-    // basePath: '/base',
-  });
+  const changeLocale = useChangeLocale();
 
   return (
     <>
