@@ -1,0 +1,23 @@
+{
+  "index": "Get Started",
+  "writing-locales": "Writing locales",
+  "testing": "Testing",
+  "examples": "Examples",
+   "-- App Router": {
+    "type": "separator",
+    "title": "App Router"
+  },
+  "app-setup": "Setup",
+  "app-plurals": "Plurals",
+  "app-scoped-translations": "Scoped translations",
+  "app-get-change-locale": "Get and change the locale",
+  "app-middleware-configuration": "Middleware configuration",
+   "-- Pages Router": {
+    "type": "separator",
+    "title": "Pages Router"
+  },
+  "pages-setup": "Setup",
+  "pages-plurals": "Plurals",
+  "pages-scoped-translations": "Scoped translations",
+  "pages-get-change-locale": "Get and change the locale"
+}

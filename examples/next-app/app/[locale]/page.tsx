@@ -1,7 +1,9 @@
 import { getI18n, getScopedI18n, getCurrentLocale /*, getStaticParams */ } from '../../locales/server';
 
 // Only needed for SSG
-// export const generateStaticParams = getStaticParams();
+// export function generateStaticParams() {
+//   return getStaticParams();
+// }
 
 export default async function Home() {
   const t = await getI18n();
