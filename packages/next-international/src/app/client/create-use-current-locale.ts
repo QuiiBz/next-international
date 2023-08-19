@@ -1,8 +1,7 @@
 import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
 import type { I18nCurrentLocaleConfig } from '../../types';
-
-const DEFAULT_SEGMENT_NAME = 'locale';
+import { DEFAULT_SEGMENT_NAME } from '../../common/constants';
 
 export function createUseCurrentLocale<LocalesKeys>(locales: LocalesKeys[]) {
   return function useCurrentLocale(config?: I18nCurrentLocaleConfig) {

@@ -22,6 +22,17 @@ export type I18nCurrentLocaleConfig = {
   segmentName?: string;
 };
 
+export type I18nStaticParamsConfig = {
+  /**
+   * The name of the Next.js layout segment param that will be used to determine the locale in a client component.
+   *
+   * An app directory folder hierarchy that looks like `app/[locale]/products/[category]/[subCategory]/page.tsx` would be `locale`.
+   *
+   * @default locale
+   */
+  segmentName?: string;
+};
+
 export type I18nChangeLocaleConfig = {
   /**
    * If you are using a custom basePath inside `next.config.js`, you must also specify it here.
