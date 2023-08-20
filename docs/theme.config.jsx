@@ -21,7 +21,7 @@ export default {
         <meta name="twitter:site:domain" content="next-international.vercel.app" />
         <meta name="twitter:url" content="https://next-international.vercel.app" />
 
-        <meta name="og:title" content={title ?? 'next-international'} />
+        <meta name="og:title" content={`${title} - next-international` ?? 'next-international'} />
         <meta property="og:description" content="Type-safe internationalization (i18n) for Next.js" />
         <meta name="og:image" content={socialCard} />
       </>
