@@ -1,3 +1,5 @@
+# Get and change the locale
+
 Export `useChangeLocale` and `useCurrentLocale` from `createI18n`:
 
 ```ts {3,4}
