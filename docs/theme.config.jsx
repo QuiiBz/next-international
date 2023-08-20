@@ -16,13 +16,13 @@ export default {
       <>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta property="description" content="Type-safe internationalization (i18n) for Next.js" />
-        <meta property="og:description" content="Type-safe internationalization (i18n) for Next.js" />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="" />
         <meta name="twitter:site:domain" content="next-international.vercel.app" />
         <meta name="twitter:url" content="https://next-international.vercel.app" />
+
         <meta name="og:title" content={title ?? 'next-international'} />
+        <meta property="og:description" content="Type-safe internationalization (i18n) for Next.js" />
         <meta name="og:image" content={socialCard} />
       </>
     );
