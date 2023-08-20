@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/QuiiBz/next-international/issues"
   },
-  "homepage": "https://github.com/QuiiBz/next-international#readme",
+  "homepage": "https://next-international.vercel.app",
   "license": "MIT",
   "scripts": {
     "build": "tsc --declaration --emitDeclarationOnly --outDir dist index.ts"

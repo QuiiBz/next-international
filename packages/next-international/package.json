@@ -42,7 +42,7 @@
   "bugs": {
     "url": "https://github.com/QuiiBz/next-international/issues"
   },
-  "homepage": "https://github.com/QuiiBz/next-international#readme",
+  "homepage": "https://next-international.vercel.app",
   "license": "MIT",
   "scripts": {
     "build": "tsup src/index.ts src/app/client/index.ts src/app/server/index.ts src/app/middleware/index.ts --external next --external react --dts --minify",
