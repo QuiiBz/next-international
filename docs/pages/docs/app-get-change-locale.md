@@ -1,3 +1,5 @@
+# Get and change the locale
+
 You can only change the current locale from a Client Component. Export `useChangeLocale` and `useCurrentLocale` from `createI18nClient`, and export `getCurrentLocale` from `createI18nServer`:
 
 ```ts {3,4,12}

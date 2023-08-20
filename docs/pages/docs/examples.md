@@ -1,3 +1,5 @@
+# Examples
+
 You can find complete examples inside the [examples/next-pages](https://github.com/QuiiBz/next-international/tree/main/examples/next-pages/) and [examples/next-app](https://github.com/QuiiBz/next-international/tree/main/examples/next-app/) directories of the GitHub repository.
 
 We also have a CodeSandbox template for the App Router that you can browse live here:

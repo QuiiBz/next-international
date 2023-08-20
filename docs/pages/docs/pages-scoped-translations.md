@@ -1,3 +1,5 @@
+# Scoped translations
+
 When you have a lot of keys, you may notice in a file that you always use and duplicate the same scope:
 
 ```ts

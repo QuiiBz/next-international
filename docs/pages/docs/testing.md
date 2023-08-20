@@ -1,3 +1,5 @@
+# Testing
+
 In case you want to make tests with next-international, you will need to create a custom render. The following example uses `@testing-library` and `Vitest`, but should work with `Jest` too.
 
 ```tsx

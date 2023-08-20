@@ -1,4 +1,6 @@
-### Rewrite the URL to hide the locale
+# Middleware configuration
+
+## Rewrite the URL to hide the locale
 
 You might have noticed that by default, next-international redirects and shows the locale in the URL (e.g `/en/products`). This is helpful for users, but you can transparently rewrite the URL to hide the locale (e.g `/products`).
 
@@ -13,7 +15,7 @@ const I18nMiddleware = createI18nMiddleware(
 })
 ```
 
-### Override the user's locale resolution
+## Override the user's locale resolution
 
 If needed, you can override the resolution of a locale from a `Request`, which by default will try to extract it from the `Accept-Language` header. This can be useful to force the use of a specific locale regardless of the `Accept-Language` header. Note that this function will only be called if the user doesn't already have a `Next-Locale` cookie.
 

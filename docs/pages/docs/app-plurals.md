@@ -1,3 +1,5 @@
+# Plurals
+
 Plural translations work out of the box without any external dependencies, using the [`Intl.PluralRules`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules) API, which is supported in all browsers and Node.js.
 
 To declare plural translations, append `#` followed by `zero`, `one`, `two`, `few`, `many` or `other`:
