@@ -53,9 +53,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
 You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop that will be used if a key has not been translated.
 
-### Setup SSG or SSR
+### Setup Static Site Generation or Rendering
 
-Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps` (this will allow to SSR locales, see [Load initial locales client-side](#load-initial-locales-client-side) if you want to load the initial locale client-side):
+Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps`:
 
 ```ts
 // pages/index.tsx
@@ -70,13 +70,10 @@ export const getStaticProps = getLocaleProps(ctx => {
 })
 ```
 
-If you already have `getServerSideProps` on this page, you can't use `getStaticProps`. In this case, you can still use `getLocaleProps` the same way:
+If you already have a `getServerSideProps` on this page, you can't use `getStaticProps`. In this case, you can still use `getLocaleProps` the same way:
 
 ```ts
 // pages/index.tsx
-export const getServerSideProps = getLocaleProps()
-
-// or with an existing `getServerSideProps` function:
 export const getServerSideProps = getLocaleProps(ctx => {
   // your existing code
   return {
@@ -116,3 +113,7 @@ export default function Page() {
 ```
 
 </Steps>
+
+## What's next?
+
+Learn how to add [plurals](/docs/pages-plurals), use [scoped translations](/docs/pages-scoped-translations), and setup [Static Site Generation](/docs/pages-static-site-generation).

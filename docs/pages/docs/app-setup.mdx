@@ -67,9 +67,9 @@ export default function SubLayout({
 
 You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop that will be used if a key has not been translated.
 
-### Setup SSG (WIP)
+### Setup Static Rendering (WIP)
 
-If you want to support SSG with `output: export`, add `getStaticParams` to your pages:
+If you want to support Static Rendering with `output: 'export'` inside `next.config.js`, add `getStaticParams` to your pages:
 
 ```ts
 // app/[locale]/page.tsx
@@ -153,3 +153,7 @@ export default async function Page() {
 ```
 
 </Steps>
+
+## What's next?
+
+Learn how to add [plurals](/docs/app-plurals), use [scoped translations](/docs/app-scoped-translations), setup [Static Rendering](/docs/app-static-rendering), and tweak the [middleware configuration](/docs/app-middleware-configuration).

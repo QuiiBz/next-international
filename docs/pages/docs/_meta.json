@@ -12,6 +12,7 @@
   "app-scoped-translations": "Scoped translations",
   "app-get-change-locale": "Get and change the locale",
   "app-middleware-configuration": "Middleware configuration",
+  "app-static-rendering": "Static Rendering",
    "-- Pages Router": {
     "type": "separator",
     "title": "Pages Router"
@@ -19,5 +20,6 @@
   "pages-setup": "Setup",
   "pages-plurals": "Plurals",
   "pages-scoped-translations": "Scoped translations",
-  "pages-get-change-locale": "Get and change the locale"
+  "pages-get-change-locale": "Get and change the locale",
+  "pages-static-site-generation": "Static Site Generation"
 }
