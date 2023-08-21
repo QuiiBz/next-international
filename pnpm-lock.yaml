@@ -95,6 +95,9 @@ importers:
       '@types/react-dom':
         specifier: 18.2.4
         version: 18.2.4
+      '@vercel/analytics':
+        specifier: ^1.0.2
+        version: 1.0.2
       eslint:
         specifier: 8.47.0
         version: 8.47.0
@@ -2867,6 +2870,10 @@ packages:
     dependencies:
       '@typescript-eslint/types': 6.3.0
       eslint-visitor-keys: 3.4.3
+
+  /@vercel/analytics@1.0.2:
+    resolution: {integrity: sha512-BZFxVrv24VbNNl5xMxqUojQIegEeXMI6rX3rg1uVLYUEXsuKNBSAEQf4BWEcjQDp/8aYJOj6m8V4PUA3x/cxgg==}
+    dev: false
 
   /@vitejs/plugin-react@4.0.1(vite@4.3.9):
     resolution: {integrity: sha512-g25lL98essfeSj43HJ0o4DMp0325XK0ITkxpgChzJU/CyemgyChtlxfnRbjfwxDGCTRxTiXtQAsdebQXKMRSOA==}
