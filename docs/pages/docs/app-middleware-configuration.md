@@ -8,9 +8,9 @@ Navigate to the `middleware.ts` file and set the `urlMappingStrategy` to `rewrit
 
 ```ts
 // middleware.ts
-const I18nMiddleware = createI18nMiddleware(
+const I18nMiddleware = createI18nMiddleware({
   locales: ['en', 'fr'],
-  defaultLocale: 'fr',
+  defaultLocale: 'en',
   urlMappingStrategy: 'rewrite'
 })
 ```
@@ -23,9 +23,9 @@ Navigate to the `middleware.ts` file and implement a new `resolveLocaleFromReque
 
 ```ts
 // middleware.ts
-const I18nMiddleware = createI18nMiddleware(
+const I18nMiddleware = createI18nMiddleware({
   locales: ['en', 'fr'],
-  defaultLocale: 'fr',
+  defaultLocale: 'en',
   resolveLocaleFromRequest: request => {
     // Do your logic here to resolve the locale
     return 'fr'

@@ -30,7 +30,7 @@ export default {
   project: {
     link: 'https://github.com/QuiiBz/next-international',
   },
-  docsRepositoryBase: 'https://github.com/QuiiBz/next-international/blob/main/docs/pages',
+  docsRepositoryBase: 'https://github.com/QuiiBz/next-international/blob/main/docs',
   useNextSeoProps() {
     return {
       titleTemplate: '%s – next-international',
