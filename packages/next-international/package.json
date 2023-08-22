@@ -45,8 +45,8 @@
   "homepage": "https://github.com/QuiiBz/next-international#readme",
   "license": "MIT",
   "scripts": {
-    "build": "tsup src/index.ts src/app/client/index.ts src/app/server/index.ts src/app/middleware/index.ts --external next --external react --dts --minify",
-    "watch": "tsup src/index.ts src/app/client/index.ts src/app/server/index.ts src/app/middleware/index.ts --external next --external react --dts --watch"
+    "build": "tsup src/index.ts src/app/client/index.ts src/app/server/index.ts src/app/middleware/index.ts --external next --external react --dts",
+    "watch": "pnpm build --watch"
   },
   "devDependencies": {
     "@types/react": "^18.2.9",
