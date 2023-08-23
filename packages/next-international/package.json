@@ -1,6 +1,6 @@
 {
   "name": "next-international",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Type-safe internationalization (i18n) for Next.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
