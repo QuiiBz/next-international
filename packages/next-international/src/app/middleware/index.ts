@@ -36,10 +36,17 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
     }
 
     const response = NextResponse.next();
-    const requestLocale = request.nextUrl.pathname.split('/')?.[1] ?? locale;
+    const requestLocale = request.nextUrl.pathname.split('/')?.[1]
 
-    if (locales.includes(requestLocale)) {
+    if (requestLocale && config?.urlMappingStrategy === 'rewrite') {
+      const newUrl = new URL(request.nextUrl.pathname.slice(requestLocale.length + 1), request.url);
+      const response = NextResponse.redirect(newUrl);
+
       return addLocaleToResponse(response, requestLocale);
+    }
+
+    if (!requestLocale || locales.includes(requestLocale)) {
+      return addLocaleToResponse(response, requestLocale ?? defaultLocale);
     }
 
     return response;
