@@ -38,7 +38,7 @@ export type I18nServerConfig<LocalesKeys> = {
    */
   segmentName?: string;
   /**
-   *
+   * The name of the locale to use if some keys aren't translated, to fallback to this locale instead of showing the translation key.
    */
   fallbackLocale?: LocalesKeys;
 };
