@@ -3,7 +3,7 @@ import type { I18nClientConfig } from '../../types';
 
 export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[], config: I18nClientConfig) {
   return function useChangeLocale() {
-    const { push } = useRouter();
+    const { push, refresh } = useRouter();
     const path = usePathname();
     const searchParams = useSearchParams();
 
@@ -21,6 +21,7 @@ export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[], confi
       const search = searchParams.toString();
 
       push(`/${newLocale}${pathWithoutLocale}${search ? `?${search}` : ''}`);
+      refresh();
     };
   };
 }
