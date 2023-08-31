@@ -21,11 +21,13 @@ export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>
     const [clientFallbackLocale, setClientFallbackLocale] = useState<Locale>();
 
     useEffect(() => {
+      // @ts-expect-error any type
       locales[locale]().then(content => {
         setClientLocale(flattenLocale<Locale>(content.default));
       });
 
       if (fallbackLocale) {
+        // @ts-expect-error any type
         locales[fallbackLocale]().then(content => {
           setClientFallbackLocale(flattenLocale<Locale>(content.default));
         });
