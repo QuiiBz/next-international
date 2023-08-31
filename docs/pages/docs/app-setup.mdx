@@ -50,22 +50,16 @@ Move all your routes inside an `app/[locale]/` folder. For Client Components, wr
 import { ReactElement } from 'react'
 import { I18nProviderClient } from '../../locales/client'
 
-export default function SubLayout({
-  children,
-  params
-}: {
-  children: ReactElement
-  params: { locale: string }
-}) {
+export default function SubLayout({ children }: { children: ReactElement }) {
   return (
-    <I18nProviderClient locale={params.locale}>
+    <I18nProviderClient>
       {children}
     </I18nProviderClient>
   )
 }
 ```
 
-You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop that will be used if a key has not been translated.
+You can also provide a `fallback` component prop to show while waiting for the locale to load.
 
 ### Setup Static Rendering (WIP)
 

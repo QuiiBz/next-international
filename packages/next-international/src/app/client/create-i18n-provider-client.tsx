@@ -1,13 +1,12 @@
-import React, { Context, ReactElement, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Context, ReactElement, ReactNode, useEffect, useMemo, useState } from 'react';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 
 import type { LocaleContext } from '../../types';
 import { flattenLocale } from '../../common/flatten-locale';
 
-type I18nProviderProps = {
-  locale: string;
+type I18nProviderProps<LocalesKeys> = {
   fallback?: ReactElement | null;
-  fallbackLocale?: Record<string, unknown>;
+  fallbackLocale?: LocalesKeys;
   children: ReactNode;
 };
 
@@ -16,32 +15,32 @@ export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>
   locales: ImportedLocales,
   useCurrentLocale: () => LocalesKeys,
 ) {
-  return function I18nProviderClient({
-    locale: baseLocale,
-    fallback = null,
-    fallbackLocale,
-    children,
-  }: I18nProviderProps) {
+  return function I18nProviderClient({ fallback = null, fallbackLocale, children }: I18nProviderProps<LocalesKeys>) {
     const locale = useCurrentLocale();
     const [clientLocale, setClientLocale] = useState<Locale>();
+    const [clientFallbackLocale, setClientFallbackLocale] = useState<Locale>();
 
-    const loadLocale = useCallback((locale: string) => {
+    useEffect(() => {
+      // @ts-expect-error any type
       locales[locale]().then(content => {
         setClientLocale(flattenLocale<Locale>(content.default));
       });
-    }, []);
 
-    useEffect(() => {
-      loadLocale(baseLocale);
-    }, [baseLocale, loadLocale]);
+      if (fallbackLocale) {
+        // @ts-expect-error any type
+        locales[fallbackLocale]().then(content => {
+          setClientFallbackLocale(flattenLocale<Locale>(content.default));
+        });
+      }
+    }, [locale, fallbackLocale]);
 
     const value = useMemo(
       () => ({
-        localeContent: (clientLocale || baseLocale) as Locale,
-        fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
+        localeContent: clientLocale as Locale,
+        fallbackLocale: clientFallbackLocale as Locale | undefined,
         locale: locale as string,
       }),
-      [clientLocale, baseLocale, fallbackLocale, locale],
+      [clientLocale, clientFallbackLocale, locale],
     );
 
     if (!clientLocale && fallback) {

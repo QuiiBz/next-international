@@ -8,5 +8,7 @@ export const { getI18n, getScopedI18n, getCurrentLocale, getStaticParams } = cre
   {
     // Uncomment to use custom segment name
     // segmentName: 'locale',
+    // Uncomment to set fallback locale
+    // fallbackLocale: 'en',
   },
 );

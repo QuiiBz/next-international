@@ -28,7 +28,7 @@ export type I18nClientConfig = {
   basePath?: string;
 };
 
-export type I18nServerConfig = {
+export type I18nServerConfig<LocalesKeys> = {
   /**
    * The name of the Next.js layout segment param that will be used to determine the locale in a client component.
    *
@@ -37,6 +37,10 @@ export type I18nServerConfig = {
    * @default locale
    */
   segmentName?: string;
+  /**
+   * The name of the locale to use if some keys aren't translated, to fallback to this locale instead of showing the translation key.
+   */
+  fallbackLocale?: LocalesKeys;
 };
 
 export type I18nMiddlewareConfig<Locales extends readonly string[]> = {

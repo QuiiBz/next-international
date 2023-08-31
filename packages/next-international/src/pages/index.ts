@@ -19,7 +19,7 @@ export function createI18n<Locales extends ImportedLocales, OtherLocales extends
 
   // @ts-expect-error deep type
   const I18nContext = createContext<LocaleContext<Locale> | null>(null);
-  const I18nProvider = createI18nProvider(I18nContext, locales);
+  const I18nProvider = createI18nProvider<Locale, LocalesKeys>(I18nContext, locales);
   const useI18n = createUsei18n(I18nContext);
   const useScopedI18n = createScopedUsei18n(I18nContext);
   const useChangeLocale = createUseChangeLocale<LocalesKeys>();
