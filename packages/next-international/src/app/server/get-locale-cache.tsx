@@ -1,7 +1,8 @@
 import { cookies, headers } from 'next/headers';
 import { cache } from 'react';
-
 import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
+import { notFound } from 'next/navigation';
+import { error } from '../../helpers/log';
 
 export const getLocaleCache = cache(() => {
   let locale: string | undefined | null;
@@ -13,7 +14,8 @@ export const getLocaleCache = cache(() => {
   }
 
   if (!locale) {
-    throw new Error('Could not get the locale from the headers or cookies.');
+    error(`Locale not found in headers or cookies, returning "notFound()"`);
+    notFound();
   }
 
   return locale;
