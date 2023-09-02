@@ -1,7 +1,8 @@
-import { useParams } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { DEFAULT_SEGMENT_NAME } from '../../common/constants';
 import { I18nClientConfig } from '../../types';
+import { error } from '../../helpers/log';
 
 export function createUseCurrentLocale<LocalesKeys>(locales: LocalesKeys[], config: I18nClientConfig) {
   return function useCurrentLocale() {
@@ -15,7 +16,8 @@ export function createUseCurrentLocale<LocalesKeys>(locales: LocalesKeys[], conf
         }
       }
 
-      throw new Error('Locale not found');
+      error(`Locale "${segment}" not found in locales (${locales.join(', ')}), returning "notFound()"`);
+      notFound();
     }, [segment]);
   };
 }
