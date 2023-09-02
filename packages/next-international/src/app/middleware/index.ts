@@ -35,17 +35,16 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
       }
     }
 
-    const response = NextResponse.next();
+    let response = NextResponse.next();
     const requestLocale = request.nextUrl.pathname.split('/')?.[1];
 
-    if (locales.includes(requestLocale) && config?.urlMappingStrategy === 'rewrite') {
-      const newUrl = new URL(request.nextUrl.pathname.slice(requestLocale.length + 1), request.url);
-      const response = NextResponse.redirect(newUrl);
-
-      return addLocaleToResponse(response, requestLocale);
-    }
-
     if (!requestLocale || locales.includes(requestLocale)) {
+      if (config?.urlMappingStrategy === 'rewrite' && requestLocale !== locale) {
+        const pathnameWithoutLocale = request.nextUrl.pathname.slice(requestLocale.length + 1);
+        const newUrl = new URL(pathnameWithoutLocale === '' ? '/' : pathnameWithoutLocale, request.url);
+        response = NextResponse.redirect(newUrl);
+      }
+
       return addLocaleToResponse(response, requestLocale ?? defaultLocale);
     }
 
