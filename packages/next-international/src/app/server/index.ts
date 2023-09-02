@@ -9,7 +9,7 @@ import { I18nServerConfig } from '../../types';
 
 export function createI18nServer<Locales extends ImportedLocales, OtherLocales extends ExplicitLocales | null = null>(
   locales: Locales,
-  config: I18nServerConfig<keyof Locales> = {},
+  config: I18nServerConfig = {},
 ) {
   type TempLocale = OtherLocales extends ExplicitLocales ? GetLocaleType<OtherLocales> : GetLocaleType<Locales>;
   type Locale = TempLocale extends Record<string, string> ? TempLocale : FlattenLocale<TempLocale>;

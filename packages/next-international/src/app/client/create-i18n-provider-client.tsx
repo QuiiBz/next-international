@@ -4,9 +4,9 @@ import type { BaseLocale, ImportedLocales } from 'international-types';
 import type { LocaleContext } from '../../types';
 import { flattenLocale } from '../../common/flatten-locale';
 
-type I18nProviderProps<LocalesKeys> = {
+type I18nProviderProps = {
   fallback?: ReactElement | null;
-  fallbackLocale?: LocalesKeys;
+  fallbackLocale?: BaseLocale;
   children: ReactNode;
 };
 
@@ -15,32 +15,24 @@ export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>
   locales: ImportedLocales,
   useCurrentLocale: () => LocalesKeys,
 ) {
-  return function I18nProviderClient({ fallback = null, fallbackLocale, children }: I18nProviderProps<LocalesKeys>) {
+  return function I18nProviderClient({ fallback = null, fallbackLocale, children }: I18nProviderProps) {
     const locale = useCurrentLocale();
     const [clientLocale, setClientLocale] = useState<Locale>();
-    const [clientFallbackLocale, setClientFallbackLocale] = useState<Locale>();
 
     useEffect(() => {
       // @ts-expect-error any type
       locales[locale]().then(content => {
         setClientLocale(flattenLocale<Locale>(content.default));
       });
-
-      if (fallbackLocale) {
-        // @ts-expect-error any type
-        locales[fallbackLocale]().then(content => {
-          setClientFallbackLocale(flattenLocale<Locale>(content.default));
-        });
-      }
     }, [locale, fallbackLocale]);
 
     const value = useMemo(
       () => ({
         localeContent: clientLocale as Locale,
-        fallbackLocale: clientFallbackLocale as Locale | undefined,
+        fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
         locale: locale as string,
       }),
-      [clientLocale, clientFallbackLocale, locale],
+      [clientLocale, fallbackLocale, locale],
     );
 
     if (!clientLocale && fallback) {

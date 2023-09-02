@@ -5,14 +5,14 @@ import { useRouter } from 'next/router';
 import { error, warn } from '../helpers/log';
 import { flattenLocale } from '../common/flatten-locale';
 
-type I18nProviderProps<Locale extends BaseLocale, LocalesKeys> = {
+type I18nProviderProps<Locale extends BaseLocale> = {
   locale: Locale;
   fallback?: ReactElement | null;
-  fallbackLocale?: LocalesKeys;
+  fallbackLocale?: BaseLocale;
   children: ReactNode;
 };
 
-export function createI18nProvider<Locale extends BaseLocale, LocalesKeys>(
+export function createI18nProvider<Locale extends BaseLocale>(
   I18nContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
 ) {
@@ -21,10 +21,9 @@ export function createI18nProvider<Locale extends BaseLocale, LocalesKeys>(
     fallback = null,
     fallbackLocale,
     children,
-  }: I18nProviderProps<Locale, LocalesKeys>) {
+  }: I18nProviderProps<Locale>) {
     const { locale, defaultLocale, locales: nextLocales } = useRouter();
     const [clientLocale, setClientLocale] = useState<Locale>();
-    const [clientFallbackLocale, setClientFallbackLocale] = useState<Locale>();
     const initialLoadRef = useRef(true);
 
     useEffect(() => {
@@ -66,22 +65,13 @@ export function createI18nProvider<Locale extends BaseLocale, LocalesKeys>(
       initialLoadRef.current = false;
     }, [baseLocale, loadLocale, locale]);
 
-    useEffect(() => {
-      if (fallbackLocale) {
-        // @ts-expect-error any type
-        locales[fallbackLocale]().then(content => {
-          setClientFallbackLocale(flattenLocale<Locale>(content.default));
-        });
-      }
-    }, [fallbackLocale]);
-
     const value = useMemo(
       () => ({
         localeContent: (clientLocale || baseLocale) as Locale,
-        fallbackLocale: clientFallbackLocale,
+        fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
         locale: locale ?? defaultLocale ?? '',
       }),
-      [clientLocale, baseLocale, clientFallbackLocale, locale, defaultLocale],
+      [clientLocale, baseLocale, fallbackLocale, locale, defaultLocale],
     );
 
     if (!locale || !defaultLocale) {

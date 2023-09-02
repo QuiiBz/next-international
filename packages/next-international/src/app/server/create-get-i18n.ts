@@ -6,7 +6,7 @@ import { flattenLocale } from '../../common/flatten-locale';
 
 export function createGetI18n<Locales extends ImportedLocales, Locale extends BaseLocale>(
   locales: Locales,
-  config: I18nServerConfig<keyof Locales>,
+  config: I18nServerConfig,
 ) {
   return async function getI18n() {
     const locale = getLocaleCache();
@@ -14,9 +14,7 @@ export function createGetI18n<Locales extends ImportedLocales, Locale extends Ba
     return createT(
       {
         localeContent: flattenLocale((await locales[locale]()).default),
-        fallbackLocale: config.fallbackLocale
-          ? flattenLocale((await locales[config.fallbackLocale]()).default)
-          : undefined,
+        fallbackLocale: config.fallbackLocale ? flattenLocale(config.fallbackLocale) : undefined,
         locale,
       } as LocaleContext<Locale>,
       undefined,
