@@ -75,11 +75,12 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
         const param = match[1] as keyof Locale;
         const paramValue = (paramObject as LocaleMap<Locale>)[param];
 
-        if (typeof paramValue !== 'string') isString = false;
+        if (isValidElement(paramValue)) {
+          isString = false;
+          return cloneElement(paramValue, { key: `${String(param)}-${index}` });
+        }
 
-        return isValidElement(paramValue)
-          ? cloneElement(paramValue, { key: `${String(param)}-${index}` })
-          : (paramValue as ReactNode);
+        return paramValue as ReactNode;
       }
 
       // if there's no match - it's not a variable and just a normal string
