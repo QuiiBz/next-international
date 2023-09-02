@@ -9,7 +9,6 @@ const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig<[]>['urlMappingStrategy
 export function createI18nMiddleware<const Locales extends readonly string[]>(config: I18nMiddlewareConfig<Locales>) {
   return function I18nMiddleware(request: NextRequest) {
     const requestUrl = request.nextUrl.clone();
-
     const locale = localeFromRequest(config.locales, request, config.resolveLocaleFromRequest) ?? config.defaultLocale;
 
     if (noLocalePrefix(config.locales, requestUrl.pathname)) {
@@ -31,17 +30,16 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
       }
     }
 
-    const response = NextResponse.next();
+    let response = NextResponse.next();
     const requestLocale = request.nextUrl.pathname.split('/')?.[1];
 
-    if (config.locales.includes(requestLocale) && config.urlMappingStrategy === 'rewrite') {
-      const newUrl = new URL(request.nextUrl.pathname.slice(requestLocale.length + 1), request.url);
-      const response = NextResponse.redirect(newUrl);
-
-      return addLocaleToResponse(response, requestLocale);
-    }
-
     if (!requestLocale || config.locales.includes(requestLocale)) {
+      if (config?.urlMappingStrategy === 'rewrite' && requestLocale !== locale) {
+        const pathnameWithoutLocale = request.nextUrl.pathname.slice(requestLocale.length + 1);
+        const newUrl = new URL(pathnameWithoutLocale === '' ? '/' : pathnameWithoutLocale, request.url);
+        response = NextResponse.redirect(newUrl);
+      }
+
       return addLocaleToResponse(response, requestLocale ?? config.defaultLocale);
     }
 
