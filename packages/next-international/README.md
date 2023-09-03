@@ -600,6 +600,15 @@ const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr', {
 })
 ```
 
+You may also want to only show the locale in the URL when it is not the default. This is provided through 'rewriteDefault' — in the case below french will be `/rest-of-path` and english will be `/en/rest-of-path`:
+
+```ts
+// middleware.ts
+const I18nMiddleware = createI18nMiddleware(['en', 'fr'] as const, 'fr', {
+  urlMappingStrategy: 'rewriteDefault'
+})
+```
+
 ### Override the user's locale resolution
 
 If needed, you can override the resolution of a locale from a `Request`, which by default will try to extract it from the `Accept-Language` header. This can be useful to force the use of a specific locale regardless of the `Accept-Language` header. Note that this function will only be called if the user doesn't already have a `Next-Locale` cookie.
