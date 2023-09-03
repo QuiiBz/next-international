@@ -1,16 +1,24 @@
 import { cookies, headers } from 'next/headers';
-import { cache } from 'react';
+import { cache, createServerContext, use, useContext } from 'react';
 import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
 import { notFound } from 'next/navigation';
 import { error } from '../../helpers/log';
 
-export const getLocaleCache = cache(() => {
+export const ServerContext = createServerContext<null | string>('locale', null);
+
+export const getLocaleCache = () => {
   let locale: string | undefined | null;
+  const localeCache = useContext(ServerContext);
 
-  locale = headers().get(LOCALE_HEADER);
+  try {
+    locale = headers().get(LOCALE_HEADER);
 
-  if (!locale) {
-    locale = cookies().get(LOCALE_COOKIE)?.value;
+    if (!locale) {
+      locale = cookies().get(LOCALE_COOKIE)?.value;
+    }
+  } catch (e) {
+    console.log('GET', { localeCache });
+    locale = localeCache ?? 'en';
   }
 
   if (!locale) {
@@ -19,4 +27,4 @@ export const getLocaleCache = cache(() => {
   }
 
   return locale;
-});
+};

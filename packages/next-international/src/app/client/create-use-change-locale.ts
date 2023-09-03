@@ -5,7 +5,8 @@ export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[], confi
   return function useChangeLocale() {
     const { push, refresh } = useRouter();
     const path = usePathname();
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
+    const searchParams = new URLSearchParams();
 
     let pathWithoutLocale = path;
 

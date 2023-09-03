@@ -10,6 +10,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  output: 'export',
   // Uncomment to set base path
   // basePath: '/base',
   // Uncomment to use SSG
