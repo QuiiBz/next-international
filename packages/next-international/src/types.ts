@@ -52,7 +52,7 @@ export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
    *
    * @default redirect
    */
-  urlMappingStrategy?: 'redirect' | 'rewrite';
+  urlMappingStrategy?: 'redirect' | 'rewrite' | 'rewriteDefault';
 
   /**
    * Override the resolution of a locale from a `Request`, which by default will try to extract it from the `Accept-Language` header. This can be useful to force the use of a specific locale regardless of the `Accept-Language` header.
