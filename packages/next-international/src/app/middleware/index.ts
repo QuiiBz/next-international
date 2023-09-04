@@ -19,7 +19,7 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
 
       if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === defaultLocale)) {
         const response = NextResponse.rewrite(mappedUrl);
-        return addLocaleToResponse(response, locale);      
+        return addLocaleToResponse(response, locale);
       } else {
         if (strategy !== 'redirect') {
           warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
