@@ -1,6 +1,6 @@
 {
   "name": "next-international",
-  "version": "0.9.5",
+  "version": "1.0.0",
   "description": "Type-safe internationalization (i18n) for Next.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -42,7 +42,7 @@
   "bugs": {
     "url": "https://github.com/QuiiBz/next-international/issues"
   },
-  "homepage": "https://github.com/QuiiBz/next-international#readme",
+  "homepage": "https://next-international.vercel.app",
   "license": "MIT",
   "scripts": {
     "build": "tsup src/index.ts src/app/client/index.ts src/app/server/index.ts src/app/middleware/index.ts --external next --external react --dts",

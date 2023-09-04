@@ -8,7 +8,7 @@ import { flattenLocale } from '../common/flatten-locale';
 type I18nProviderProps<Locale extends BaseLocale> = {
   locale: Locale;
   fallback?: ReactElement | null;
-  fallbackLocale?: Record<string, unknown>;
+  fallbackLocale?: BaseLocale;
   children: ReactNode;
 };
 

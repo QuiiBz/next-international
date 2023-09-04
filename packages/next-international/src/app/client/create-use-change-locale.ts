@@ -1,15 +1,15 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import type { I18nChangeLocaleConfig } from '../../types';
+import type { I18nClientConfig } from '../../types';
 
-export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[]) {
-  return function useChangeLocale(config?: I18nChangeLocaleConfig) {
+export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[], config: I18nClientConfig) {
+  return function useChangeLocale() {
     const { push, refresh } = useRouter();
     const path = usePathname();
     const searchParams = useSearchParams();
 
     let pathWithoutLocale = path;
 
-    if (config?.basePath) {
+    if (config.basePath) {
       pathWithoutLocale = pathWithoutLocale.replace(config.basePath, '');
     }
 

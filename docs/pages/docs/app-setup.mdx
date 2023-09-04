@@ -1,0 +1,153 @@
+import { Callout, Steps } from 'nextra/components'
+
+# Setup
+
+<Callout type="info" emoji="ℹ️">
+  Make sure you've followed the [Get Started](/docs) documentation before continuing!
+</Callout>
+
+<Steps>
+
+### Create locale files
+
+Create `locales/client.ts` and `locales/server.ts` with your locales:
+
+```ts
+// locales/client.ts
+import { createI18nClient } from 'next-international/client'
+
+export const { useI18n, useScopedI18n, I18nProviderClient } = createI18nClient({
+  en: () => import('./en'),
+  fr: () => import('./fr')
+})
+
+// locales/server.ts
+import { createI18nServer } from 'next-international/server'
+
+export const { getI18n, getScopedI18n, getStaticParams } = createI18nServer({
+  en: () => import('./en'),
+  fr: () => import('./fr')
+})
+```
+
+Each locale file should export a default object (don't forget `as const`):
+
+```ts
+// locales/en.ts
+export default {
+  'hello': 'Hello',
+  'hello.world': 'Hello world!',
+  'welcome': 'Hello {name}!'
+} as const
+```
+
+### Move your existing files
+
+Move all your routes inside an `app/[locale]/` folder. For Client Components, wrap the lowest parts of your app with `I18nProviderClient` inside a layout:
+
+```tsx
+// app/[locale]/client/layout.tsx
+import { ReactElement } from 'react'
+import { I18nProviderClient } from '../../locales/client'
+
+export default function SubLayout({ children }: { children: ReactElement }) {
+  return (
+    <I18nProviderClient>
+      {children}
+    </I18nProviderClient>
+  )
+}
+```
+
+You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop to specify a locale to fallback on if a key has not been translated.
+
+### Setup Static Rendering (WIP)
+
+If you want to support Static Rendering with `output: 'export'` inside `next.config.js`, add `getStaticParams` to your pages:
+
+```ts
+// app/[locale]/page.tsx
+import { ..., getStaticParams } from '../../locales/server'
+
+export function generateStaticParams() {
+  return getStaticParams()
+}
+```
+
+### Setup middleware
+
+Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale. You can also [rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale):
+
+```ts
+// middleware.ts
+import { createI18nMiddleware } from 'next-international/middleware'
+import { NextRequest } from 'next/server'
+
+const I18nMiddleware = createI18nMiddleware({
+  locales: ['en', 'fr'],
+  defaultLocale: 'en'
+})
+
+export function middleware(request: NextRequest) {
+  return I18nMiddleware(request)
+}
+
+export const config = {
+  matcher: ['/((?!api|static|.*\\..*|_next|favicon.ico|robots.txt).*)']
+}
+```
+
+### Translate
+
+Use `useI18n` and `useScopedI18n()` / `getI18n` and `getScopedI18n()` inside your components:
+
+```tsx
+// Client Component
+'use client'
+import { useI18n, useScopedI18n } from '../../locales/client'
+
+export default function Page() {
+  const t = useI18n()
+  const scopedT = useScopedI18n('hello')
+
+  return (
+    <div>
+      <p>{t('hello')}</p>
+
+      {/* Both are equivalent: */}
+      <p>{t('hello.world')}</p>
+      <p>{scopedT('world')}</p>
+
+      <p>{t('welcome', { name: 'John' })}</p>
+      <p>{t('welcome', { name: <strong>John</strong> })}</p>
+    </div>
+  )
+}
+
+// Server Component
+import { getI18n, getScopedI18n } from '../../locales/server'
+
+export default async function Page() {
+  const t = await getI18n()
+  const scopedT = await getScopedI18n('hello')
+
+  return (
+    <div>
+      <p>{t('hello')}</p>
+
+      {/* Both are equivalent: */}
+      <p>{t('hello.world')}</p>
+      <p>{scopedT('world')}</p>
+
+      <p>{t('welcome', { name: 'John' })}</p>
+      <p>{t('welcome', { name: <strong>John</strong> })}</p>
+    </div>
+  )
+}
+```
+
+</Steps>
+
+## What's next?
+
+Learn how to add [plurals](/docs/app-plurals), use [scoped translations](/docs/app-scoped-translations), setup [Static Rendering](/docs/app-static-rendering), and tweak the [middleware configuration](/docs/app-middleware-configuration).
