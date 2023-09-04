@@ -22,18 +22,9 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
 
       const strategy = config?.urlMappingStrategy ?? DEFAULT_STRATEGY;
 
-      if (strategy === 'rewrite') {
+      if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === defaultLocale)) {
         const response = NextResponse.rewrite(mappedUrl);
-        return addLocaleToResponse(response, locale);
-      } else if (strategy === 'rewriteDefault') {
-        if (locale === defaultLocale) {
-          const response = NextResponse.rewrite(mappedUrl);
-          return addLocaleToResponse(response, locale);
-        }
-        else {
-          const response = NextResponse.redirect(mappedUrl);
-          return addLocaleToResponse(response, locale);
-        }        
+        return addLocaleToResponse(response, locale);      
       } else {
         if (strategy !== 'redirect') {
           warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
