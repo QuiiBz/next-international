@@ -6,12 +6,23 @@ You might have noticed that by default, next-international redirects and shows t
 
 Navigate to the `middleware.ts` file and set the `urlMappingStrategy` to `rewrite` (the default is `redirect`):
 
-```ts
+```ts {5}
 // middleware.ts
 const I18nMiddleware = createI18nMiddleware({
   locales: ['en', 'fr'],
   defaultLocale: 'en',
   urlMappingStrategy: 'rewrite'
+})
+```
+
+You can also choose to only rewrite the URL for the default locale, and keep others locale in the URL (e.g use `/products` instead of `/en/products`, but keep `/fr/products`) using the `rewriteDefault` strategy:
+
+```ts {5}
+// middleware.ts
+const I18nMiddleware = createI18nMiddleware({
+  locales: ['en', 'fr'],
+  defaultLocale: 'en',
+  urlMappingStrategy: 'rewriteDefault'
 })
 ```
 
@@ -21,7 +32,7 @@ If needed, you can override the resolution of a locale from a `Request`, which b
 
 Navigate to the `middleware.ts` file and implement a new `resolveLocaleFromRequest` function:
 
-```ts
+```ts {5-8}
 // middleware.ts
 const I18nMiddleware = createI18nMiddleware({
   locales: ['en', 'fr'],
