@@ -53,9 +53,11 @@ export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
    *
    * **rewrite**: `https://example.com/products` -> *rewrite* to `https://example.com/en/products` -> client doesn't see the locale in the url
    *
+   * **rewriteDefault**: `https://example.com/products` -> use *rewrite* for the default locale, *redirect* for all other locales
+   *
    * @default redirect
    */
-  urlMappingStrategy?: 'redirect' | 'rewrite';
+  urlMappingStrategy?: 'redirect' | 'rewrite' | 'rewriteDefault';
 
   /**
    * Override the resolution of a locale from a `Request`, which by default will try to extract it from the `Accept-Language` header. This can be useful to force the use of a specific locale regardless of the `Accept-Language` header.
