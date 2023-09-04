@@ -53,7 +53,7 @@ export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
    *
    * **rewrite**: `https://example.com/products` -> *rewrite* to `https://example.com/en/products` -> client doesn't see the locale in the url
    *
-   * **rewriteDefault**: `https://example.com/products` -> *redirect* unless it's the defaultLocale, *rewrite* for the defaultLocale
+   * **rewriteDefault**: `https://example.com/products` -> use *rewrite* for the default locale, *redirect* for all other locales
    *
    * @default redirect
    */
