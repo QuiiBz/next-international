@@ -76,7 +76,7 @@ export function generateStaticParams() {
 
 ### Setup middleware
 
-Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale. You can also [rewrite the URL to hide the locale](#rewrite-the-url-to-hide-the-locale):
+Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale. You can also [rewrite the URL to hide the locale](/docs/app-middleware-configuration#rewrite-the-url-to-hide-the-locale):
 
 ```ts
 // middleware.ts
@@ -101,7 +101,7 @@ export const config = {
 
 Use `useI18n` and `useScopedI18n()` / `getI18n` and `getScopedI18n()` inside your components:
 
-```tsx
+```tsx {3,6-7,24,27-28}
 // Client Component
 'use client'
 import { useI18n, useScopedI18n } from '../../locales/client'

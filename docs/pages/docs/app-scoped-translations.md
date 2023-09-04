@@ -33,7 +33,7 @@ export const {
 
 Then use it in your components:
 
-```tsx {6,21}
+```tsx {6,10-12,21,25-27}
 // Client Component
 'use client'
 import { useScopedI18n } from '../../locales/client'

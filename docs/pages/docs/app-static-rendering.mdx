@@ -8,7 +8,7 @@ import { Callout } from 'nextra/components'
 
 Next.js allows to render pages statically with `output: 'export'` inside `next.config.js`. Export `getStaticParams` from `createI18nServer`:
 
-```ts
+```ts {3}
 // locales/server.ts
 export const {
   getStaticParams,
@@ -20,7 +20,7 @@ export const {
 
 Then, export a new `generateStaticParams` function from all your pages. Next.js requires it to be a function, so you can't just export the `getStaticParams` function directly:
 
-```ts
+```ts {2,4-6}
 // app/[locale]/page.tsx
 import { getStaticParams } from '../../locales/server'
  

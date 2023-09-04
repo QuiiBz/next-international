@@ -4,7 +4,7 @@ Plural translations work out of the box without any external dependencies, using
 
 To declare plural translations, append `#` followed by `zero`, `one`, `two`, `few`, `many` or `other`:
 
-```ts
+```ts {3-4}
 // locales/en.ts
 export default {
   'cows#one': 'A cow',
@@ -21,9 +21,9 @@ The correct translation will then be determined automatically using a mandatory 
 
 This works in both Client and Server Components, and with [scoped translations](/docs/app-scoped-translations):
 
-```tsx
+```tsx {7,9}
 export default function Page() {
-  const t = useI18n()
+  const t = useI18n() // or `getI18n()` in Server Components
 
   return (
     <div>
