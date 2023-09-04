@@ -17,7 +17,7 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
 
       const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
 
-      if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === defaultLocale)) {
+      if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === config.defaultLocale)) {
         const response = NextResponse.rewrite(mappedUrl);
         return addLocaleToResponse(response, locale);
       } else {
