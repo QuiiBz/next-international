@@ -3,7 +3,6 @@ import './globals.css';
 import { Switch } from './switch';
 import Link from 'next/link';
 import { getStaticParams } from '../../locales/server';
-import { ServerContext } from 'next-international/server';
 
 export const metadata = {
   title: 'Create Next App',
@@ -15,32 +14,29 @@ export function generateStaticParams() {
   return getStaticParams();
 }
 
-export default function RootLayout({
-  children,
-  params: { locale },
-}: {
-  children: ReactElement;
-  params: { locale: string };
-}) {
+// export const dynamic = 'force-static';
+
+export const dynamic = 'error';
+export const dynamicParams = true;
+
+export default function RootLayout({ children }: { children: ReactElement }) {
   return (
-    <ServerContext.Provider value={locale}>
-      <html lang="en">
-        <body>
-          <Switch />
-          <ul>
-            <li>
-              <Link href="/">Go to /</Link>
-            </li>
-            <li>
-              <Link href="/subpage">Go to /subpage</Link>
-            </li>
-            <li>
-              <Link href="/client">Go to /client</Link>
-            </li>
-          </ul>
-          {children}
-        </body>
-      </html>
-    </ServerContext.Provider>
+    <html lang="en">
+      <body>
+        <Switch />
+        <ul>
+          <li>
+            <Link href="/">Go to /</Link>
+          </li>
+          <li>
+            <Link href="/subpage">Go to /subpage</Link>
+          </li>
+          <li>
+            <Link href="/client">Go to /client</Link>
+          </li>
+        </ul>
+        {children}
+      </body>
+    </html>
   );
 }

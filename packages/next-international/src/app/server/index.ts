@@ -7,8 +7,6 @@ import { createGetCurrentLocale } from './create-get-current-locale';
 import { createGetStaticParams } from './create-get-static-params';
 import { I18nServerConfig } from '../../types';
 
-export { ServerContext } from './get-locale-cache';
-
 export function createI18nServer<Locales extends ImportedLocales, OtherLocales extends ExplicitLocales | null = null>(
   locales: Locales,
   config: I18nServerConfig = {},
