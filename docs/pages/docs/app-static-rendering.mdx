@@ -3,10 +3,10 @@ import { Callout } from 'nextra/components'
 # Static Rendering
 
 <Callout type="warning" emoji="⚠️">
-  This feature doesn't work yet due to how Next.js handles dynamic route segments when rendering.
+  This feature doesn't work properly yet (still generates Functions instead of static HTML) despite that `next build` properly marks the pages as SSG.
 </Callout>
 
-Next.js allows to render pages statically with `output: 'export'` inside `next.config.js`. Export `getStaticParams` from `createI18nServer`:
+Export `getStaticParams` from `createI18nServer`:
 
 ```ts {3}
 // locales/server.ts
@@ -18,10 +18,10 @@ export const {
 })
 ```
 
-Then, export a new `generateStaticParams` function from all your pages. Next.js requires it to be a function, so you can't just export the `getStaticParams` function directly:
+Then, export a new `generateStaticParams` function from your root layout. Next.js requires it to be a function, so you can't just export the `getStaticParams` function directly:
 
 ```ts {2,4-6}
-// app/[locale]/page.tsx
+// app/[locale]/layout.tsx
 import { getStaticParams } from '../../locales/server'
  
 export function generateStaticParams() {

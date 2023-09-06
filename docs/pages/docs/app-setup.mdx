@@ -61,12 +61,12 @@ export default function SubLayout({ children }: { children: ReactElement }) {
 
 You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop to specify a locale to fallback on if a key has not been translated.
 
-### Setup Static Rendering (WIP)
+### Setup Static Rendering
 
-If you want to support Static Rendering with `output: 'export'` inside `next.config.js`, add `getStaticParams` to your pages:
+If you want Static Rendering, export a `generateStaticParams` function to your root layout:
 
 ```ts
-// app/[locale]/page.tsx
+// app/[locale]/layout.tsx
 import { ..., getStaticParams } from '../../locales/server'
 
 export function generateStaticParams() {
