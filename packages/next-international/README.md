@@ -20,7 +20,7 @@
 - **100% Type-safe**: Locales in TS or JSON, type-safe `t()` & `scopedT()`, type-safe params, type-safe plurals, type-safe `changeLocale()`...
 - **Small**: No dependencies, lazy-loaded
 - **Simple**: No Webpack configuration, no CLI, no code generation, just pure TypeScript
-- **SSR/SSG/CSR**: Load only the required locale, client-side and server-side
+- **Server and Client, Static Rendering**: Lazy-load server and client-side, support for Static Rendering
 - **App or Pages Router**: With support for React Server Components
 
 > **Note**: You can now build on top of the types used by next-international using [international-types](https://github.com/QuiiBz/next-international/tree/main/packages/international-types)!
