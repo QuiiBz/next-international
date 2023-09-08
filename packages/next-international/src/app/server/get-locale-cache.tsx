@@ -31,7 +31,6 @@ export const getLocaleCache = cache(() => {
   }
 
   if (!locale) {
-    console.log('404');
     error(`Locale not found in headers or cookies, returning "notFound()"`);
     notFound();
   }

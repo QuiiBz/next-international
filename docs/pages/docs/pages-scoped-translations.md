@@ -25,7 +25,7 @@ export const {
 
 Then use it in your component:
 
-```tsx {4}
+```tsx {4,8-10}
 import { useScopedI18n } from '../locales'
 
 export default function Page() {
