@@ -1,11 +1,10 @@
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import type { I18nClientConfig } from '../../types';
 
 export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[], config: I18nClientConfig) {
   return function useChangeLocale() {
     const { push, refresh } = useRouter();
     const path = usePathname();
-    const searchParams = useSearchParams();
 
     let pathWithoutLocale = path;
 
@@ -18,9 +17,7 @@ export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[], confi
     });
 
     return function changeLocale(newLocale: LocalesKeys) {
-      const search = searchParams.toString();
-
-      push(`/${newLocale}${pathWithoutLocale}${search ? `?${search}` : ''}`);
+      push(`/${newLocale}${pathWithoutLocale}`);
       refresh();
     };
   };

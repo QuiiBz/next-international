@@ -1,21 +1,26 @@
-import { getI18n, getScopedI18n, getCurrentLocale /*, getStaticParams */ } from '../../locales/server';
+// import { setStaticParamsLocale } from 'next-international/server';
+import { getI18n, getScopedI18n, getCurrentLocale } from '../../locales/server';
 
-// Only needed for SSG
+// Uncomment to test Static Generation on this page only
 // export function generateStaticParams() {
 //   return getStaticParams();
 // }
 
-export default async function Home() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default async function Home({ params: { locale } }: { params: { locale: string } }) {
+  // Uncomment to test Static Generation
+  // setStaticParamsLocale(locale);
+
   const t = await getI18n();
   const t2 = await getScopedI18n('scope.more');
-  const locale = getCurrentLocale();
+  const currentLocale = getCurrentLocale();
 
   return (
     <div>
       <h1>SSR / SSG</h1>
       <p>
         Current locale:
-        <span>{locale}</span>
+        <span>{currentLocale}</span>
       </p>
       <p>Hello: {t('hello')}</p>
       <p>

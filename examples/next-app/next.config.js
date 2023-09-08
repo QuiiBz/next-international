@@ -12,7 +12,7 @@ const nextConfig = {
   },
   // Uncomment to set base path
   // basePath: '/base',
-  // Uncomment to use SSG
+  // Uncomment to use Static Export
   // output: 'export',
 };
 

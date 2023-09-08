@@ -4,13 +4,30 @@ import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
 import { notFound } from 'next/navigation';
 import { error } from '../../helpers/log';
 
+const getLocale = cache<() => { current: string | undefined }>(() => ({ current: undefined }));
+const getStaticParamsLocale = () => getLocale().current;
+
+export const setStaticParamsLocale = (value: string) => {
+  getLocale().current = value;
+};
+
 export const getLocaleCache = cache(() => {
   let locale: string | undefined | null;
 
-  locale = headers().get(LOCALE_HEADER);
+  locale = getStaticParamsLocale();
 
   if (!locale) {
-    locale = cookies().get(LOCALE_COOKIE)?.value;
+    try {
+      locale = headers().get(LOCALE_HEADER);
+
+      if (!locale) {
+        locale = cookies().get(LOCALE_COOKIE)?.value;
+      }
+    } catch (e) {
+      throw new Error(
+        'Could not find locale while pre-rendering page, make sure you called `setStaticParamsLocale` at the top of your pages',
+      );
+    }
   }
 
   if (!locale) {
