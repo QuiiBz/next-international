@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import './globals.css';
 import { Switch } from './switch';
 import Link from 'next/link';
-import { getStaticParams } from '../../locales/server';
+// import { getStaticParams } from '../../locales/server';
 
 export const metadata = {
   title: 'Create Next App',
@@ -10,14 +10,9 @@ export const metadata = {
 };
 
 // Uncomment to test Static Generation
-export function generateStaticParams() {
-  return getStaticParams();
-}
-
-// export const dynamic = 'force-static';
-
-export const dynamic = 'error';
-export const dynamicParams = true;
+// export function generateStaticParams() {
+//   return getStaticParams();
+// }
 
 export default function RootLayout({ children }: { children: ReactElement }) {
   return (
