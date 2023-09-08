@@ -16,17 +16,6 @@ export const {
 })
 ```
 
-Then, export a new `generateStaticParams` function from your root layout:
-
-```ts {2,4-6}
-// app/[locale]/layout.tsx
-import { getStaticParams } from '../../locales/server'
- 
-export function generateStaticParams() {
-  return getStaticParams()
-}
-```
-
 Inside all pages that you want to be statically rendered, call this `setStaticParamsLocale` function by giving it the `locale` page param:
 
 ```tsx {2,4-5}
@@ -41,6 +30,18 @@ export default function Page({ params: { locale } }: { params: { locale: string 
   )
 }
 ```
+
+And export a new `generateStaticParams` function. If all your pages should be rendered statically, you can also move this to the root layout:
+
+```ts {2,4-6}
+// app/[locale]/page.tsx and any other page, or in the root layout
+import { getStaticParams } from '../../locales/server'
+ 
+export function generateStaticParams() {
+  return getStaticParams()
+}
+```
+
 
 ## Static Export with `output: 'export'`
 
