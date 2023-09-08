@@ -61,19 +61,6 @@ export default function SubLayout({ children }: { children: ReactElement }) {
 
 You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop to specify a locale to fallback on if a key has not been translated.
 
-### Setup Static Rendering
-
-If you want Static Rendering, export a `generateStaticParams` function to your root layout:
-
-```ts
-// app/[locale]/layout.tsx
-import { ..., getStaticParams } from '../../locales/server'
-
-export function generateStaticParams() {
-  return getStaticParams()
-}
-```
-
 ### Setup middleware
 
 Add a `middleware.ts` file at the root of your app, that will redirect the user to the right locale. You can also [rewrite the URL to hide the locale](/docs/app-middleware-configuration#rewrite-the-url-to-hide-the-locale):

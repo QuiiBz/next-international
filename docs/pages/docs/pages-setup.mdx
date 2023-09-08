@@ -53,35 +53,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
 You can also provide a `fallback` component prop to show while waiting for the locale to load, and a `fallbackLocale` prop to specify a locale to fallback on if a key has not been translated.
 
-### Setup Static Site Generation or Rendering
-
-Add `getLocaleProps` to your pages, or wrap your existing `getStaticProps`:
-
-```ts
-// pages/index.tsx
-export const getStaticProps = getLocaleProps()
-
-// or with an existing `getStaticProps` function:
-export const getStaticProps = getLocaleProps(ctx => {
-  // your existing code
-  return {
-    ...
-  }
-})
-```
-
-If you already have a `getServerSideProps` on this page, you can't use `getStaticProps`. In this case, you can still use `getLocaleProps` the same way:
-
-```ts
-// pages/index.tsx
-export const getServerSideProps = getLocaleProps(ctx => {
-  // your existing code
-  return {
-    ...
-  }
-})
-```
-
 ### Translate
 
 Use `useI18n` and `useScopedI18n()`:
