@@ -1,6 +1,7 @@
 import type { ImportedLocales } from 'international-types';
 import type { GetStaticProps, GetServerSideProps } from 'next';
 import { error } from '../helpers/log';
+import { flattenLocale } from '../common/flatten-locale';
 
 export function createGetLocaleProps(locales: ImportedLocales) {
   return function getLocaleProps<
@@ -23,7 +24,7 @@ export function createGetLocaleProps(locales: ImportedLocales) {
         props: {
           // @ts-expect-error Next `GetStaticPropsResult` doesn't have `props`
           ...initialResult?.props,
-          locale: (await load()).default,
+          locale: flattenLocale((await load()).default),
         },
       };
     };
