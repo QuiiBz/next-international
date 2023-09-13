@@ -1,26 +1,26 @@
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import type { I18nChangeLocaleConfig } from '../../types';
+import { useRouter, usePathname } from 'next/navigation';
+import type { I18nClientConfig } from '../../types';
 
-export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[]) {
-  return function useChangeLocale(config?: I18nChangeLocaleConfig) {
+export function createUseChangeLocale<LocalesKeys>(useCurrentLocale: () => LocalesKeys, config: I18nClientConfig) {
+  return function useChangeLocale() {
     const { push, refresh } = useRouter();
+    const currentLocale = useCurrentLocale();
     const path = usePathname();
-    const searchParams = useSearchParams();
 
     let pathWithoutLocale = path;
 
-    if (config?.basePath) {
+    if (config.basePath) {
       pathWithoutLocale = pathWithoutLocale.replace(config.basePath, '');
     }
 
-    locales.forEach(locale => {
-      pathWithoutLocale = pathWithoutLocale.replace(`/${locale}`, '');
-    });
+    if (pathWithoutLocale.startsWith(`/${currentLocale}/`)) {
+      pathWithoutLocale = pathWithoutLocale.replace(`/${currentLocale}/`, '/');
+    } else if (pathWithoutLocale === `/${currentLocale}`) {
+      pathWithoutLocale = '/';
+    }
 
     return function changeLocale(newLocale: LocalesKeys) {
-      const search = searchParams.toString();
-
-      push(`/${newLocale}${pathWithoutLocale}${search ? `?${search}` : ''}`);
+      push(`/${newLocale}${pathWithoutLocale}`);
       refresh();
     };
   };

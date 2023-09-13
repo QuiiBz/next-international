@@ -6,23 +6,18 @@ import { warn } from '../../helpers/log';
 
 const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig<[]>['urlMappingStrategy']> = 'redirect';
 
-export function createI18nMiddleware<Locales extends readonly string[]>(
-  locales: Locales,
-  defaultLocale: Locales[number],
-  config?: I18nMiddlewareConfig<Locales>,
-) {
+export function createI18nMiddleware<const Locales extends readonly string[]>(config: I18nMiddlewareConfig<Locales>) {
   return function I18nMiddleware(request: NextRequest) {
     const requestUrl = request.nextUrl.clone();
+    const locale = localeFromRequest(config.locales, request, config.resolveLocaleFromRequest) ?? config.defaultLocale;
 
-    const locale = localeFromRequest(locales, request, config?.resolveLocaleFromRequest) ?? defaultLocale;
-
-    if (noLocalePrefix(locales, requestUrl.pathname)) {
+    if (noLocalePrefix(config.locales, requestUrl.pathname)) {
       const mappedUrl = requestUrl.clone();
       mappedUrl.pathname = `/${locale}${mappedUrl.pathname}`;
 
-      const strategy = config?.urlMappingStrategy ?? DEFAULT_STRATEGY;
+      const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
 
-      if (strategy === 'rewrite') {
+      if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === config.defaultLocale)) {
         const response = NextResponse.rewrite(mappedUrl);
         return addLocaleToResponse(response, locale);
       } else {
@@ -38,14 +33,14 @@ export function createI18nMiddleware<Locales extends readonly string[]>(
     let response = NextResponse.next();
     const requestLocale = request.nextUrl.pathname.split('/')?.[1];
 
-    if (!requestLocale || locales.includes(requestLocale)) {
+    if (!requestLocale || config.locales.includes(requestLocale)) {
       if (config?.urlMappingStrategy === 'rewrite' && requestLocale !== locale) {
         const pathnameWithoutLocale = request.nextUrl.pathname.slice(requestLocale.length + 1);
         const newUrl = new URL(pathnameWithoutLocale === '' ? '/' : pathnameWithoutLocale, request.url);
         response = NextResponse.redirect(newUrl);
       }
 
-      return addLocaleToResponse(response, requestLocale ?? defaultLocale);
+      return addLocaleToResponse(response, requestLocale ?? config.defaultLocale);
     }
 
     return response;

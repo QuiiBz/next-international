@@ -11,7 +11,7 @@ export type LocaleMap<T> = Record<keyof T, React.ReactNode>;
 
 export type ReactParamsObject<Value extends LocaleValue> = Record<Params<Value>[number], React.ReactNode>;
 
-export type I18nCurrentLocaleConfig = {
+export type I18nClientConfig = {
   /**
    * The name of the Next.js layout segment param that will be used to determine the locale in a client component.
    *
@@ -20,20 +20,6 @@ export type I18nCurrentLocaleConfig = {
    * @default locale
    */
   segmentName?: string;
-};
-
-export type I18nStaticParamsConfig = {
-  /**
-   * The name of the Next.js layout segment param that will be used to determine the locale in a client component.
-   *
-   * An app directory folder hierarchy that looks like `app/[locale]/products/[category]/[subCategory]/page.tsx` would be `locale`.
-   *
-   * @default locale
-   */
-  segmentName?: string;
-};
-
-export type I18nChangeLocaleConfig = {
   /**
    * If you are using a custom basePath inside `next.config.js`, you must also specify it here.
    *
@@ -42,7 +28,24 @@ export type I18nChangeLocaleConfig = {
   basePath?: string;
 };
 
+export type I18nServerConfig = {
+  /**
+   * The name of the Next.js layout segment param that will be used to determine the locale in a client component.
+   *
+   * An app directory folder hierarchy that looks like `app/[locale]/products/[category]/[subCategory]/page.tsx` would be `locale`.
+   *
+   * @default locale
+   */
+  segmentName?: string;
+  /**
+   * A locale to use if some keys aren't translated, to fallback to this locale instead of showing the translation key.
+   */
+  fallbackLocale?: BaseLocale;
+};
+
 export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
+  locales: Locales;
+  defaultLocale: Locales[number];
   /**
    * When a url is not prefixed with a locale, this setting determines whether the middleware should perform a *redirect* or *rewrite* to the default locale.
    *
@@ -50,9 +53,11 @@ export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
    *
    * **rewrite**: `https://example.com/products` -> *rewrite* to `https://example.com/en/products` -> client doesn't see the locale in the url
    *
+   * **rewriteDefault**: `https://example.com/products` -> use *rewrite* for the default locale, *redirect* for all other locales
+   *
    * @default redirect
    */
-  urlMappingStrategy?: 'redirect' | 'rewrite';
+  urlMappingStrategy?: 'redirect' | 'rewrite' | 'rewriteDefault';
 
   /**
    * Override the resolution of a locale from a `Request`, which by default will try to extract it from the `Accept-Language` header. This can be useful to force the use of a specific locale regardless of the `Accept-Language` header.
