@@ -31,7 +31,7 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
   );
   const useI18n = createUsei18n(I18nClientContext);
   const useScopedI18n = createScopedUsei18n(I18nClientContext);
-  const useChangeLocale = createUseChangeLocale<LocalesKeys>(localesKeys, config);
+  const useChangeLocale = createUseChangeLocale<LocalesKeys>(useCurrentLocale, config);
   const defineLocale = createDefineLocale<Locale>();
 
   return {
