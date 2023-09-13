@@ -1,9 +1,10 @@
 import { useRouter, usePathname } from 'next/navigation';
 import type { I18nClientConfig } from '../../types';
 
-export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[], config: I18nClientConfig) {
+export function createUseChangeLocale<LocalesKeys>(useCurrentLocale: () => LocalesKeys, config: I18nClientConfig) {
   return function useChangeLocale() {
     const { push, refresh } = useRouter();
+    const currentLocale = useCurrentLocale();
     const path = usePathname();
 
     let pathWithoutLocale = path;
@@ -12,9 +13,11 @@ export function createUseChangeLocale<LocalesKeys>(locales: LocalesKeys[], confi
       pathWithoutLocale = pathWithoutLocale.replace(config.basePath, '');
     }
 
-    locales.forEach(locale => {
-      pathWithoutLocale = pathWithoutLocale.replace(`/${locale}`, '');
-    });
+    if (pathWithoutLocale.startsWith(`/${currentLocale}/`)) {
+      pathWithoutLocale = pathWithoutLocale.replace(`/${currentLocale}/`, '/');
+    } else if (pathWithoutLocale === `/${currentLocale}`) {
+      pathWithoutLocale = '/';
+    }
 
     return function changeLocale(newLocale: LocalesKeys) {
       push(`/${newLocale}${pathWithoutLocale}`);
