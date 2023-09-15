@@ -40,7 +40,7 @@ export type I18nServerConfig = {
   /**
    * A locale to use if some keys aren't translated, to fallback to this locale instead of showing the translation key.
    */
-  fallbackLocale?: BaseLocale;
+  fallbackLocale?: Record<string, unknown>;
 };
 
 export type I18nMiddlewareConfig<Locales extends readonly string[]> = {

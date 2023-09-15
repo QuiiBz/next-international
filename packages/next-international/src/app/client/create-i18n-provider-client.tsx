@@ -6,7 +6,7 @@ import { flattenLocale } from '../../common/flatten-locale';
 
 type I18nProviderProps = {
   fallback?: ReactElement | null;
-  fallbackLocale?: BaseLocale;
+  fallbackLocale?: Record<string, unknown>;
   children: ReactNode;
 };
 
