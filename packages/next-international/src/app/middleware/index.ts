@@ -50,7 +50,7 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
   };
 }
 
-function localeFromRequest<Locales extends readonly string[]>(
+export function localeFromRequest<Locales extends readonly string[]>(
   locales: Locales,
   request: NextRequest,
   resolveLocaleFromRequest: NonNullable<
@@ -76,13 +76,13 @@ const defaultResolveLocaleFromRequest: NonNullable<I18nMiddlewareConfig<any>['re
   return locale ?? null;
 };
 
-function noLocalePrefix(locales: readonly string[], pathname: string) {
+export function noLocalePrefix(locales: readonly string[], pathname: string) {
   return locales.every(locale => {
     return !(pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
   });
 }
 
-function addLocaleToResponse(response: NextResponse, locale: string) {
+export function addLocaleToResponse(response: NextResponse, locale: string) {
   response.headers.set(LOCALE_HEADER, locale);
   response.cookies.set(LOCALE_COOKIE, locale);
   return response;
