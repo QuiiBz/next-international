@@ -1,0 +1,14 @@
+name: Sherif
+on:
+  pull_request:
+jobs:
+  check:
+    name: Run Sherif
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npx sherif@0.2.0
