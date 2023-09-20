@@ -1,10 +1,7 @@
 {
+  "name": "next-international",
   "private": true,
   "description": "Type-safe internationalization (i18n) for Next.js",
-  "workspaces": [
-    "packages/*",
-    "fixtures/*"
-  ],
   "scripts": {
     "test": "vitest --run --coverage",
     "lint": "eslint --cache .",
