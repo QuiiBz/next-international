@@ -10,4 +10,8 @@ export default {
   'namespace.subnamespace.user.description': '{name} is {years} years old',
   'only.exists.in.en': 'EN locale',
   'double.param': 'This {param} is used twice ({param})',
+  'cow#zero': 'No cows (#zero)',
+  'cow#one': 'One cow (#one)',
+  'cow#two': 'Two cows (#two)',
+  'cow#other': '{count} cows (#other)',
 } as const;
