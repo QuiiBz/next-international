@@ -26,6 +26,10 @@ export type I18nClientConfig = {
    * @see https://nextjs.org/docs/app/api-reference/next-config-js/basePath
    */
   basePath?: string;
+  /**
+   * A locale to use if some keys aren't translated, to fallback to this locale instead of showing the translation key.
+   */
+  fallbackLocale?: Record<string, unknown>;
 };
 
 export type I18nServerConfig = {

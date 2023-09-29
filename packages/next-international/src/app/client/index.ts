@@ -28,6 +28,7 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
     I18nClientContext,
     locales,
     useCurrentLocale,
+    config.fallbackLocale,
   );
   const useI18n = createUsei18n(I18nClientContext);
   const useScopedI18n = createScopedUsei18n(I18nClientContext);

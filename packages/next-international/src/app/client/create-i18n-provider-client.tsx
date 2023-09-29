@@ -12,15 +12,16 @@ export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>
   I18nClientContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
   useCurrentLocale: () => LocalesKeys,
+  fallbackLocale?: Record<string, unknown>,
 ) {
   return function I18nProviderClient({ children }: I18nProviderProps) {
     const locale = useCurrentLocale();
-    // @ts-expect-error any type
-    const { default: clientLocale } = use(locales[locale]());
+    const { default: clientLocale } = use(locales[locale as keyof typeof locales]());
 
     const value = useMemo(
       () => ({
         localeContent: flattenLocale<Locale>(clientLocale),
+        fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
         locale: locale as string,
       }),
       [clientLocale, locale],
