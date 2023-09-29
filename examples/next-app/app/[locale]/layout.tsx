@@ -2,6 +2,7 @@ import { ReactElement } from 'react';
 import './globals.css';
 import { Switch } from './switch';
 import Link from 'next/link';
+import { Provider } from './provider';
 // import { getStaticParams } from '../../locales/server';
 
 export const metadata = {
@@ -30,7 +31,7 @@ export default function RootLayout({ children }: { children: ReactElement }) {
             <Link href="/client">Go to /client</Link>
           </li>
         </ul>
-        {children}
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

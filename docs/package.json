@@ -15,7 +15,7 @@
     "@vercel/analytics": "^1.0.2",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.13",
-    "next": "13.4.13",
+    "next": "13.5.3",
     "nextra": "^2.11.0",
     "nextra-theme-docs": "^2.11.0",
     "react": "18.2.0",

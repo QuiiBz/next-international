@@ -14,7 +14,7 @@
     "@types/react-dom": "18.2.4",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.13",
-    "next": "13.4.13",
+    "next": "13.5.3",
     "next-international": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0",
