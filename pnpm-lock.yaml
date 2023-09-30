@@ -86,15 +86,6 @@ importers:
 
   docs:
     dependencies:
-      '@types/node':
-        specifier: ^18.0.4
-        version: 18.0.5
-      '@types/react':
-        specifier: ^18.2.9
-        version: 18.2.9
-      '@types/react-dom':
-        specifier: 18.2.4
-        version: 18.2.4
       '@vercel/analytics':
         specifier: ^1.0.2
         version: 1.0.2
@@ -126,9 +117,6 @@ importers:
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0
-
-  examples/next-app:
-    dependencies:
       '@types/node':
         specifier: ^18.0.4
         version: 18.0.5
@@ -138,6 +126,9 @@ importers:
       '@types/react-dom':
         specifier: 18.2.4
         version: 18.2.4
+
+  examples/next-app:
+    dependencies:
       eslint:
         specifier: 8.47.0
         version: 8.47.0
@@ -159,6 +150,16 @@ importers:
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
+    devDependencies:
+      '@types/node':
+        specifier: ^18.0.4
+        version: 18.0.5
+      '@types/react':
+        specifier: ^18.2.9
+        version: 18.2.9
+      '@types/react-dom':
+        specifier: 18.2.4
+        version: 18.2.4
 
   examples/next-pages:
     dependencies:
@@ -2696,6 +2697,7 @@ packages:
 
   /@types/node@18.0.5:
     resolution: {integrity: sha512-En7tneq+j0qAiVwysBD79y86MT3ModuoIJbe7JXp+sb5UAjInSShmK3nXXMioBzfF7rXC12hv12d4IyCVwN4dA==}
+    dev: true
 
   /@types/node@20.4.4:
     resolution: {integrity: sha512-CukZhumInROvLq3+b5gLev+vgpsIqC2D0deQr/yS1WnxvmYLlJXZpaQrQiseMY+6xusl79E04UjWoqyr+t1/Ew==}
@@ -2714,7 +2716,7 @@ packages:
     resolution: {integrity: sha512-G2mHoTMTL4yoydITgOGwWdWMVd8sNgyEP85xVmMKAPUBwQWm9wBPQUmvbeF4V3WBY1P7mmL4BkjQ0SqUpf1snw==}
     dependencies:
       '@types/react': 18.2.9
-    dev: false
+    dev: true
 
   /@types/react@18.2.9:
     resolution: {integrity: sha512-pL3JAesUkF7PEQGxh5XOwdXGV907te6m1/Qe1ERJLgomojS6Ne790QiA7GUl434JEkFA2aAaB6qJ5z4e1zJn/w==}
