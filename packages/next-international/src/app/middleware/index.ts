@@ -43,6 +43,12 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
         response = NextResponse.redirect(newUrl);
       }
 
+      if (config.urlMappingStrategy === 'rewriteDefault' && requestLocale === config.defaultLocale) {
+        const pathnameWithoutLocale = request.nextUrl.pathname.slice(requestLocale.length + 1);
+        const newUrl = new URL(pathnameWithoutLocale === '' ? '/' : pathnameWithoutLocale, request.url);
+        response = NextResponse.redirect(newUrl);
+      }
+
       return addLocaleToResponse(response, requestLocale ?? config.defaultLocale);
     }
 
