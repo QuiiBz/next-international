@@ -1,10 +1,13 @@
-import React, { Context, ReactNode, use, useMemo } from 'react';
+import React, { Context, ReactNode, Suspense, use, useMemo } from 'react';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 
 import type { LocaleContext } from '../../types';
 import { flattenLocale } from '../../common/flatten-locale';
 
-type I18nProviderProps = {
+type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'>;
+
+type I18nProviderWrapperProps = {
+  fallback?: ReactNode;
   children: ReactNode;
 };
 
@@ -14,7 +17,7 @@ export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>
   useCurrentLocale: () => LocalesKeys,
   fallbackLocale?: Record<string, unknown>,
 ) {
-  return function I18nProviderClient({ children }: I18nProviderProps) {
+  function I18nProvider({ children }: I18nProviderProps) {
     const locale = useCurrentLocale();
     const { default: clientLocale } = use(locales[locale as keyof typeof locales]());
 
@@ -28,5 +31,13 @@ export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>
     );
 
     return <I18nClientContext.Provider value={value}>{children}</I18nClientContext.Provider>;
+  }
+
+  return function I18nProviderWrapper({ fallback, children }: I18nProviderWrapperProps) {
+    return (
+      <Suspense fallback={fallback}>
+        <I18nProvider>{children}</I18nProvider>
+      </Suspense>
+    );
   };
 }
