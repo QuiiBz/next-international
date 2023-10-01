@@ -8,7 +8,8 @@ export function createUseChangeLocale<LocalesKeys>(useCurrentLocale: () => Local
     const path = usePathname();
     // We call the hook conditionally to avoid always opting out of Static Rendering.
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const searchParams = changeLocaleConfig?.preserveSearchParams ? useSearchParams() : new URLSearchParams();
+    const searchParams = changeLocaleConfig?.preserveSearchParams ? useSearchParams().toString() : undefined;
+    const finalSearchParams = searchParams ? `?${searchParams}` : '';
 
     let pathWithoutLocale = path;
 
@@ -23,7 +24,7 @@ export function createUseChangeLocale<LocalesKeys>(useCurrentLocale: () => Local
     }
 
     return function changeLocale(newLocale: LocalesKeys) {
-      push(`/${newLocale}${pathWithoutLocale}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`);
+      push(`/${newLocale}${pathWithoutLocale}${finalSearchParams}`);
       refresh();
     };
   };

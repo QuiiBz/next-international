@@ -1,8 +1,8 @@
-import { ReactElement, Suspense } from 'react';
+import { ReactElement } from 'react';
 import './globals.css';
 import { Switch } from './switch';
 import Link from 'next/link';
-import { getStaticParams } from '../../locales/server';
+// import { getStaticParams } from '../../locales/server';
 
 export const metadata = {
   title: 'Create Next App',
@@ -10,18 +10,18 @@ export const metadata = {
 };
 
 // Uncomment to test Static Generation for all pages
-export function generateStaticParams() {
-  return getStaticParams();
-}
+// export function generateStaticParams() {
+//   return getStaticParams();
+// }
 
 export default function RootLayout({ children }: { children: ReactElement }) {
   return (
     <html lang="en">
       <body>
         {/* Uncomment the suspense boundary if using `preserveSearchParams` in `useChangeLocale()` */}
-        <Suspense>
-          <Switch />
-        </Suspense>
+        {/* <Suspense> */}
+        <Switch />
+        {/* </Suspense> */}
         <ul>
           <li>
             <Link href="/">Go to /</Link>

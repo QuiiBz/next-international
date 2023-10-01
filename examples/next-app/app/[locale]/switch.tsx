@@ -3,7 +3,8 @@
 import { useChangeLocale } from '../../locales/client';
 
 export function Switch() {
-  const changeLocale = useChangeLocale({ preserveSearchParams: true });
+  // Uncomment to preserve the search params. Don't forget to also uncomment the Suspense in the layout
+  const changeLocale = useChangeLocale(/* { preserveSearchParams: true } */);
 
   return (
     <>
