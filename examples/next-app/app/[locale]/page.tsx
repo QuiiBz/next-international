@@ -1,17 +1,17 @@
-import { setStaticParamsLocale } from 'next-international/server';
-import { getI18n, getScopedI18n, getCurrentLocale, getStaticParams } from '../../locales/server';
+// import { setStaticParamsLocale } from 'next-international/server';
+import { getI18n, getScopedI18n, getCurrentLocale } from '../../locales/server';
 import Client from './client';
 import { Provider } from './provider';
 
 // Uncomment to test Static Generation on this page only
-export function generateStaticParams() {
-  return getStaticParams();
-}
+// export function generateStaticParams() {
+//   return getStaticParams();
+// }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function Home({ params: { locale } }: { params: { locale: string } }) {
   // Uncomment to test Static Generation
-  setStaticParamsLocale(locale);
+  // setStaticParamsLocale(locale);
 
   const t = await getI18n();
   const t2 = await getScopedI18n('scope.more');
