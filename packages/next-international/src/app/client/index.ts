@@ -24,12 +24,7 @@ export function createI18nClient<Locales extends ImportedLocales, OtherLocales e
   const I18nClientContext = createContext<LocaleContext<Locale> | null>(null);
 
   const useCurrentLocale = createUseCurrentLocale<LocalesKeys>(localesKeys, config);
-  const I18nProviderClient = createI18nProviderClient<Locale, LocalesKeys>(
-    I18nClientContext,
-    locales,
-    useCurrentLocale,
-    config.fallbackLocale,
-  );
+  const I18nProviderClient = createI18nProviderClient<Locale>(I18nClientContext, locales, config.fallbackLocale);
   const useI18n = createUsei18n(I18nClientContext);
   const useScopedI18n = createScopedUsei18n(I18nClientContext);
   const useChangeLocale = createUseChangeLocale<LocalesKeys>(useCurrentLocale, config);
