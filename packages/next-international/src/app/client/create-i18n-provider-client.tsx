@@ -1,4 +1,4 @@
-import React, { Context, ReactNode, Suspense, use, useMemo } from 'react';
+import React, { Context, ReactNode, Suspense, cache, use, useMemo } from 'react';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 
 import type { LocaleContext } from '../../types';
@@ -17,9 +17,18 @@ export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>
   useCurrentLocale: () => LocalesKeys,
   fallbackLocale?: Record<string, unknown>,
 ) {
+  const loadCachedLocale = cache((locale: LocalesKeys) => locales[locale as keyof typeof locales]());
+  const loadLocale = (locale: LocalesKeys) => {
+    try {
+      return loadCachedLocale(locale);
+    } catch (_) {
+      return locales[locale as keyof typeof locales]();
+    }
+  };
+
   function I18nProvider({ children }: I18nProviderProps) {
     const locale = useCurrentLocale();
-    const { default: clientLocale } = use(locales[locale as keyof typeof locales]());
+    const { default: clientLocale } = use(loadLocale(locale));
 
     const value = useMemo(
       () => ({
