@@ -53,6 +53,41 @@ export default function Page() {
 }
 ```
 
+## Preserving search params
+
+By default, next-international doesn't preserve search params when changing the locale. This is because [`useSearchParams()`](https://nextjs.org/docs/app/api-reference/functions/use-search-params) will [opt-out the page from Static Rendering](https://nextjs.org/docs/app/api-reference/functions/use-search-params#static-rendering) if you don't wrap the component in a `Suspense` boundary.
+
+If you want to preserve search params, you can manually use the `preserveSearchParams` option inside `useChangeLocale`:
+
+```tsx {6}
+// Client Component
+'use client'
+import { useChangeLocale } from '../../locales/client'
+
+export function ChangeLocaleButton() {
+  const changeLocale = useChangeLocale({ preserveSearchParams: true })
+
+  ...
+}
+```
+
+Then, don't forget to wrap the component in a `Suspense` boundary to avoid opting out the entire page from Static Rendering:
+
+```tsx {6-8}
+// Client or Server Component
+import { ChangeLocaleButton } from './change-locale-button'
+
+export default function Page() {
+  return (
+    <Suspense>
+      <ChangeLocaleButton />
+    </Suspense>
+  )
+}
+```
+
+## `basePath` support
+
 If you have set a [`basePath`](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) option inside `next.config.js`, you'll also need to set it inside `createI18nClient`:
 
 ```ts {7}

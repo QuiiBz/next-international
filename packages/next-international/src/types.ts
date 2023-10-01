@@ -70,3 +70,14 @@ export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
    */
   resolveLocaleFromRequest?: (request: NextRequest) => Locales[number] | null;
 };
+
+export type I18nChangeLocaleConfig = {
+  /**
+   * If `true`, the search params will be preserved when changing the locale.
+   * Don't forget to **wrap the component in a `Suspense` boundary to avoid opting out the page from Static Rendering**.
+   *
+   * @see https://nextjs.org/docs/app/api-reference/functions/use-search-params#static-rendering
+   * @default false
+   */
+  preserveSearchParams?: boolean;
+};

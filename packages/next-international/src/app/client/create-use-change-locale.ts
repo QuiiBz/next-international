@@ -1,11 +1,15 @@
-import { useRouter, usePathname } from 'next/navigation';
-import type { I18nClientConfig } from '../../types';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import type { I18nChangeLocaleConfig, I18nClientConfig } from '../../types';
 
 export function createUseChangeLocale<LocalesKeys>(useCurrentLocale: () => LocalesKeys, config: I18nClientConfig) {
-  return function useChangeLocale() {
+  return function useChangeLocale(changeLocaleConfig?: I18nChangeLocaleConfig) {
     const { push, refresh } = useRouter();
     const currentLocale = useCurrentLocale();
     const path = usePathname();
+    // We call the hook conditionally to avoid always opting out of Static Rendering.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const searchParams = changeLocaleConfig?.preserveSearchParams ? useSearchParams().toString() : undefined;
+    const finalSearchParams = searchParams ? `?${searchParams}` : '';
 
     let pathWithoutLocale = path;
 
@@ -20,7 +24,7 @@ export function createUseChangeLocale<LocalesKeys>(useCurrentLocale: () => Local
     }
 
     return function changeLocale(newLocale: LocalesKeys) {
-      push(`/${newLocale}${pathWithoutLocale}`);
+      push(`/${newLocale}${pathWithoutLocale}${finalSearchParams}`);
       refresh();
     };
   };
