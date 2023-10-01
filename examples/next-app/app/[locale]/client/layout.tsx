@@ -1,12 +1,6 @@
-'use client';
-
-import { ReactNode, Suspense } from 'react';
-import { I18nProviderClient } from '../../../locales/client';
+import { ReactNode } from 'react';
+import { Provider } from '../provider';
 
 export default function Layout({ children }: { children: ReactNode }) {
-  return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <I18nProviderClient>{children}</I18nProviderClient>
-    </Suspense>
-  );
+  return <Provider>{children}</Provider>;
 }
