@@ -28,11 +28,12 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
       .map(key => key.split('#')[0]),
   );
 
+  const pluralRules = new Intl.PluralRules(context.locale);
+
   function getPluralKey(count: number) {
     if (count === 0) return 'zero';
     return pluralRules.select(count);
   }
-  const pluralRules = new Intl.PluralRules(context.locale);
 
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
