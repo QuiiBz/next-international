@@ -12,6 +12,7 @@ export default {
   'double.param': 'This {param} is used twice ({param})',
   'cow#zero': 'No cows (#zero)',
   'cow#one': 'One cow (#one)',
-  'cow#two': 'Two cows (#two)',
   'cow#other': '{count} cows (#other)',
+  'horse#one': 'One horse (#one)',
+  'horse#other': '{count} horses (#other)',
 } as const;

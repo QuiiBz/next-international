@@ -29,14 +29,7 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
   );
 
   function getPluralKey(count: number) {
-    switch (count) {
-      case 0:
-        return 'zero';
-      case 1:
-        return 'one';
-      case 2:
-        return 'two';
-    }
+    if (count === 0) return 'zero';
     return pluralRules.select(count);
   }
   const pluralRules = new Intl.PluralRules(context.locale);

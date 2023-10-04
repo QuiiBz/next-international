@@ -327,7 +327,7 @@ describe('useI18n', () => {
     },
     {
       count: 2,
-      expected: 'Two cows (#two)',
+      expected: '2 cows (#other)',
     },
     ...[...new Array(30).fill(0)].map((_, i) => ({ count: i + 3, expected: `${i + 3} cows (#other)` })),
   ];
@@ -355,5 +355,29 @@ describe('useI18n', () => {
     );
 
     expect(result.current).toBe(expected);
+  });
+  it('should fallback on #other if #zero is not defined', async () => {
+    const { useI18n, I18nProvider } = createI18n({
+      en: () => import('./utils/en'),
+      fr: () => import('./utils/fr'),
+    });
+
+    const App = ({ children }: { children: React.ReactNode }) => {
+      return <I18nProvider locale={en}>{children}</I18nProvider>;
+    };
+
+    const { result } = renderHook(
+      () => {
+        const t = useI18n();
+        return t('horse', {
+          count: 0,
+        });
+      },
+      {
+        wrapper: App,
+      },
+    );
+
+    expect(result.current).toBe('0 horses (#other)');
   });
 });
