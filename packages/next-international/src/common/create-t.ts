@@ -27,7 +27,13 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
       .filter(key => key.includes('#'))
       .map(key => key.split('#')[0]),
   );
+
   const pluralRules = new Intl.PluralRules(context.locale);
+
+  function getPluralKey(count: number) {
+    if (count === 0) return 'zero';
+    return pluralRules.select(count);
+  }
 
   function t<Key extends LocaleKeys<Locale, Scope>, Value extends LocaleValue = ScopedValue<Locale, Scope, Key>>(
     key: Key,
@@ -48,7 +54,7 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
       const isPluralKey = scope ? pluralKeys.has(`${scope}.${key}`) : pluralKeys.has(key);
 
       if (isPluralKey) {
-        key = `${key}#${pluralRules.select(paramObject.count)}` as Key;
+        key = `${key}#${getPluralKey(paramObject.count)}` as Key;
         isPlural = true;
       }
     }
