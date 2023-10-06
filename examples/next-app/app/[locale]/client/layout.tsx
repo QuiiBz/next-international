@@ -1,13 +1,6 @@
-'use client';
-
 import { ReactNode } from 'react';
-import { I18nProviderClient } from '../../../locales/client';
-import en from '../../../locales/en';
+import { Provider } from '../provider';
 
-export default function Layout({ children }: { children: ReactNode }) {
-  return (
-    <I18nProviderClient fallback={<p> Loading...</p>} fallbackLocale={en}>
-      {children}
-    </I18nProviderClient>
-  );
+export default function Layout({ params: { locale }, children }: { params: { locale: string }; children: ReactNode }) {
+  return <Provider locale={locale}>{children}</Provider>;
 }

@@ -26,6 +26,10 @@ export type I18nClientConfig = {
    * @see https://nextjs.org/docs/app/api-reference/next-config-js/basePath
    */
   basePath?: string;
+  /**
+   * A locale to use if some keys aren't translated, to fallback to this locale instead of showing the translation key.
+   */
+  fallbackLocale?: Record<string, unknown>;
 };
 
 export type I18nServerConfig = {
@@ -65,4 +69,15 @@ export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
    * @description This function will only be called if the user doesn't already have a `Next-Locale` cookie.
    */
   resolveLocaleFromRequest?: (request: NextRequest) => Locales[number] | null;
+};
+
+export type I18nChangeLocaleConfig = {
+  /**
+   * If `true`, the search params will be preserved when changing the locale.
+   * Don't forget to **wrap the component in a `Suspense` boundary to avoid opting out the page from Static Rendering**.
+   *
+   * @see https://nextjs.org/docs/app/api-reference/functions/use-search-params#static-rendering
+   * @default false
+   */
+  preserveSearchParams?: boolean;
 };

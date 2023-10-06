@@ -1,5 +1,7 @@
 // import { setStaticParamsLocale } from 'next-international/server';
 import { getI18n, getScopedI18n, getCurrentLocale } from '../../locales/server';
+import Client from './client';
+import { Provider } from './provider';
 
 // Uncomment to test Static Generation on this page only
 // export function generateStaticParams() {
@@ -17,6 +19,9 @@ export default async function Home({ params: { locale } }: { params: { locale: s
 
   return (
     <div>
+      <Provider locale={locale}>
+        <Client />
+      </Provider>
       <h1>SSR / SSG</h1>
       <p>
         Current locale:

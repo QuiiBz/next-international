@@ -18,7 +18,10 @@ export default function RootLayout({ children }: { children: ReactElement }) {
   return (
     <html lang="en">
       <body>
+        {/* Uncomment the suspense boundary if using `preserveSearchParams` in `useChangeLocale()` */}
+        {/* <Suspense> */}
         <Switch />
+        {/* </Suspense> */}
         <ul>
           <li>
             <Link href="/">Go to /</Link>

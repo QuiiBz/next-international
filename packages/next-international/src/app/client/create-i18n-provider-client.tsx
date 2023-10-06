@@ -1,44 +1,42 @@
-import React, { Context, ReactElement, ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { Context, ReactNode, Suspense, use, useMemo } from 'react';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 
 import type { LocaleContext } from '../../types';
 import { flattenLocale } from '../../common/flatten-locale';
 
-type I18nProviderProps = {
-  fallback?: ReactElement | null;
-  fallbackLocale?: Record<string, unknown>;
+type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'>;
+
+type I18nProviderWrapperProps = {
+  locale: string;
+  fallback?: ReactNode;
   children: ReactNode;
 };
 
-export function createI18nProviderClient<Locale extends BaseLocale, LocalesKeys>(
+export function createI18nProviderClient<Locale extends BaseLocale>(
   I18nClientContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
-  useCurrentLocale: () => LocalesKeys,
+  fallbackLocale?: Record<string, unknown>,
 ) {
-  return function I18nProviderClient({ fallback = null, fallbackLocale, children }: I18nProviderProps) {
-    const locale = useCurrentLocale();
-    const [clientLocale, setClientLocale] = useState<Locale>();
-
-    useEffect(() => {
-      // @ts-expect-error any type
-      locales[locale]().then(content => {
-        setClientLocale(flattenLocale<Locale>(content.default));
-      });
-    }, [locale, fallbackLocale]);
+  function I18nProvider({ locale, children }: I18nProviderProps) {
+    const { default: clientLocale } = use(locales[locale as keyof typeof locales]());
 
     const value = useMemo(
       () => ({
-        localeContent: clientLocale as Locale,
+        localeContent: flattenLocale<Locale>(clientLocale),
         fallbackLocale: fallbackLocale ? flattenLocale<Locale>(fallbackLocale) : undefined,
         locale: locale as string,
       }),
-      [clientLocale, fallbackLocale, locale],
+      [clientLocale, locale],
     );
 
-    if (!clientLocale && fallback) {
-      return fallback;
-    }
-
     return <I18nClientContext.Provider value={value}>{children}</I18nClientContext.Provider>;
+  }
+
+  return function I18nProviderWrapper({ locale, fallback, children }: I18nProviderWrapperProps) {
+    return (
+      <Suspense fallback={fallback}>
+        <I18nProvider locale={locale}>{children}</I18nProvider>
+      </Suspense>
+    );
   };
 }

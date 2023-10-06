@@ -7,6 +7,7 @@ To declare plural translations, append `#` followed by `zero`, `one`, `two`, `fe
 ```ts {3-4}
 // locales/en.ts
 export default {
+  'cows#zero': 'No cows',
   'cows#one': 'A cow',
   'cows#other': '{count} cows'
 } as const
@@ -27,6 +28,8 @@ export default function Page() {
 
   return (
     <div>
+      {/* Output: No cows */}
+      <p>{t('cows', { count: 0 })}</p>
       {/* Output: A cow */}
       <p>{t('cows', { count: 1 })}</p>
       {/* Output: 3 cows */}
