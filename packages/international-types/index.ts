@@ -43,9 +43,9 @@ type ExtractScopes<
   Prev extends string | undefined = undefined,
 > = Value extends `${infer Head}.${infer Tail}`
   ? [
-    Prev extends string ? `${Prev}.${Head}` : Head,
-    ...ExtractScopes<Tail, Prev extends string ? `${Prev}.${Head}` : Head>,
-  ]
+      Prev extends string ? `${Prev}.${Head}` : Head,
+      ...ExtractScopes<Tail, Prev extends string ? `${Prev}.${Head}` : Head>,
+    ]
   : [];
 
 export type Scopes<Locale extends BaseLocale> = ExtractScopes<Extract<keyof Locale, string>>[number];
@@ -56,8 +56,8 @@ export type ScopedValue<
   Key extends LocaleKeys<Locale, Scope>,
 > = Scope extends undefined
   ? IsPlural<Key, Scope, Locale> extends true
-  ? Locale[`${Key}#${PluralSuffix}`]
-  : Locale[Key]
+    ? Locale[`${Key}#${PluralSuffix}`]
+    : Locale[Key]
   : IsPlural<Key, Scope, Locale> extends true
   ? Locale[`${Scope}.${Key}#${PluralSuffix}`]
   : Locale[`${Scope}.${Key}`];
@@ -83,8 +83,8 @@ export type GetLocaleType<Locales extends ImportedLocales | ExplicitLocales> = L
 
 type Join<K, P> = K extends string | number
   ? P extends string | number
-  ? `${K}${'' extends P ? '' : '.'}${P}`
-  : never
+    ? `${K}${'' extends P ? '' : '.'}${P}`
+    : never
   : never;
 
 type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...0[]];
@@ -97,10 +97,10 @@ type Leaves<T, D extends number = 10> = [D] extends [never]
 
 type FollowPath<T, P> = P extends `${infer U}.${infer R}`
   ? U extends keyof T
-  ? FollowPath<T[U], R>
-  : P extends keyof T
-  ? T[P]
-  : never
+    ? FollowPath<T[U], R>
+    : P extends keyof T
+    ? T[P]
+    : never
   : P extends keyof T
   ? T[P]
   : never;
@@ -108,21 +108,6 @@ type FollowPath<T, P> = P extends `${infer U}.${infer R}`
 export type FlattenLocale<Locale extends Record<string, unknown>> = {
   [K in Leaves<Locale>]: FollowPath<Locale, K>;
 };
-
-type t = FlattenLocale<{
-  hello: 'Hello';
-  welcome: 'Hello {name}!';
-  'about.you': 'Hello {name}! You have {age} yo';
-  'scope.test': 'A scope';
-  'scope.more.stars#one': '1 star on GitHub';
-  'scope.more.stars#other': '{count} stars on GitHub';
-  'cows#one': 'A cow';
-  'cows#other': '{count} cows';
-  omg: {
-    world: 'test';
-    world2: 'test {yo}';
-  };
-}>;
 
 type PluralSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
 
@@ -134,14 +119,14 @@ type GetPlural<
   Locale extends BaseLocale,
 > = Scope extends undefined
   ? `${Key}#${PluralSuffix}` & keyof Locale extends infer PluralKey
-  ? PluralKey extends `${string}#${infer Plural extends PluralSuffix}`
-  ? Plural
-  : never
-  : never
+    ? PluralKey extends `${string}#${infer Plural extends PluralSuffix}`
+      ? Plural
+      : never
+    : never
   : `${Scope}.${Key}#${PluralSuffix}` & keyof Locale extends infer PluralKey
   ? PluralKey extends `${string}#${infer Plural extends PluralSuffix}`
-  ? Plural
-  : never
+    ? Plural
+    : never
   : never;
 
 type IsPlural<
@@ -150,8 +135,8 @@ type IsPlural<
   Locale extends BaseLocale,
 > = Scope extends undefined
   ? `${Key}#${PluralSuffix}` & keyof Locale extends never
-  ? false
-  : true
+    ? false
+    : true
   : `${Scope}.${Key}#${PluralSuffix}` & keyof Locale extends never
   ? false
   : true;
@@ -165,46 +150,46 @@ type GetCountUnion<
   ? 0
   : Plural extends 'one'
   ? // eslint-disable-next-line @typescript-eslint/ban-types
-  1 | 21 | 31 | 41 | 51 | 61 | 71 | 81 | 91 | 101 | (number & {})
+    1 | 21 | 31 | 41 | 51 | 61 | 71 | 81 | 91 | 101 | (number & {})
   : Plural extends 'two'
   ? // eslint-disable-next-line @typescript-eslint/ban-types
-  2 | 22 | 32 | 42 | 52 | 62 | 72 | 82 | 92 | 102 | (number & {})
+    2 | 22 | 32 | 42 | 52 | 62 | 72 | 82 | 92 | 102 | (number & {})
   : number;
 
 type AddCount<T, Key extends string, Scope extends Scopes<Locale> | undefined, Locale extends BaseLocale> = T extends []
   ? [
-    {
-      /**
-       * The `count` depends on the plural tags defined in your locale,
-       * and the current locale rules.
-       *
-       * - `zero` allows 0
-       * - `one` autocompletes 1, 21, 31, 41... but allows any number
-       * - `two` autocompletes 2, 22, 32, 42... but allows any number
-       * - `few`, `many` and `other` allow any number
-       *
-       * @see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
-       */
-      count: GetCountUnion<Key, Scope, Locale>;
-    },
-  ]
+      {
+        /**
+         * The `count` depends on the plural tags defined in your locale,
+         * and the current locale rules.
+         *
+         * - `zero` allows 0
+         * - `one` autocompletes 1, 21, 31, 41... but allows any number
+         * - `two` autocompletes 2, 22, 32, 42... but allows any number
+         * - `few`, `many` and `other` allow any number
+         *
+         * @see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
+         */
+        count: GetCountUnion<Key, Scope, Locale>;
+      },
+    ]
   : T extends [infer R]
   ? [
-    {
-      /**
-       * The `count` depends on the plural tags defined in your locale,
-       * and the current locale rules.
-       *
-       * - `zero` allows 0
-       * - `one` autocompletes 1, 21, 31, 41... but allows any number
-       * - `two` autocompletes 2, 22, 32, 42... but allows any number
-       * - `few`, `many` and `other` allow any number
-       *
-       * @see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
-       */
-      count: GetCountUnion<Key, Scope, Locale>;
-    } & R,
-  ]
+      {
+        /**
+         * The `count` depends on the plural tags defined in your locale,
+         * and the current locale rules.
+         *
+         * - `zero` allows 0
+         * - `one` autocompletes 1, 21, 31, 41... but allows any number
+         * - `two` autocompletes 2, 22, 32, 42... but allows any number
+         * - `few`, `many` and `other` allow any number
+         *
+         * @see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
+         */
+        count: GetCountUnion<Key, Scope, Locale>;
+      } & R,
+    ]
   : never;
 
 export type CreateParams<
