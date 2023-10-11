@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
 import type { I18nMiddlewareConfig } from '../../types';
@@ -78,7 +79,7 @@ function localeFromRequest<Locales extends readonly string[]>(
 
 const defaultResolveLocaleFromRequest: NonNullable<I18nMiddlewareConfig<any>['resolveLocaleFromRequest']> = request => {
   const header = request.headers.get('Accept-Language');
-  const locale = header?.split(',')?.[0]?.split('-')?.[0];
+  const locale = header?.split(',', 1)?.[0]?.split('-', 1)?.[0];
   return locale ?? null;
 };
 

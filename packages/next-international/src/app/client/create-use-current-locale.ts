@@ -1,7 +1,7 @@
 import { notFound, useParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { DEFAULT_SEGMENT_NAME } from '../../common/constants';
-import { I18nClientConfig } from '../../types';
+import type { I18nClientConfig } from '../../types';
 import { error } from '../../helpers/log';
 
 export function createUseCurrentLocale<LocalesKeys>(locales: LocalesKeys[], config: I18nClientConfig) {

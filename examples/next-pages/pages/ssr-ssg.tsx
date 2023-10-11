@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import { getLocaleProps, useChangeLocale, useCurrentLocale, useI18n, useScopedI18n } from '../locales';
 
 export const getServerSideProps: GetServerSideProps = getLocaleProps();

@@ -1,4 +1,3 @@
-import { isValidElement, cloneElement, ReactNode } from 'react';
 import type {
   BaseLocale,
   CreateParams,
@@ -8,7 +7,9 @@ import type {
   ScopedValue,
   Scopes,
 } from 'international-types';
-import type { ReactParamsObject, LocaleContext, LocaleMap } from '../types';
+import type { ReactNode } from 'react';
+import { cloneElement, isValidElement } from 'react';
+import type { LocaleContext, LocaleMap, ReactParamsObject } from '../types';
 
 export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> | undefined>(
   context: LocaleContext<Locale>,
@@ -25,7 +26,7 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
   const pluralKeys = new Set(
     Object.keys(content)
       .filter(key => key.includes('#'))
-      .map(key => key.split('#')[0]),
+      .map(key => key.split('#', 1)[0]),
   );
 
   const pluralRules = new Intl.PluralRules(context.locale);
@@ -62,7 +63,7 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
     let value = scope ? content[`${scope}.${key}`] : content[key];
 
     if (!value && isPlural) {
-      const baseKey = key.split('#')[0] as Key;
+      const baseKey = key.split('#', 1)[0] as Key;
       value = (content[`${baseKey}#other`] || key)?.toString();
     } else {
       value = (value || key)?.toString();

@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { ImportedLocales, ExplicitLocales, GetLocaleType, FlattenLocale } from 'international-types';
+import type { ImportedLocales, ExplicitLocales, GetLocaleType, FlattenLocale } from 'international-types';
 import type { LocaleContext } from '../types';
 import { createDefineLocale } from '../common/create-define-locale';
 import { createGetLocaleProps } from './create-get-locale-props';

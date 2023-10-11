@@ -1,6 +1,6 @@
 import type { BaseLocale, ImportedLocales, Scopes } from 'international-types';
 import { createT } from '../../common/create-t';
-import { I18nServerConfig, LocaleContext } from '../../types';
+import type { I18nServerConfig, LocaleContext } from '../../types';
 import { getLocaleCache } from './get-locale-cache';
 import { flattenLocale } from '../../common/flatten-locale';
 

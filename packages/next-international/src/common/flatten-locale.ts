@@ -1,4 +1,4 @@
-import { BaseLocale } from 'international-types';
+import type { BaseLocale } from 'international-types';
 
 export const flattenLocale = <Locale extends BaseLocale>(locale: Record<string, unknown>, prefix = ''): Locale =>
   Object.entries(locale).reduce(
