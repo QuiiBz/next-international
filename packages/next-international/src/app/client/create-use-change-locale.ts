@@ -1,7 +1,13 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { I18nChangeLocaleConfig, I18nClientConfig } from '../../types';
+import { ImportedLocales } from 'international-types';
+import { localesCache } from './create-i18n-provider-client';
 
-export function createUseChangeLocale<LocalesKeys>(useCurrentLocale: () => LocalesKeys, config: I18nClientConfig) {
+export function createUseChangeLocale<LocalesKeys>(
+  useCurrentLocale: () => LocalesKeys,
+  locales: ImportedLocales,
+  config: I18nClientConfig,
+) {
   return function useChangeLocale(changeLocaleConfig?: I18nChangeLocaleConfig) {
     const { push, refresh } = useRouter();
     const currentLocale = useCurrentLocale();
@@ -24,8 +30,12 @@ export function createUseChangeLocale<LocalesKeys>(useCurrentLocale: () => Local
     }
 
     return function changeLocale(newLocale: LocalesKeys) {
-      push(`/${newLocale}${pathWithoutLocale}${finalSearchParams}`);
-      refresh();
+      locales[newLocale as keyof typeof locales]().then(module => {
+        localesCache.set(newLocale as string, module.default);
+
+        push(`/${newLocale}${pathWithoutLocale}${finalSearchParams}`);
+        refresh();
+      });
     };
   };
 }
