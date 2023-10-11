@@ -1,4 +1,5 @@
-import { useContext, type Context } from 'react';
+import type { Context } from 'react';
+import { useContext } from 'react';
 import type { BaseLocale, Scopes } from 'international-types';
 import type { LocaleContext } from '../types';
 import { createT } from '../common/create-t';

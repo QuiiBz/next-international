@@ -1,15 +1,7 @@
 import type { BaseLocale, ImportedLocales } from 'international-types';
 import { useRouter } from 'next/router';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type Context,
-  type ReactElement,
-  type ReactNode,
-} from 'react';
+import type { Context, ReactElement, ReactNode } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { flattenLocale } from '../common/flatten-locale';
 import { error, warn } from '../helpers/log';
 import type { LocaleContext } from '../types';

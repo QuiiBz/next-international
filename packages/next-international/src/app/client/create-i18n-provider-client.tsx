@@ -1,5 +1,6 @@
 import type { BaseLocale, ImportedLocales } from 'international-types';
-import React, { type Context, type ReactNode, Suspense, use, useMemo } from 'react';
+import type { Context, ReactNode } from 'react';
+import React, { Suspense, use, useMemo } from 'react';
 import { flattenLocale } from '../../common/flatten-locale';
 import type { LocaleContext } from '../../types';
 
