@@ -79,7 +79,7 @@ function localeFromRequest<Locales extends readonly string[]>(
 
 const defaultResolveLocaleFromRequest: NonNullable<I18nMiddlewareConfig<any>['resolveLocaleFromRequest']> = request => {
   const header = request.headers.get('Accept-Language');
-  const locale = header?.split(',')?.[0]?.split('-')?.[0];
+  const locale = header?.split(',', 1)?.[0]?.split('-', 1)?.[0];
   return locale ?? null;
 };
 
