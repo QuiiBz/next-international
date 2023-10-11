@@ -98,6 +98,8 @@ type Leaves<T, D extends number = 10> = [D] extends [never]
 type FollowPath<T, P> = P extends `${infer U}.${infer R}`
   ? U extends keyof T
     ? FollowPath<T[U], R>
+    : P extends keyof T
+    ? T[P]
     : never
   : P extends keyof T
   ? T[P]
