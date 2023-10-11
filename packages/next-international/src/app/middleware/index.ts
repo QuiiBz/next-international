@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
 import type { I18nMiddlewareConfig } from '../../types';

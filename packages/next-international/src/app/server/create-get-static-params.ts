@@ -1,5 +1,5 @@
 import type { ImportedLocales } from 'international-types';
-import { I18nServerConfig } from '../../types';
+import type { I18nServerConfig } from '../../types';
 import { DEFAULT_SEGMENT_NAME } from '../../common/constants';
 
 export function createGetStaticParams<Locales extends ImportedLocales>(locales: Locales, config: I18nServerConfig) {

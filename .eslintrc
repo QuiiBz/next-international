@@ -4,7 +4,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "import"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -14,7 +14,9 @@
   ],
   "rules": {
     "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/consistent-type-imports": ["error", { "fixStyle": "separate-type-imports" }],
+    "import/consistent-type-specifier-style": ["error", "prefer-top-level"]
   },
   "env": {
     "browser": true,

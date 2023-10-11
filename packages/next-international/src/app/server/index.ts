@@ -1,11 +1,11 @@
 import 'server-only';
 
 import type { ExplicitLocales, FlattenLocale, GetLocaleType, ImportedLocales } from 'international-types';
+import type { I18nServerConfig } from '../../types';
+import { createGetCurrentLocale } from './create-get-current-locale';
 import { createGetI18n } from './create-get-i18n';
 import { createGetScopedI18n } from './create-get-scoped-i18n';
-import { createGetCurrentLocale } from './create-get-current-locale';
 import { createGetStaticParams } from './create-get-static-params';
-import { I18nServerConfig } from '../../types';
 
 export { setStaticParamsLocale } from './get-locale-cache';
 

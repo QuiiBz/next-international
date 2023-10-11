@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import './globals.css';
 import { Switch } from './switch';
 import Link from 'next/link';
