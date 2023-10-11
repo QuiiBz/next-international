@@ -20,7 +20,12 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
   fallbackLocale?: Record<string, unknown>,
 ) {
   function I18nProvider({ locale, children }: I18nProviderProps) {
-    const clientLocale = localesCache.get(locale) ?? use(locales[locale as keyof typeof locales]()).default;
+    let clientLocale: any = localesCache.get(locale);
+
+    if (!clientLocale) {
+      clientLocale = use(locales[locale as keyof typeof locales]()).default;
+      localesCache.set(locale, clientLocale);
+    }
 
     const value = useMemo(
       () => ({
