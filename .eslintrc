@@ -14,7 +14,8 @@
   ],
   "rules": {
     "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/consistent-type-imports": "warn"
   },
   "env": {
     "browser": true,
