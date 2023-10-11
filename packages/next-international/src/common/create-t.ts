@@ -1,4 +1,4 @@
-import { isValidElement, cloneElement, ReactNode } from 'react';
+import { isValidElement, cloneElement, type ReactNode } from 'react';
 import type {
   BaseLocale,
   CreateParams,

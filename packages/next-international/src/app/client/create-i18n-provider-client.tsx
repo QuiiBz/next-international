@@ -1,8 +1,7 @@
-import React, { Context, ReactNode, Suspense, use, useMemo } from 'react';
 import type { BaseLocale, ImportedLocales } from 'international-types';
-
-import type { LocaleContext } from '../../types';
+import React, { type Context, type ReactNode, Suspense, use, useMemo } from 'react';
 import { flattenLocale } from '../../common/flatten-locale';
+import type { LocaleContext } from '../../types';
 
 type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'>;
 
