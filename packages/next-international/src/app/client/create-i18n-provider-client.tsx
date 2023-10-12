@@ -12,13 +12,20 @@ type I18nProviderWrapperProps = {
   children: ReactNode;
 };
 
+export const localesCache = new Map<string, Record<string, unknown>>();
+
 export function createI18nProviderClient<Locale extends BaseLocale>(
   I18nClientContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
   fallbackLocale?: Record<string, unknown>,
 ) {
   function I18nProvider({ locale, children }: I18nProviderProps) {
-    const { default: clientLocale } = use(locales[locale as keyof typeof locales]());
+    let clientLocale: any = localesCache.get(locale);
+
+    if (!clientLocale) {
+      clientLocale = use(locales[locale as keyof typeof locales]()).default;
+      localesCache.set(locale, clientLocale);
+    }
 
     const value = useMemo(
       () => ({
