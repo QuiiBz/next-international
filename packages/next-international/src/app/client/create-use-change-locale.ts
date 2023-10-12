@@ -1,6 +1,6 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { I18nChangeLocaleConfig, I18nClientConfig } from '../../types';
-import { ImportedLocales } from 'international-types';
+import type { ImportedLocales } from 'international-types';
 import { localesCache } from './create-i18n-provider-client';
 
 export function createUseChangeLocale<LocalesKeys>(
