@@ -1,4 +1,4 @@
-import { useConfig } from 'nextra-theme-docs'
+import { useConfig } from 'nextra-theme-docs';
 import Image from 'next/image';
 
 export default {
@@ -10,7 +10,10 @@ export default {
   ),
   head: () => {
     const { title } = useConfig();
-    const socialCard = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/og.jpg' : 'https://next-international.vercel.app/og.jpg';
+    const socialCard =
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000/og.jpg'
+        : 'https://next-international.vercel.app/og.jpg';
 
     return (
       <>
@@ -39,9 +42,7 @@ export default {
   footer: {
     text: <span>MIT {new Date().getFullYear()} © next-international contributors.</span>,
   },
-  darkMode: false,
   nextThemes: {
     defaultTheme: 'light',
-    forcedTheme: 'light',
   },
 };
