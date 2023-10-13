@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   webpack(config) {
-    const allowedSvgRegex = /components\/icons\/.+\.svg$/;
+    const allowedSvgRegex = /\.svg$/;
 
     const fileLoaderRule = config.module.rules.find(rule => rule.test?.test?.('.svg'));
     fileLoaderRule.exclude = allowedSvgRegex;
