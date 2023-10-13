@@ -2,11 +2,12 @@
 title: Home
 ---
 
-import { Cards, Card } from 'nextra/components'
-import { AppIcon, PagesIcon } from '../components/icons'
+import { Cards, Card } from 'nextra/components';
+import Logo from '@components/logo';
+import { AppIcon, PagesIcon } from '@components/icons';
 
 <p align="center">
-  <img alt="" height="100px" src="/logo-black.png" />
+  <Logo />
   <br />
   <span>Type-safe internationalization (i18n) for Next.js</span>
 </p>
@@ -17,7 +18,10 @@ import { AppIcon, PagesIcon } from '../components/icons'
 - **Small**: No dependencies, lazy-loaded
 - **Simple**: No Webpack configuration, no CLI, no code generation, just pure TypeScript
 - **Server and Client, Static Rendering**: Lazy-load server and client-side, support for Static Rendering
-- <strong style={{ display: 'inline-flex', gap: '8px', verticalAlign: 'top' }}><AppIcon /> App or <PagesIcon /> Pages Router</strong>: With support for React Server Components
+
+- <span style={{ display: 'inline-flex', gap: '1ch', verticalAlign: 'top' }}>
+    <AppIcon /> <strong>App or</strong> <PagesIcon /> <strong>Pages Router:</strong> With support for React Server Components
+  </span>
 
 Try it live on CodeSandbox:
 
@@ -29,8 +33,6 @@ Try it live on CodeSandbox:
   <Card title="Browse documentation" href="/docs" />
 </Cards>
 
-
 ## Sponsors
 
 ![Sponsors](https://github.com/QuiiBz/dotfiles/blob/main/sponsors.png?raw=true)
-
