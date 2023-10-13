@@ -2,15 +2,22 @@
 
 import Image from 'next/image';
 import { useTheme } from 'nextra-theme-docs';
+import { useEffect, useState } from 'react';
 
 const Logo = () => {
   const { resolvedTheme } = useTheme();
+  const [src, setSrc] = useState('/logo-black.png');
 
-  if (resolvedTheme === 'dark') {
-    return <Image src="/logo-white.png" alt="Next International logo" priority width={240} height={200} />;
-  }
+  useEffect(() => {
+    if (resolvedTheme === 'dark') {
+      setSrc('/logo-white.png');
+      return;
+    }
 
-  return <Image src="/logo-black.png" alt="Next International logo" priority width={240} height={200} />;
+    setSrc('/logo-black.png');
+  }, [resolvedTheme]);
+
+  return <Image src={src} alt="Next International logo" priority width={240} height={200} />;
 };
 
 export default Logo;
