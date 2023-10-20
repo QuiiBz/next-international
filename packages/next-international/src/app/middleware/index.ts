@@ -55,6 +55,9 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
       return addLocaleToResponse(response, requestLocale ?? config.defaultLocale);
     }
 
+    const pathnameWithoutLocale = requestUrl.pathname.replace(new RegExp(config.locales.join('|'), 'g'), '');
+    response.headers.set('x-original-pathname', pathnameWithoutLocale)
+
     return response;
   };
 }
