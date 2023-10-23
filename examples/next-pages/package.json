@@ -1,5 +1,5 @@
 {
-  "name": "example-next",
+  "name": "example-next-pages",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,17 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "13.5.4",
+    "next": "^13.5.6",
     "next-international": "workspace:*",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "^18.0.4",
-    "@types/react": "^18.2.9",
-    "eslint": "8.47.0",
-    "eslint-config-next": "13.5.4",
-    "next-transpile-modules": "^9.0.0",
-    "typescript": "^5.1.6"
+    "@types/node": "^20.8.7",
+    "@types/react": "^18.2.31",
+    "eslint": "^8.52.0",
+    "eslint-config-next": "^13.5.6",
+    "typescript": "^5.2.2"
   }
 }
