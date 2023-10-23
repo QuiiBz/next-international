@@ -26,13 +26,16 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
 
     if (!clientLocale) {
       const newLocale = locales[locale as keyof typeof locales];
+
       if (!newLocale) {
-        error(`The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`)
+        error(`The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`);
         notFound();
       }
+
       clientLocale = use(newLocale()).default;
       localesCache.set(locale, clientLocale);
     }
+
     const value = useMemo(
       () => ({
         localeContent: flattenLocale<Locale>(clientLocale),
@@ -53,3 +56,4 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
     );
   };
 }
+
