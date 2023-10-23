@@ -56,4 +56,3 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
     );
   };
 }
-
