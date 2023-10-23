@@ -1,7 +1,9 @@
+import { notFound } from 'next/navigation';
 import type { BaseLocale, ImportedLocales } from 'international-types';
 import type { Context, ReactNode } from 'react';
 import React, { Suspense, use, useMemo } from 'react';
 import { flattenLocale } from '../../common/flatten-locale';
+import { error } from '../../helpers/log';
 import type { LocaleContext } from '../../types';
 
 type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'>;
@@ -25,9 +27,8 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
     if (!clientLocale) {
       const newLocale = locales[locale as keyof typeof locales];
       if (!newLocale) {
-        throw new Error(
-          `The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`,
-        );
+        error(`The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`)
+        notFound();
       }
       clientLocale = use(newLocale()).default;
       localesCache.set(locale, clientLocale);
