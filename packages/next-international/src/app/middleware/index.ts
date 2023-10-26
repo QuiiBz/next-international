@@ -2,8 +2,8 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
-import type { I18nMiddlewareConfig } from '../../types';
 import { warn } from '../../helpers/log';
+import type { I18nMiddlewareConfig } from '../../types';
 
 const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig<[]>['urlMappingStrategy']> = 'redirect';
 
@@ -17,21 +17,23 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
       mappedUrl.pathname = `/${locale}${mappedUrl.pathname}`;
 
       const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
-
       if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === config.defaultLocale)) {
-        const response = NextResponse.rewrite(mappedUrl);
+        const response = NextResponse.rewrite(requestUrl);
+        cloneCookies(request, response);
         return addLocaleToResponse(response, locale);
       } else {
         if (!['redirect', 'rewriteDefault'].includes(strategy)) {
           warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
         }
 
-        const response = NextResponse.redirect(mappedUrl);
+        const response = NextResponse.redirect(requestUrl);
+        cloneCookies(request, response);
         return addLocaleToResponse(response, locale);
       }
     }
 
     let response = NextResponse.next();
+    cloneCookies(request, response);
     const requestLocale = request.nextUrl.pathname.split('/')?.[1];
 
     if (!requestLocale || config.locales.includes(requestLocale)) {
@@ -106,4 +108,14 @@ function addLocaleToResponse(response: NextResponse, locale: string) {
   response.headers.set(LOCALE_HEADER, locale);
   response.cookies.set(LOCALE_COOKIE, locale);
   return response;
+}
+
+/**
+ * Clone cookies from request to response
+ */
+function cloneCookies(request: NextRequest, response: NextResponse) {
+  const cookies = request.cookies;
+  for (const [, value] of cookies) {
+    response.cookies.set(value.name, value.value);
+  }
 }
