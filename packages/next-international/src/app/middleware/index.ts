@@ -59,6 +59,10 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
   };
 }
 
+/**
+ * Retrieve `Next-Locale` header from request
+ * and check if it is an handled locale.
+ */
 function localeFromRequest<Locales extends readonly string[]>(
   locales: Locales,
   request: NextRequest,
@@ -79,12 +83,19 @@ function localeFromRequest<Locales extends readonly string[]>(
   return locale;
 }
 
+/**
+ * Default implementation of the `resolveLocaleFromRequest` function for the I18nMiddlewareConfig.
+ * This function extracts the locale from the 'Accept-Language' header of the request.
+ */
 const defaultResolveLocaleFromRequest: NonNullable<I18nMiddlewareConfig<any>['resolveLocaleFromRequest']> = request => {
   const header = request.headers.get('Accept-Language');
   const locale = header?.split(',', 1)?.[0]?.split('-', 1)?.[0];
   return locale ?? null;
 };
 
+/**
+ * Returns `true` if the pathname does not start with an handled locale
+ */
 function noLocalePrefix(locales: readonly string[], pathname: string) {
   return locales.every(locale => {
     return !(pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
