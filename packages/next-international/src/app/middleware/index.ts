@@ -13,8 +13,7 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
     const locale = localeFromRequest(config.locales, request, config.resolveLocaleFromRequest) ?? config.defaultLocale;
 
     if (noLocalePrefix(config.locales, requestUrl.pathname)) {
-      const mappedUrl = requestUrl.clone();
-      mappedUrl.pathname = `/${locale}${mappedUrl.pathname}`;
+      requestUrl.pathname = `/${locale}${requestUrl.pathname}`;
 
       const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
       if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === config.defaultLocale)) {
