@@ -116,6 +116,8 @@ function addLocaleToResponse(response: NextResponse, locale: string) {
 function cloneCookies(request: NextRequest, response: NextResponse) {
   const cookies = request.cookies;
   for (const [, value] of cookies) {
-    response.cookies.set(value.name, value.value);
+    if (value.name !== LOCALE_COOKIE) {
+      response.cookies.set(value.name, value.value);
+    }
   }
 }
