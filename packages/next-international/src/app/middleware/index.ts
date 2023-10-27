@@ -93,6 +93,6 @@ function noLocalePrefix(locales: readonly string[], pathname: string) {
 
 function addLocaleToResponse(response: NextResponse, locale: string) {
   response.headers.set(LOCALE_HEADER, locale);
-  response.cookies.set(LOCALE_COOKIE, locale, { sameSite: "strict"});
+  response.cookies.set(LOCALE_COOKIE, locale, { sameSite: 'strict' });
   return response;
 }
