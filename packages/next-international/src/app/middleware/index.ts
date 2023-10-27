@@ -106,7 +106,7 @@ function noLocalePrefix(locales: readonly string[], pathname: string) {
  */
 function addLocaleToResponse(request: NextRequest, response: NextResponse, locale: string) {
   response.headers.set(LOCALE_HEADER, locale);
-  response.cookies.set(LOCALE_COOKIE, locale);
+  response.cookies.set(LOCALE_COOKIE, locale, { sameSite: 'strict' });
 
   // Apply cookies from request to response
   const cookies = request.cookies;
