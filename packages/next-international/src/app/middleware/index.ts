@@ -102,7 +102,7 @@ function noLocalePrefix(locales: readonly string[], pathname: string) {
 
 /**
  * Add `X-Next-Locale` header and `Next-Locale` cookie to response
- * 
+ *
  * **NOTE:** The cookie is only set if the locale is different from the one in the cookie
  */
 function addLocaleToResponse(request: NextRequest, response: NextResponse, locale: string) {
