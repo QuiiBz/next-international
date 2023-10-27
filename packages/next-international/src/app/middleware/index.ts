@@ -18,21 +18,18 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
       const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
       if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === config.defaultLocale)) {
         const response = NextResponse.rewrite(requestUrl);
-        cloneCookies(request, response);
-        return addLocaleToResponse(response, locale);
+        return addLocaleToResponse(request, response, locale);
       } else {
         if (!['redirect', 'rewriteDefault'].includes(strategy)) {
           warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
         }
 
         const response = NextResponse.redirect(requestUrl);
-        cloneCookies(request, response);
-        return addLocaleToResponse(response, locale);
+        return addLocaleToResponse(request, response, locale);
       }
     }
 
     let response = NextResponse.next();
-    cloneCookies(request, response);
     const requestLocale = request.nextUrl.pathname.split('/')?.[1];
 
     if (!requestLocale || config.locales.includes(requestLocale)) {
@@ -53,7 +50,7 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
         response = NextResponse.redirect(newUrl);
       }
 
-      return addLocaleToResponse(response, requestLocale ?? config.defaultLocale);
+      return addLocaleToResponse(request, response, requestLocale ?? config.defaultLocale);
     }
 
     return response;
@@ -103,20 +100,20 @@ function noLocalePrefix(locales: readonly string[], pathname: string) {
   });
 }
 
-function addLocaleToResponse(response: NextResponse, locale: string) {
+/**
+ * Add `X-Next-Locale` header and `Next-Locale` cookie to response
+ * and copy all cookies from request to response
+ */
+function addLocaleToResponse(request: NextRequest, response: NextResponse, locale: string) {
   response.headers.set(LOCALE_HEADER, locale);
   response.cookies.set(LOCALE_COOKIE, locale);
-  return response;
-}
 
-/**
- * Clone cookies from request to response
- */
-function cloneCookies(request: NextRequest, response: NextResponse) {
+  // Apply cookies from request to response
   const cookies = request.cookies;
   for (const [, value] of cookies) {
     if (value.name !== LOCALE_COOKIE) {
       response.cookies.set(value.name, value.value);
     }
   }
+  return response;
 }
