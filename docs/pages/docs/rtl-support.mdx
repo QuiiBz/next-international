@@ -1,0 +1,118 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# RTL supoprt
+
+In case you want the `dir` attribute of your HTML node to adjust based on the current locale, you'll need to add some logic.
+
+## From the root layout
+
+```tsx
+// layout.tsx (root layout)
+export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) => {
+  const dir = new Intl.Locale(locale).getTextInfo().direction
+
+  return (
+    <html lang={locale} dir={dir}>
+      <body>
+        {children}
+      </body>
+    </html>
+  );
+};
+```
+
+### Caveat
+
+Note that this doesn't work in Firefox, if your root layout is a client component.  
+This is because `Intl.Locale.prototype.getTextInfo` is not yet supported in Firefox, even if it is built-in in Node.js.
+
+To cover this, you can add a _polyfill_ to guarantee compatibility with all browsers, until this standard is fully adopted.
+
+To do this, you can firstly add this polyfill:
+
+<Tabs items={['pnpm', 'npm', 'yarn', 'bun']}>
+  <Tab>
+    ```bash
+    pnpm install intl-locale-textinfo-polyfill
+    ```
+  </Tab>
+  <Tab>
+    ```bash
+    npm install intl-locale-textinfo-polyfill
+    ```
+  </Tab>
+  <Tab>
+    ```bash
+    yarn add intl-locale-textinfo-polyfill
+    ```
+  </Tab>
+    <Tab>
+    ```bash
+    bun add intl-locale-textinfo-polyfill
+    ```
+  </Tab>
+</Tabs>
+
+And then write:
+
+```tsx
+// layout.tsx (root layout)
+import Locale from 'intl-locale-textinfo-polyfill';
+
+export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) => {
+  const { direction: dir } = new Locale(locale).textInfo;
+
+  return (
+    <html lang={locale} dir={dir}>
+      <body>
+        {children}
+      </body>
+    </html>
+  );
+};
+```
+
+Or you can use a lib like [rtl-detect](https://github.com/shadiabuhilal/rtl-detect)
+
+## With a useEffect call
+
+You may implement your RTL support with a `useEffect` as well.
+
+For instance, if you have a language switcher component on all your pages, you could also choose to write the language direction detection logic in it.
+
+Something like:
+
+```tsx
+// LanguageSwitcher.tsx
+'use client';
+
+import { useChangeLocale, useCurrentLocale } from '../../locales/client'
+import { FunctionComponent, useEffect } from 'react';
+
+interface LanguageSwitcherProps {}
+
+const LanguageSwitcher: FunctionComponent<LanguageSwitcherProps> = () => {
+  const currentLocale = useCurrentLocale();
+  const changeLocale = useChangeLocale();
+
+  useEffect(() => {
+    if (__YOUR_CUSTOM_RTL_DETECT__(currentLocale)) document.documentElement.dir = 'rtl';
+    else document.documentElement.dir = 'ltr';
+  }, [currentLocale]);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <button onClick={() => changeLocale('en')}>EN</Button>
+      <button onClick={() => changeLocale('fr')}>FR</Button>
+    </div>
+  );
+};
+export default LanguageSwitcher;
+```
+
+Where `__YOUR_CUSTOM_RTL_DETECT__` could be a call to a lib like [rtl-detect](https://github.com/shadiabuhilal/rtl-detect), or the implementation mentioned just above, based on `Intl.Locale.prototype.getTextInfo`, including the polyfill currently required to ensure compatibility with Firefox-based browsers.
+
+### Caveat
+
+Note that this choice of implementation will cause an UI flickering when your user loads your web pages for the first time.  
+This is because the page will first be mounted with the default `dir` attribute value of your HTML node, then updates when the component including the `useEffect` is mounted. This will introduce CLS (Cumulative Layout Shift) issues.
