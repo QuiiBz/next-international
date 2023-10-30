@@ -56,7 +56,7 @@ To do this, you can firstly add this polyfill:
 And then write:
 
 ```tsx
-// layout.tsx (root layout)
+// app/[locale]/layout.tsx
 import Locale from 'intl-locale-textinfo-polyfill';
 
 export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) => {
