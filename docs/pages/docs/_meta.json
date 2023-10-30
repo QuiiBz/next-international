@@ -1,6 +1,7 @@
 {
   "index": "Get Started",
   "writing-locales": "Writing locales",
+  "rtl-support": "RTL support",
   "testing": "Testing",
   "examples": "Examples",
    "-- App Router": {
