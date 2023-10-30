@@ -84,30 +84,26 @@ Something like:
 
 ```tsx
 // LanguageSwitcher.tsx
-'use client';
+'use client'
 
 import { useChangeLocale, useCurrentLocale } from '../../locales/client'
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent, useEffect } from 'react'
 
-interface LanguageSwitcherProps {}
-
-const LanguageSwitcher: FunctionComponent<LanguageSwitcherProps> = () => {
-  const currentLocale = useCurrentLocale();
-  const changeLocale = useChangeLocale();
+export default function LanguageSwitcher() {
+  const currentLocale = useCurrentLocale()
+  const changeLocale = useChangeLocale()
 
   useEffect(() => {
-    if (__YOUR_CUSTOM_RTL_DETECT__(currentLocale)) document.documentElement.dir = 'rtl';
-    else document.documentElement.dir = 'ltr';
-  }, [currentLocale]);
+    document.documentElement.dir = isLocaleRTL(currentLocale) ? 'rtl' : 'ltr'
+  }, [currentLocale])
 
   return (
     <div className="flex flex-col gap-4">
       <button onClick={() => changeLocale('en')}>EN</Button>
       <button onClick={() => changeLocale('fr')}>FR</Button>
     </div>
-  );
-};
-export default LanguageSwitcher;
+  )
+}
 ```
 
 Where `__YOUR_CUSTOM_RTL_DETECT__` could be a call to a lib like [rtl-detect](https://github.com/shadiabuhilal/rtl-detect), or the implementation mentioned just above, based on `Intl.Locale.prototype.getTextInfo`, including the polyfill currently required to ensure compatibility with Firefox-based browsers.
