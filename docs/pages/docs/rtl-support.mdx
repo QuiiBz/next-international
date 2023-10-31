@@ -6,9 +6,9 @@ If you want to support the `dir` attribute in your `<html>` tag, you'll need to 
 
 ## From the root layout
 
-```tsx
+```tsx {3,6}
 // app/[locale]/layout.tsx
-export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) => {
+export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) {
   const dir = new Intl.Locale(locale).getTextInfo().direction
 
   return (
@@ -23,12 +23,9 @@ export default function Layout({ children, params: { locale } }: { children: Rea
 
 ### Caveat
 
-Note that this doesn't work in Firefox, if your root layout is a client component.  
-This is because `Intl.Locale.prototype.getTextInfo` is not yet supported in Firefox, even if it is built-in in Node.js.
+Note that this won't work in Firefox if your root layout is a Client Component. This is because the `Intl.Locale.prototype.getTextInfo` API is [not yet supported in Firefox](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getTextInfo#browser_compatibility).
 
-To cover this, you can add a _polyfill_ to guarantee compatibility with all browsers, until this standard is fully adopted.
-
-To do this, you can firstly add this polyfill:
+To prevent this, you can add a polyfill to guarantee compatibility with all browsers, until this standard is fully adopted. First, install the `intl-locale-textinfo-polyfill` package:
 
 <Tabs items={['pnpm', 'npm', 'yarn', 'bun']}>
   <Tab>
@@ -53,14 +50,14 @@ To do this, you can firstly add this polyfill:
   </Tab>
 </Tabs>
 
-And then write:
+Then, use it instead of the native `Intl.Locale.prototype.getTextInfo` API:
 
-```tsx
+```tsx {2,5}
 // app/[locale]/layout.tsx
-import Locale from 'intl-locale-textinfo-polyfill';
+import Locale from 'intl-locale-textinfo-polyfill'
 
-export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) => {
-  const { direction: dir } = new Locale(locale).textInfo;
+export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) {
+  const { direction: dir } = new Locale(locale).textInfo
 
   return (
     <html lang={locale} dir={dir}>
@@ -68,21 +65,15 @@ export default function Layout({ children, params: { locale } }: { children: Rea
         {children}
       </body>
     </html>
-  );
-};
+  )
+}
 ```
-
-Or you can use a lib like [rtl-detect](https://github.com/shadiabuhilal/rtl-detect)
 
 ## With a useEffect call
 
-You may implement your RTL support with a `useEffect` as well.
+You may implement your RTL support with a `useEffect` as well. For instance, if you have a language switcher component on all your pages, you could also choose to write the language direction detection logic in it:
 
-For instance, if you have a language switcher component on all your pages, you could also choose to write the language direction detection logic in it.
-
-Something like:
-
-```tsx
+```tsx {11-13}
 // LanguageSwitcher.tsx
 'use client'
 
@@ -106,9 +97,8 @@ export default function LanguageSwitcher() {
 }
 ```
 
-Where `isLocaleRTL` could be a call to a lib like [rtl-detect](https://github.com/shadiabuhilal/rtl-detect), or the implementation mentioned just above, based on `Intl.Locale.prototype.getTextInfo`, including the polyfill currently required to ensure compatibility with Firefox-based browsers.
+Where `isLocaleRTL` could be a call to a librarie like [rtl-detect](https://github.com/shadiabuhilal/rtl-detect), or the implementation mentioned just above, based on `Intl.Locale.prototype.getTextInfo`, including the polyfill currently required to ensure compatibility with Firefox-based browsers.
 
 ### Caveat
 
-Note that this choice of implementation will cause an UI flickering when your user loads your web pages for the first time.  
-This is because the page will first be mounted with the default `dir` attribute value of your HTML node, then updates when the component including the `useEffect` is mounted. This will introduce CLS (Cumulative Layout Shift) issues.
+Note that this choice of implementation will cause an UI flickering when your user loads your web pages for the first time: the page will first be mounted with the default `dir` attribute value of your HTML node, then updates when the component including the `useEffect` is mounted. This will introduce CLS (Cumulative Layout Shift) issues.
