@@ -1,4 +1,4 @@
-## Contributing
+## Contributing
 
 Thanks for your interest in contributing to next-international!
 
@@ -16,10 +16,10 @@ Thanks for your interest in contributing to next-international!
 
 Before submitting a PR, run the `test`, `lint`, and `typecheck` scripts from the root of the repository.
 
-### Running the example apps
+### Running the example apps
 
 Make sure you've followed the [Getting Started](#getting-started), then navigate to `examples/next-{app/pages}` and run `pnpm dev`.
 
-### Running the documentation
+### Running the documentation
 
 You don't need to follow the [Getting Started](#getting-started) for the documentation website. Simply navigate to the `docs` folder and run `pnpm dev`.
