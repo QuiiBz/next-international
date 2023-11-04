@@ -33,6 +33,10 @@ Try it live on CodeSandbox:
 
 Check out the documentation at [https://next-international.vercel.app](https://next-international.vercel.app).
 
+## Contributing
+
+[See the contributing guide](./CONTRIBUTING.md).
+
 ## Sponsors
 
 ![Sponsors](https://github.com/QuiiBz/dotfiles/blob/main/sponsors.png?raw=true)
