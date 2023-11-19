@@ -68,14 +68,10 @@ function localeFromRequest<Locales extends readonly string[]>(
     I18nMiddlewareConfig<Locales>['resolveLocaleFromRequest']
   > = defaultResolveLocaleFromRequest,
 ) {
-  let locale = request.cookies.get(LOCALE_COOKIE)?.value ?? null;
-
-  if (!locale) {
-    locale = resolveLocaleFromRequest(request);
-  }
+  const locale = request.cookies.get(LOCALE_COOKIE)?.value ?? resolveLocaleFromRequest(request);
 
   if (!locale || !locales.includes(locale)) {
-    locale = null;
+    return null;
   }
 
   return locale;
