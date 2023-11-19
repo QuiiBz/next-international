@@ -9,28 +9,28 @@ const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig<[]>['urlMappingStrategy
 
 export function createI18nMiddleware<const Locales extends readonly string[]>(config: I18nMiddlewareConfig<Locales>) {
   return function I18nMiddleware(request: NextRequest) {
-    const requestUrl = request.nextUrl.clone();
     const locale = localeFromRequest(config.locales, request, config.resolveLocaleFromRequest) ?? config.defaultLocale;
+    const nextUrl = request.nextUrl;
 
-    if (noLocalePrefix(config.locales, requestUrl.pathname)) {
-      requestUrl.pathname = `/${locale}${requestUrl.pathname}`;
+    if (noLocalePrefix(config.locales, nextUrl.pathname)) {
+      nextUrl.pathname = `/${locale}${nextUrl.pathname}`;
 
       const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
       if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === config.defaultLocale)) {
-        const response = NextResponse.rewrite(requestUrl);
+        const response = NextResponse.rewrite(nextUrl);
         return addLocaleToResponse(request, response, locale);
       } else {
         if (!['redirect', 'rewriteDefault'].includes(strategy)) {
           warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
         }
 
-        const response = NextResponse.redirect(requestUrl);
+        const response = NextResponse.redirect(nextUrl);
         return addLocaleToResponse(request, response, locale);
       }
     }
 
     let response = NextResponse.next();
-    const pathnameLocale = request.nextUrl.pathname.split('/', 2)?.[1];
+    const pathnameLocale = nextUrl.pathname.split('/', 2)?.[1];
 
     if (!pathnameLocale || config.locales.includes(pathnameLocale)) {
       // If the URL mapping strategy is set to 'rewrite' and the locale from the request doesn't match the locale in the pathname,
@@ -42,13 +42,13 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
           (pathnameLocale !== locale || pathnameLocale === config.defaultLocale))
       ) {
         // Remove the locale from the pathname
-        const pathnameWithoutLocale = request.nextUrl.pathname.slice(pathnameLocale.length + 1);
+        const pathnameWithoutLocale = nextUrl.pathname.slice(pathnameLocale.length + 1);
 
         // Create a new URL without the locale in the pathname
         const newUrl = new URL(pathnameWithoutLocale || '/', request.url);
 
         // Preserve the original search parameters
-        newUrl.search = request.nextUrl.search;
+        newUrl.search = nextUrl.search;
         response = NextResponse.redirect(newUrl);
       }
 
