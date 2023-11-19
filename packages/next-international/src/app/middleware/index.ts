@@ -30,7 +30,7 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
     }
 
     let response = NextResponse.next();
-    const requestLocale = request.nextUrl.pathname.split('/')?.[1];
+    const requestLocale = request.nextUrl.pathname.split('/', 2)?.[1];
 
     if (!requestLocale || config.locales.includes(requestLocale)) {
       if (
