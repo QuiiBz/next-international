@@ -12,7 +12,8 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
     const locale = localeFromRequest(config.locales, request, config.resolveLocaleFromRequest) ?? config.defaultLocale;
     const nextUrl = request.nextUrl;
 
-    if (noLocalePrefix(config.locales, nextUrl.pathname)) {
+    // If the locale from the request is not an handled locale, then redirect to the same URL with the default locale
+    if (!hasHandledLocale(config.locales, nextUrl.pathname)) {
       nextUrl.pathname = `/${locale}${nextUrl.pathname}`;
 
       const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
@@ -92,9 +93,9 @@ const defaultResolveLocaleFromRequest: NonNullable<I18nMiddlewareConfig<any>['re
 /**
  * Returns `true` if the pathname does not start with an handled locale
  */
-function noLocalePrefix(locales: readonly string[], pathname: string) {
-  return locales.every(locale => {
-    return !(pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
+function hasHandledLocale(locales: readonly string[], pathname: string) {
+  return locales.some(locale => {
+    return pathname === `/${locale}` || pathname.startsWith(`/${locale}/`);
   });
 }
 
