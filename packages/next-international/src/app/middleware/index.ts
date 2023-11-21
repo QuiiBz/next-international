@@ -9,48 +9,51 @@ const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig<[]>['urlMappingStrategy
 
 export function createI18nMiddleware<const Locales extends readonly string[]>(config: I18nMiddlewareConfig<Locales>) {
   return function I18nMiddleware(request: NextRequest) {
-    const requestUrl = request.nextUrl.clone();
     const locale = localeFromRequest(config.locales, request, config.resolveLocaleFromRequest) ?? config.defaultLocale;
+    const nextUrl = request.nextUrl;
 
-    if (noLocalePrefix(config.locales, requestUrl.pathname)) {
-      requestUrl.pathname = `/${locale}${requestUrl.pathname}`;
+    // If the locale from the request is not an handled locale, then redirect to the same URL with the default locale
+    if (noLocalePrefix(config.locales, nextUrl.pathname)) {
+      nextUrl.pathname = `/${locale}${nextUrl.pathname}`;
 
       const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
       if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === config.defaultLocale)) {
-        const response = NextResponse.rewrite(requestUrl);
+        const response = NextResponse.rewrite(nextUrl);
         return addLocaleToResponse(request, response, locale);
       } else {
         if (!['redirect', 'rewriteDefault'].includes(strategy)) {
           warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
         }
 
-        const response = NextResponse.redirect(requestUrl);
+        const response = NextResponse.redirect(nextUrl);
         return addLocaleToResponse(request, response, locale);
       }
     }
 
     let response = NextResponse.next();
-    const requestLocale = request.nextUrl.pathname.split('/')?.[1];
+    const pathnameLocale = nextUrl.pathname.split('/', 2)?.[1];
 
-    if (!requestLocale || config.locales.includes(requestLocale)) {
+    if (!pathnameLocale || config.locales.includes(pathnameLocale)) {
+      // If the URL mapping strategy is set to 'rewrite' and the locale from the request doesn't match the locale in the pathname,
+      // or if the URL mapping strategy is set to 'rewriteDefault' and the locale from the request doesn't match the locale in the pathname
+      // or is the same as the default locale, then proceed with the following logic
       if (
-        (config.urlMappingStrategy === 'rewrite' || config.urlMappingStrategy === 'rewriteDefault') &&
-        requestLocale !== locale
+        (config.urlMappingStrategy === 'rewrite' && pathnameLocale !== locale) ||
+        (config.urlMappingStrategy === 'rewriteDefault' &&
+          (pathnameLocale !== locale || pathnameLocale === config.defaultLocale))
       ) {
-        const pathnameWithoutLocale = request.nextUrl.pathname.slice(requestLocale.length + 1);
-        const newUrl = new URL(pathnameWithoutLocale === '' ? '/' : pathnameWithoutLocale, request.url);
-        newUrl.search = request.nextUrl.search;
+        // Remove the locale from the pathname
+        const pathnameWithoutLocale = nextUrl.pathname.slice(pathnameLocale.length + 1);
+
+        // Create a new URL without the locale in the pathname
+        const newUrl = new URL(pathnameWithoutLocale || '/', request.url);
+
+        // Preserve the original search parameters
+        newUrl.search = nextUrl.search;
         response = NextResponse.redirect(newUrl);
       }
 
-      if (config.urlMappingStrategy === 'rewriteDefault' && requestLocale === config.defaultLocale) {
-        const pathnameWithoutLocale = request.nextUrl.pathname.slice(requestLocale.length + 1);
-        const newUrl = new URL(pathnameWithoutLocale === '' ? '/' : pathnameWithoutLocale, request.url);
-        newUrl.search = request.nextUrl.search;
-        response = NextResponse.redirect(newUrl);
-      }
-
-      return addLocaleToResponse(request, response, requestLocale ?? config.defaultLocale);
+      return addLocaleToResponse(request, response, pathnameLocale ?? config.defaultLocale);
     }
 
     return response;
@@ -68,14 +71,10 @@ function localeFromRequest<Locales extends readonly string[]>(
     I18nMiddlewareConfig<Locales>['resolveLocaleFromRequest']
   > = defaultResolveLocaleFromRequest,
 ) {
-  let locale = request.cookies.get(LOCALE_COOKIE)?.value ?? null;
-
-  if (!locale) {
-    locale = resolveLocaleFromRequest(request);
-  }
+  const locale = request.cookies.get(LOCALE_COOKIE)?.value ?? resolveLocaleFromRequest(request);
 
   if (!locale || !locales.includes(locale)) {
-    locale = null;
+    return null;
   }
 
   return locale;
