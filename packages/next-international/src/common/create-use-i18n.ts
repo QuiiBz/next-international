@@ -5,6 +5,8 @@ import type { LocaleContext } from '../types';
 import { createT } from './create-t';
 
 export function createUsei18n<Locale extends BaseLocale>(I18nClientContext: Context<LocaleContext<Locale> | null>) {
+  const localeCache = new Map<string, ReturnType<typeof createT<Locale, undefined>>>();
+
   return function useI18n() {
     const context = useContext(I18nClientContext);
 
@@ -12,6 +14,16 @@ export function createUsei18n<Locale extends BaseLocale>(I18nClientContext: Cont
       throw new Error('`useI18n` must be used inside `I18nProvider`');
     }
 
-    return createT(context, undefined);
+    const cached = localeCache.get(context.locale);
+
+    if (cached) {
+      return cached;
+    }
+
+    const localeFn = createT(context, undefined);
+
+    localeCache.set(context.locale, localeFn);
+
+    return localeFn;
   };
 }

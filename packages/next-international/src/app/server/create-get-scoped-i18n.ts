@@ -8,10 +8,18 @@ export function createGetScopedI18n<Locales extends ImportedLocales, Locale exte
   locales: Locales,
   config: I18nServerConfig,
 ) {
+  const localeCache = new Map<string, ReturnType<typeof createT<Locale, undefined>>>();
+
   return async function getScopedI18n<Scope extends Scopes<Locale>>(scope: Scope) {
     const locale = getLocaleCache();
+    const cacheKey = `${locale}-${scope}`;
+    const cached = localeCache.get(cacheKey);
 
-    return createT(
+    if (cached) {
+      return cached;
+    }
+
+    const localeFn = createT(
       {
         localeContent: flattenLocale((await locales[locale]()).default),
         fallbackLocale: config.fallbackLocale ? flattenLocale(config.fallbackLocale) : undefined,
@@ -19,5 +27,9 @@ export function createGetScopedI18n<Locales extends ImportedLocales, Locale exte
       } as LocaleContext<Locale>,
       scope,
     );
+
+    localeCache.set(cacheKey, localeFn);
+
+    return localeFn;
   };
 }
