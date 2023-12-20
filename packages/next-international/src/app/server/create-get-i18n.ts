@@ -8,10 +8,17 @@ export function createGetI18n<Locales extends ImportedLocales, Locale extends Ba
   locales: Locales,
   config: I18nServerConfig,
 ) {
+  const localeCache = new Map<string, ReturnType<typeof createT<Locale, undefined>>>();
+
   return async function getI18n() {
     const locale = getLocaleCache();
+    const cached = localeCache.get(locale);
 
-    return createT(
+    if (cached) {
+      return cached;
+    }
+
+    const localeFn = createT(
       {
         localeContent: flattenLocale((await locales[locale]()).default),
         fallbackLocale: config.fallbackLocale ? flattenLocale(config.fallbackLocale) : undefined,
@@ -19,5 +26,9 @@ export function createGetI18n<Locales extends ImportedLocales, Locale extends Ba
       } as LocaleContext<Locale>,
       undefined,
     );
+
+    localeCache.set(locale, localeFn);
+
+    return localeFn;
   };
 }
