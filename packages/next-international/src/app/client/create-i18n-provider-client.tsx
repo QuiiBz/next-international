@@ -12,6 +12,8 @@ type I18nProviderWrapperProps = {
   locale: string;
   fallback?: ReactNode;
   children: ReactNode;
+
+  importLocale: Promise<Record<string, unknown>>;
 };
 
 export const localesCache = new Map<string, Record<string, unknown>>();
@@ -21,21 +23,9 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
   locales: ImportedLocales,
   fallbackLocale?: Record<string, unknown>,
 ) {
-  function I18nProvider({ locale, children }: I18nProviderProps) {
-    let clientLocale: any = localesCache.get(locale);
-
-    if (!clientLocale) {
-      const newLocale = locales[locale as keyof typeof locales];
-
-      if (!newLocale) {
-        error(`The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`);
-        notFound();
-      }
-
-      clientLocale = use(newLocale()).default;
-      localesCache.set(locale, clientLocale);
-    }
-
+  function I18nProvider({ locale, importLocale, children }: I18nProviderProps) {
+    const clientLocale = use(importLocale).default as Record<string, unknown>;
+    localesCache.set(locale, clientLocale);
     const value = useMemo(
       () => ({
         localeContent: flattenLocale<Locale>(clientLocale),
@@ -49,9 +39,17 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
   }
 
   return function I18nProviderWrapper({ locale, fallback, children }: I18nProviderWrapperProps) {
+    const importFnLocale = locales[locale as keyof typeof locales];
+    if (!importFnLocale) {
+      error(`The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`);
+      notFound();
+    }
+
     return (
       <Suspense fallback={fallback}>
-        <I18nProvider locale={locale}>{children}</I18nProvider>
+        <I18nProvider locale={locale} importLocale={importFnLocale()}>
+          {children}
+        </I18nProvider>
       </Suspense>
     );
   };
