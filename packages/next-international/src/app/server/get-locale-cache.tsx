@@ -1,4 +1,5 @@
 import { cookies, headers } from 'next/headers';
+// @ts-expect-error - no types
 import { cache } from 'react';
 import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
 import { notFound } from 'next/navigation';
