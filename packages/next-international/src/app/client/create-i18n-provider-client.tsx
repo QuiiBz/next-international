@@ -16,8 +16,6 @@ type I18nProviderWrapperProps = {
   importLocale: Promise<Record<string, unknown>>;
 };
 
-export const localesCache = new Map<string, Record<string, unknown>>();
-
 export function createI18nProviderClient<Locale extends BaseLocale>(
   I18nClientContext: Context<LocaleContext<Locale> | null>,
   locales: ImportedLocales,
@@ -25,7 +23,6 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
 ) {
   function I18nProvider({ locale, importLocale, children }: I18nProviderProps) {
     const clientLocale = use(importLocale).default as Record<string, unknown>;
-    localesCache.set(locale, clientLocale);
     const value = useMemo(
       () => ({
         localeContent: flattenLocale<Locale>(clientLocale),
