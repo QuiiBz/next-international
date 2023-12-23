@@ -1,3 +1,4 @@
+import { warn } from '../../helpers/log';
 import type { ImportedLocales } from 'international-types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { I18nChangeLocaleConfig, I18nClientConfig } from '../../types';
@@ -30,7 +31,13 @@ export function createUseChangeLocale<LocalesKeys>(
     }
 
     return function changeLocale(newLocale: LocalesKeys) {
-      locales[newLocale as keyof typeof locales]().then(module => {
+      const importFnLocale = locales[newLocale as keyof typeof locales];
+      if (!importFnLocale) {
+        warn(`The locale '${newLocale}' is not supported.`);
+        return;
+      }
+
+      importFnLocale().then(module => {
         localesCache.set(newLocale as string, module.default);
         push(`/${newLocale}${pathWithoutLocale}${finalSearchParams}`);
         refresh();
