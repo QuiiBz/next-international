@@ -32,13 +32,15 @@ export function createUseChangeLocale<LocalesKeys>(
 
     return function changeLocale(newLocale: LocalesKeys) {
       const importFnLocale = locales[newLocale as keyof typeof locales];
+
       if (!importFnLocale) {
-        warn(`The locale '${newLocale}' is not supported.`);
+        warn(`The locale '${newLocale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`);
         return;
       }
 
       importFnLocale().then(module => {
         localesCache.set(newLocale as string, module.default);
+
         push(`/${newLocale}${pathWithoutLocale}${finalSearchParams}`);
         refresh();
       });

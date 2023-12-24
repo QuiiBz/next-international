@@ -11,9 +11,8 @@ type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'>;
 type I18nProviderWrapperProps = {
   locale: string;
   fallback?: ReactNode;
-  children: ReactNode;
-
   importLocale: Promise<Record<string, unknown>>;
+  children: ReactNode;
 };
 
 export const localesCache = new Map<string, Record<string, unknown>>();
@@ -25,9 +24,11 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
 ) {
   function I18nProvider({ locale, importLocale, children }: I18nProviderProps) {
     const clientLocale = (localesCache.get(locale) ?? use(importLocale).default) as Record<string, unknown>;
+
     if (!localesCache.has(locale)) {
       localesCache.set(locale, clientLocale);
     }
+
     const value = useMemo(
       () => ({
         localeContent: flattenLocale<Locale>(clientLocale),
@@ -42,6 +43,7 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
 
   return function I18nProviderWrapper({ locale, fallback, children }: I18nProviderWrapperProps) {
     const importFnLocale = locales[locale as keyof typeof locales];
+
     if (!importFnLocale) {
       error(`The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`);
       notFound();
