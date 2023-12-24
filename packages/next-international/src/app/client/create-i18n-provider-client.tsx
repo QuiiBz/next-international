@@ -1,5 +1,5 @@
-import { notFound } from 'next/navigation';
 import type { BaseLocale, ImportedLocales } from 'international-types';
+import { notFound } from 'next/navigation';
 import type { Context, ReactNode } from 'react';
 import React, { Suspense, use, useMemo } from 'react';
 import { flattenLocale } from '../../common/flatten-locale';
@@ -11,6 +11,7 @@ type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'>;
 type I18nProviderWrapperProps = {
   locale: string;
   fallback?: ReactNode;
+  importLocale: Promise<Record<string, unknown>>;
   children: ReactNode;
 };
 
@@ -21,18 +22,10 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
   locales: ImportedLocales,
   fallbackLocale?: Record<string, unknown>,
 ) {
-  function I18nProvider({ locale, children }: I18nProviderProps) {
-    let clientLocale: any = localesCache.get(locale);
+  function I18nProvider({ locale, importLocale, children }: I18nProviderProps) {
+    const clientLocale = (localesCache.get(locale) ?? use(importLocale).default) as Record<string, unknown>;
 
-    if (!clientLocale) {
-      const newLocale = locales[locale as keyof typeof locales];
-
-      if (!newLocale) {
-        error(`The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`);
-        notFound();
-      }
-
-      clientLocale = use(newLocale()).default;
+    if (!localesCache.has(locale)) {
       localesCache.set(locale, clientLocale);
     }
 
@@ -49,9 +42,18 @@ export function createI18nProviderClient<Locale extends BaseLocale>(
   }
 
   return function I18nProviderWrapper({ locale, fallback, children }: I18nProviderWrapperProps) {
+    const importFnLocale = locales[locale as keyof typeof locales];
+
+    if (!importFnLocale) {
+      error(`The locale '${locale}' is not supported. Defined locales are: [${Object.keys(locales).join(', ')}].`);
+      notFound();
+    }
+
     return (
       <Suspense fallback={fallback}>
-        <I18nProvider locale={locale}>{children}</I18nProvider>
+        <I18nProvider locale={locale} importLocale={importFnLocale()}>
+          {children}
+        </I18nProvider>
       </Suspense>
     );
   };
