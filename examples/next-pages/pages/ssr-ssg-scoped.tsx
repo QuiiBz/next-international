@@ -1,6 +1,5 @@
 import type { GetServerSideProps } from 'next';
-import { getLocaleProps, useChangeLocale, useCurrentLocale, useI18n, useScopedI18n } from '../locales';
-
+import { getLocaleProps, useCurrentLocale, useI18n } from '../locales';
 
 export const getServerSideProps: GetServerSideProps = getLocaleProps(['scope2']);
 // export const getStaticProps: GetStaticProps = getLocaleProps();
