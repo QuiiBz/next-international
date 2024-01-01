@@ -31,10 +31,7 @@ export function createUseChangeLocale<LocalesKeys>(
     }
 
     return function changeLocale(newLocale: LocalesKeys) {
-      if (newLocale === currentLocale) {
-        warn(`The locale '${newLocale}' is already set`);
-        return;
-      }
+      if (newLocale === currentLocale) return;
 
       const importFnLocale = locales[newLocale as keyof typeof locales];
 
