@@ -32,7 +32,7 @@ export function createUseChangeLocale<LocalesKeys>(
 
     return function changeLocale(newLocale: LocalesKeys) {
       if (newLocale === currentLocale) {
-        warn(`The locale '${newLocale}' is already set. Defined locales are: [${Object.keys(locales).join(', ')}].`);
+        warn(`The locale '${newLocale}' is already set`);
         return;
       }
 
