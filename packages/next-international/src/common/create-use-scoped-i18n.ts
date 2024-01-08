@@ -9,7 +9,7 @@ export function createScopedUsei18n<Locale extends BaseLocale>(
 ) {
   const localeCache = new Map<string, ReturnType<typeof createT<Locale, undefined>>>();
 
-  return function useScopedI18n<Scope extends Scopes<Locale> | undefined>(scope: Scope) {
+  return function useScopedI18n<Scope extends Scopes<Locale>>(scope: Scope): ReturnType<typeof createT<Locale, Scope>> {
     const context = useContext(I18nClientContext);
 
     if (!context) {
