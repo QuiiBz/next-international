@@ -10,7 +10,9 @@ export function createGetScopedI18n<Locales extends ImportedLocales, Locale exte
 ) {
   const localeCache = new Map<string, ReturnType<typeof createT<Locale, undefined>>>();
 
-  return async function getScopedI18n<Scope extends Scopes<Locale>>(scope: Scope) {
+  return async function getScopedI18n<Scope extends Scopes<Locale>>(
+    scope: Scope,
+  ): Promise<ReturnType<typeof createT<Locale, Scope>>> {
     const locale = getLocaleCache();
     const cacheKey = `${locale}-${scope}`;
     const cached = localeCache.get(cacheKey);
