@@ -1,17 +1,18 @@
 import type { BaseLocale, ImportedLocales } from 'international-types';
 import { notFound } from 'next/navigation';
 import type { Context, ReactNode } from 'react';
-import React, { Suspense, use, useMemo } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { flattenLocale } from '../../common/flatten-locale';
 import { error } from '../../helpers/log';
 import type { LocaleContext } from '../../types';
 
-type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'>;
+type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'> & {
+  importLocale: Promise<Record<string, unknown>>;
+};
 
 type I18nProviderWrapperProps = {
   locale: string;
   fallback?: ReactNode;
-  importLocale: Promise<Record<string, unknown>>;
   children: ReactNode;
 };
 
