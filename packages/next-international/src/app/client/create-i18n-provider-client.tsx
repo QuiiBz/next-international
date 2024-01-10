@@ -6,12 +6,13 @@ import { flattenLocale } from '../../common/flatten-locale';
 import { error } from '../../helpers/log';
 import type { LocaleContext } from '../../types';
 
-type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'>;
+type I18nProviderProps = Omit<I18nProviderWrapperProps, 'fallback'> & {
+  importLocale: Promise<Record<string, unknown>>;
+};
 
 type I18nProviderWrapperProps = {
   locale: string;
   fallback?: ReactNode;
-  importLocale: Promise<Record<string, unknown>>;
   children: ReactNode;
 };
 
