@@ -26,13 +26,15 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
       : Object.assign(fallbackLocale ?? {}, localeContent);
 
   function getCachedPluralKeys() {
-    if (!pluralKeysCache) {
-      pluralKeysCache = new Set(
-        Object.keys(content)
-          .filter(key => key.includes('#'))
-          .map(key => key.split('#', 1)[0]),
-      );
+    if (pluralKeysCache) {
+      return pluralKeysCache;
     }
+
+    pluralKeysCache = new Set(
+      Object.keys(content)
+        .filter(key => key.includes('#'))
+        .map(key => key.split('#', 1)[0]),
+    );
     return pluralKeysCache;
   }
 
