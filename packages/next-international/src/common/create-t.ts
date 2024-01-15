@@ -11,6 +11,8 @@ import type { ReactNode } from 'react';
 import { cloneElement, isValidElement } from 'react';
 import type { LocaleContext, LocaleMap, ReactParamsObject } from '../types';
 
+let pluralKeysCache = new Set<string>();
+
 export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> | undefined>(
   context: LocaleContext<Locale>,
   scope: Scope | undefined,
@@ -23,12 +25,18 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
       ? fallbackLocale
       : Object.assign(fallbackLocale ?? {}, localeContent);
 
-  const pluralKeys = new Set(
-    Object.keys(content)
-      .filter(key => key.includes('#'))
-      .map(key => key.split('#', 1)[0]),
-  );
+  function getCachedPluralKeys() {
+    if (!pluralKeysCache) {
+      pluralKeysCache = new Set(
+        Object.keys(content)
+          .filter(key => key.includes('#'))
+          .map(key => key.split('#', 1)[0]),
+      );
+    }
+    return pluralKeysCache;
+  }
 
+  const pluralKeys = getCachedPluralKeys();
   const pluralRules = new Intl.PluralRules(context.locale);
 
   function getPluralKey(count: number) {
