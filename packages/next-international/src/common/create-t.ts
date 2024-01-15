@@ -11,7 +11,7 @@ import type { ReactNode } from 'react';
 import { cloneElement, isValidElement } from 'react';
 import type { LocaleContext, LocaleMap, ReactParamsObject } from '../types';
 
-let pluralKeysCache = new Set<string>();
+let pluralKeysCache: Set<string> | undefined = undefined;
 
 export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> | undefined>(
   context: LocaleContext<Locale>,
