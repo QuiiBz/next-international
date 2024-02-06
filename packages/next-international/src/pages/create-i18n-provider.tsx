@@ -9,7 +9,7 @@ import type { LocaleContext } from '../types';
 type I18nProviderProps<Locale extends BaseLocale> = {
   locale: Locale;
   fallback?: ReactElement | null;
-  fallbackLocale?: BaseLocale;
+  fallbackLocale?: Record<string, unknown>;
   children: ReactNode;
 };
 
