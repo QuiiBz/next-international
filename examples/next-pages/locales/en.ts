@@ -13,6 +13,8 @@ export default {
   'missing.translation.in.fr': 'This should work',
   'cows#one': 'A cow',
   'cows#other': '{count} cows',
+  'scope2.test': 'A scope',
+  'scope2.more.test': 'A more scoped ',
 } as const;
 
 // We can also write locales using nested objects
