@@ -21,6 +21,11 @@
     "./middleware": {
       "types": "./dist/app/middleware/index.d.ts",
       "default": "./dist/app/middleware/index.js"
+    },
+    "./app": {
+      "types": "./dist/app/app/client.d.ts",
+      "react-server": "./dist/app/app/server.js",
+      "default": "./dist/app/app/client.js"
     }
   },
   "keywords": [
@@ -33,7 +38,8 @@
     "dist",
     "client.d.ts",
     "server.d.ts",
-    "middleware.d.ts"
+    "middleware.d.ts",
+    "app.d.ts"
   ],
   "repository": {
     "type": "git",
@@ -45,7 +51,7 @@
   "homepage": "https://next-international.vercel.app",
   "license": "MIT",
   "scripts": {
-    "build": "tsup src/index.ts src/app/client/index.ts src/app/server/index.ts src/app/middleware/index.ts --external next --external react --dts",
+    "build": "tsup src/app/app/client.ts src/app/app/server.ts --out-dir dist/app/app --external next --external react --dts",
     "watch": "pnpm build --watch"
   },
   "devDependencies": {

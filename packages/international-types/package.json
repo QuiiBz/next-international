@@ -23,6 +23,7 @@
   "homepage": "https://next-international.vercel.app",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --declaration --emitDeclarationOnly --outDir dist index.ts"
+    "build": "tsc --declaration --emitDeclarationOnly --outDir dist index.ts",
+    "watch": "pnpm build --watch"
   }
 }
