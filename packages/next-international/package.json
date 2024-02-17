@@ -19,8 +19,8 @@
       "default": "./dist/app/server/index.js"
     },
     "./middleware": {
-      "types": "./dist/app/middleware/index.d.ts",
-      "default": "./dist/app/middleware/index.js"
+      "types": "./dist/app/app/middleware/index.d.ts",
+      "default": "./dist/app/app/middleware/index.js"
     },
     "./app": {
       "types": "./dist/app/app/client.d.ts",
@@ -51,7 +51,7 @@
   "homepage": "https://next-international.vercel.app",
   "license": "MIT",
   "scripts": {
-    "build": "tsup src/app/app/client.ts src/app/app/server.ts --out-dir dist/app/app --external next --external react --dts",
+    "build": "tsup src/app/app/client.ts src/app/app/server.ts src/app/middleware/index.ts --out-dir dist/app/app --external next --external react --dts",
     "watch": "pnpm build --watch"
   },
   "devDependencies": {
