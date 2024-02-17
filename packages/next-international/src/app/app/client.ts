@@ -1,5 +1,6 @@
 import type { GetLocale, LocaleType, LocalesObject } from 'international-types';
 import type { CreateI18n, UseI18n, UseScopedI18n } from './types';
+import { createI18nProvider } from './provider';
 
 export function createI18n<Locales extends LocalesObject, Locale extends LocaleType = GetLocale<Locales>>(
   locales: Locales,
@@ -19,5 +20,6 @@ export function createI18n<Locales extends LocalesObject, Locale extends LocaleT
   return {
     useI18n,
     useScopedI18n,
+    I18nProvider: createI18nProvider<Locale>(),
   };
 }
