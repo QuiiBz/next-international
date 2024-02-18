@@ -11,11 +11,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body>
-        <I18nProvider>{children}</I18nProvider>
-      </body>
-    </html>
-  );
+  return <I18nProvider>{children}</I18nProvider>;
 }
