@@ -23,9 +23,9 @@
       "default": "./dist/app/app/middleware/index.js"
     },
     "./app": {
-      "types": "./dist/app/app/client.d.ts",
-      "react-server": "./dist/app/app/server.js",
-      "default": "./dist/app/app/client.js"
+      "types": "./dist/app/app/app/client.d.ts",
+      "react-server": "./dist/app/app/app/server.js",
+      "default": "./dist/app/app/app/client.js"
     }
   },
   "keywords": [

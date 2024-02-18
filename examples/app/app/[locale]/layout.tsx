@@ -1,5 +1,7 @@
-import { I18nProvider } from '@/locales';
+import { I18nProvider, generateI18nStaticParams } from '@/locales';
 import React from 'react';
+
+export const generateStaticParams = generateI18nStaticParams();
 
 export default function RootLayout({
   children,
