@@ -1,1 +1,1 @@
-export * from './dist/app/app';
+export * from './dist/app/app/app/client';
