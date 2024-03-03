@@ -1,10 +1,11 @@
 import React from 'react';
-import { useI18n, useScopedI18n } from '@/locales';
+import { useI18n, useLocale, useScopedI18n } from '@/locales';
 import { ClientComponent } from './client-component';
 
 export default function Home() {
   const t = useI18n();
   const scopedT = useScopedI18n('hello');
+  const locale = useLocale();
 
   return (
     <div>
@@ -20,6 +21,8 @@ export default function Home() {
           name: 'John',
         })}
       </p>
+      <p>Current locale: {locale}</p>
+      <hr />
       <ClientComponent />
     </div>
   );
