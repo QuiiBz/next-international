@@ -8,8 +8,10 @@ export function generateStaticParams() {
 
 export default function RootLayout({
   children,
+  params: { locale },
 }: Readonly<{
   children: React.ReactNode;
+  params: { locale: string };
 }>) {
-  return <I18nProvider>{children}</I18nProvider>;
+  return <I18nProvider locale={locale}>{children}</I18nProvider>;
 }
