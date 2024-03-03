@@ -1,5 +1,5 @@
 import { generateI18nStaticParams } from '@/locales';
-import type React from 'react';
+import React from 'react';
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -8,8 +8,14 @@ export function generateStaticParams() {
 
 export default function RootLayout({
   children,
+  params: { locale },
 }: Readonly<{
   children: React.ReactNode;
+  params: { locale: string };
 }>) {
-  return children;
+  return (
+    <html lang={locale}>
+      <body>{children}</body>
+    </html>
+  );
 }

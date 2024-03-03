@@ -54,8 +54,11 @@ export function createI18n<Locales extends LocalesObject, Locale extends LocaleT
     const router = useRouter();
 
     return locale => {
+      const finalLocale = locale as string;
+      document.cookie = `locale=${finalLocale};`;
+
       // TODO: preserve URL & search params
-      router.push(`/${locale as string}`);
+      router.push(`/${finalLocale}`);
     };
   };
 
