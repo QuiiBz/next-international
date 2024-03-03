@@ -1,122 +1,88 @@
-// import type { NextRequest } from 'next/server';
-// import { NextResponse } from 'next/server';
-//
-// import { LOCALE_COOKIE, LOCALE_HEADER } from '../../common/constants';
-// import { warn } from '../../helpers/log';
-// import type { I18nMiddlewareConfig } from '../../types';
-//
-// const DEFAULT_STRATEGY: NonNullable<I18nMiddlewareConfig<[]>['urlMappingStrategy']> = 'redirect';
-//
-// export function createI18nMiddleware<const Locales extends readonly string[]>(config: I18nMiddlewareConfig<Locales>) {
-//   return function I18nMiddleware(request: NextRequest) {
-//     const locale = localeFromRequest(config.locales, request, config.resolveLocaleFromRequest) ?? config.defaultLocale;
-//     const nextUrl = request.nextUrl;
-//
-//     // If the locale from the request is not an handled locale, then redirect to the same URL with the default locale
-//     if (noLocalePrefix(config.locales, nextUrl.pathname)) {
-//       nextUrl.pathname = `/${locale}${nextUrl.pathname}`;
-//
-//       const strategy = config.urlMappingStrategy ?? DEFAULT_STRATEGY;
-//       if (strategy === 'rewrite' || (strategy === 'rewriteDefault' && locale === config.defaultLocale)) {
-//         const response = NextResponse.rewrite(nextUrl);
-//         return addLocaleToResponse(request, response, locale);
-//       } else {
-//         if (!['redirect', 'rewriteDefault'].includes(strategy)) {
-//           warn(`Invalid urlMappingStrategy: ${strategy}. Defaulting to redirect.`);
-//         }
-//
-//         const response = NextResponse.redirect(nextUrl);
-//         return addLocaleToResponse(request, response, locale);
-//       }
-//     }
-//
-//     let response = NextResponse.next();
-//     const pathnameLocale = nextUrl.pathname.split('/', 2)?.[1];
-//
-//     if (!pathnameLocale || config.locales.includes(pathnameLocale)) {
-//       // If the URL mapping strategy is set to 'rewrite' and the locale from the request doesn't match the locale in the pathname,
-//       // or if the URL mapping strategy is set to 'rewriteDefault' and the locale from the request doesn't match the locale in the pathname
-//       // or is the same as the default locale, then proceed with the following logic
-//       if (
-//         (config.urlMappingStrategy === 'rewrite' && pathnameLocale !== locale) ||
-//         (config.urlMappingStrategy === 'rewriteDefault' &&
-//           (pathnameLocale !== locale || pathnameLocale === config.defaultLocale))
-//       ) {
-//         // Remove the locale from the pathname
-//         const pathnameWithoutLocale = nextUrl.pathname.slice(pathnameLocale.length + 1);
-//
-//         // Create a new URL without the locale in the pathname
-//         const newUrl = new URL(pathnameWithoutLocale || '/', request.url);
-//
-//         // Preserve the original search parameters
-//         newUrl.search = nextUrl.search;
-//         response = NextResponse.redirect(newUrl);
-//       }
-//
-//       return addLocaleToResponse(request, response, pathnameLocale ?? config.defaultLocale);
-//     }
-//
-//     return response;
-//   };
-// }
-//
-// /**
-//  * Retrieve `Next-Locale` header from request
-//  * and check if it is an handled locale.
-//  */
-// function localeFromRequest<Locales extends readonly string[]>(
-//   locales: Locales,
-//   request: NextRequest,
-//   resolveLocaleFromRequest: NonNullable<
-//     I18nMiddlewareConfig<Locales>['resolveLocaleFromRequest']
-//   > = defaultResolveLocaleFromRequest,
-// ) {
-//   const locale = request.cookies.get(LOCALE_COOKIE)?.value ?? resolveLocaleFromRequest(request);
-//
-//   if (!locale || !locales.includes(locale)) {
-//     return null;
-//   }
-//
-//   return locale;
-// }
-//
-// /**
-//  * Default implementation of the `resolveLocaleFromRequest` function for the I18nMiddlewareConfig.
-//  * This function extracts the locale from the 'Accept-Language' header of the request.
-//  */
-// const defaultResolveLocaleFromRequest: NonNullable<I18nMiddlewareConfig<any>['resolveLocaleFromRequest']> = request => {
-//   const header = request.headers.get('Accept-Language');
-//   const locale = header?.split(',', 1)?.[0]?.split('-', 1)?.[0];
-//   return locale ?? null;
-// };
-//
-// /**
-//  * Returns `true` if the pathname does not start with an handled locale
-//  */
-// function noLocalePrefix(locales: readonly string[], pathname: string) {
-//   return locales.every(locale => {
-//     return !(pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
-//   });
-// }
-//
-// /**
-//  * Add `X-Next-Locale` header and `Next-Locale` cookie to response
-//  *
-//  * **NOTE:** The cookie is only set if the locale is different from the one in the cookie
-//  */
-// function addLocaleToResponse(request: NextRequest, response: NextResponse, locale: string) {
-//   response.headers.set(LOCALE_HEADER, locale);
-//
-//   if (request.cookies.get(LOCALE_COOKIE)?.value !== locale) {
-//     response.cookies.set(LOCALE_COOKIE, locale, { sameSite: 'strict' });
-//   }
-//   return response;
-// }
+import { NextResponse } from 'next/server';
+import type { NextMiddleware, NextRequest } from 'next/server';
 
-import type { NextMiddleware } from 'next/server';
+type I18nMiddlewareConfig<Locales extends readonly string[]> = {
+  locales: Locales;
+  defaultLocale: Locales[number];
+  resolveLocaleFromRequest?: (request: NextRequest) => string | null;
+  urlMappingStrategy?: 'redirect' | 'rewrite' | 'rewriteDefault';
+};
 
-export function createI18nMiddleware(middleware: NextMiddleware): NextMiddleware {
-  return (request, event) => {
+function getLocaleFromRequest<const Locales extends readonly string[]>(
+  request: NextRequest,
+  config: I18nMiddlewareConfig<Locales>,
+) {
+  if (config.resolveLocaleFromRequest) {
+    return config.resolveLocaleFromRequest(request);
+  }
+
+  const locale = request.cookies.get('locale')?.value;
+
+  if (!locale || !config.locales.includes(locale)) {
+    return null;
+  }
+
+  return locale;
+}
+
+function noLocalePrefix(locales: readonly string[], pathname: string) {
+  return locales.every(locale => {
+    return !(pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
+  });
+}
+
+export function createI18nMiddleware<const Locales extends readonly string[]>(
+  middleware: NextMiddleware,
+  config: I18nMiddlewareConfig<Locales>,
+): NextMiddleware {
+  return async (request, event) => {
+    let currentLocale = getLocaleFromRequest(request, config);
+
+    if (currentLocale === null) {
+      currentLocale = config.defaultLocale;
+      const response = await middleware(request, event);
+
+      if (response instanceof NextResponse) {
+        response.cookies.set('locale', currentLocale, { sameSite: 'strict' });
+      } else if (response instanceof Response) {
+        const cookies = response.headers.get('set-cookie') ?? '';
+        response.headers.set('set-cookie', `${cookies}; locale=${currentLocale}; SameSite=Strict`);
+      }
+
+      return response;
+    }
+
+    if (!config.urlMappingStrategy || config.urlMappingStrategy === 'redirect') {
+      const nextUrl = request.nextUrl;
+      const pathname = new URL(request.url).pathname;
+
+      if (noLocalePrefix(config.locales, pathname)) {
+        nextUrl.pathname = `/${currentLocale}${pathname}`;
+        const response = NextResponse.redirect(nextUrl);
+        return response;
+      }
+    }
+
+    if (
+      (config.urlMappingStrategy === 'rewriteDefault' && currentLocale === config.defaultLocale) ||
+      config.urlMappingStrategy === 'rewrite'
+    ) {
+      const nextUrl = request.nextUrl;
+
+      if (noLocalePrefix(config.locales, nextUrl.pathname)) {
+        nextUrl.pathname = `/${currentLocale}${nextUrl.pathname}`;
+        const response = NextResponse.rewrite(nextUrl);
+        return response;
+      }
+
+      const urlWithoutLocale = nextUrl.pathname.slice(currentLocale.length + 1);
+      const newUrl = new URL(urlWithoutLocale || '/', request.url);
+      newUrl.search = nextUrl.search;
+
+      const response = NextResponse.redirect(newUrl);
+      return response;
+    }
+
     return middleware(request, event);
   };
 }

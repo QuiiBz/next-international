@@ -13,5 +13,11 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }>) {
-  return <I18nProvider locale={locale}>{children}</I18nProvider>;
+  return (
+    <html lang={locale}>
+      <body>
+        <I18nProvider locale={locale}>{children}</I18nProvider>
+      </body>
+    </html>
+  );
 }

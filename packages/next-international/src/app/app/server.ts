@@ -22,7 +22,22 @@ const useLocaleCache = cache(() => {
     throw new Error('Invariant: urlPathname is not a string: ' + JSON.stringify(store, null, 2));
   }
 
-  return url.split('/')[1].split('?')[0];
+  let locale = url.split('/')[1].split('?')[0];
+
+  if (locale === '') {
+    const cookie = (store?.incrementalCache?.requestHeaders?.['cookie'] as string)
+      ?.split(';')
+      .find(c => c.trim().startsWith('locale='))
+      ?.split('=')[1];
+
+    if (!cookie) {
+      throw new Error('Invariant: locale cookie not found');
+    }
+
+    locale = cookie;
+  }
+
+  return locale;
 });
 
 export function createI18n<Locales extends LocalesObject, Locale extends LocaleType = GetLocale<Locales>>(
