@@ -1,4 +1,4 @@
 export default {
   'hello.world': 'Bonjour, le monde !',
-  'a.param': 'Bonjour, {name} !',
+  'hello.param': 'Bonjour, {name} !',
 } as const;

@@ -10,8 +10,9 @@ import type {
 } from './types';
 import { SEGMENT_NAME } from './constants';
 // @ts-expect-error - no types
-import { cache } from 'react';
+import { cache, use } from 'react';
 import { staticGenerationAsyncStorage } from 'next/dist/client/components/static-generation-async-storage.external';
+import { createT } from './utils';
 
 const useLocaleCache = cache(() => {
   const store = staticGenerationAsyncStorage.getStore();
@@ -45,18 +46,17 @@ export function createI18n<Locales extends LocalesObject, Locale extends LocaleT
 ): CreateI18n<Locales, Locale> {
   const useI18n: UseI18n<Locale> = () => {
     const locale = useLocaleCache();
+    const data = use(locales[locale]()).default;
 
-    return (key, ...params) => {
-      return 'server: ' + locale;
-    };
+    return (key, ...params) => createT(locale, data, undefined, key, ...params);
   };
 
   const useScopedI18n: UseScopedI18n<Locale> = scope => {
     const locale = useLocaleCache();
+    const data = use(locales[locale]()).default;
 
-    return (key, ...params) => {
-      return 'server: ' + locale;
-    };
+    // @ts-expect-error - no types
+    return (key, ...params) => createT(locale, data, scope, key, ...params);
   };
 
   const generateI18nStaticParams: GenerateI18nStaticParams = () => {

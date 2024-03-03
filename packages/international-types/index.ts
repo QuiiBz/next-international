@@ -9,9 +9,9 @@ type ExtractScopes<
   Prev extends string | undefined = undefined,
 > = Value extends `${infer Head}.${infer Tail}`
   ? [
-    Prev extends string ? `${Prev}.${Head}` : Head,
-    ...ExtractScopes<Tail, Prev extends string ? `${Prev}.${Head}` : Head>,
-  ]
+      Prev extends string ? `${Prev}.${Head}` : Head,
+      ...ExtractScopes<Tail, Prev extends string ? `${Prev}.${Head}` : Head>,
+    ]
   : [];
 
 export type Scopes<
@@ -21,9 +21,13 @@ export type Scopes<
 
 export type Keys<
   Locale extends LocaleType,
-  Scope extends Scopes<Locale> | undefined = undefined,
+  Scope extends Scopes<Locale> | undefined,
   TheKeys extends string = Extract<keyof Locale, string>,
-> = Scope extends undefined ? TheKeys : TheKeys extends `${Scope}.${infer Tail}` ? Tail : never;
+> = Scope extends undefined
+  ? RemovePlural<TheKeys>
+  : TheKeys extends `${Scope}.${infer Tail}`
+  ? RemovePlural<Tail>
+  : never;
 
 export type ExtractParams<Value extends string> = Value extends ''
   ? []
@@ -31,19 +35,51 @@ export type ExtractParams<Value extends string> = Value extends ''
   ? [Param, ...ExtractParams<Tail>]
   : [];
 
+export type PluralSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
+export type RemovePlural<Key extends string> = Key extends `${infer Head}#${PluralSuffix}` ? Head : Key;
+
+export type IsPlural<
+  Locale extends LocaleType,
+  Scope extends Scopes<Locale> | undefined,
+  Key extends string,
+> = Scope extends undefined
+  ? `${Key}#${PluralSuffix}` & keyof Locale extends never
+    ? false
+    : true
+  : `${Scope}.${Key}#${PluralSuffix}` & keyof Locale extends never
+  ? false
+  : true;
+
+export type GetPluralCount = number;
+
 export type Params<
   Locale extends LocaleType,
   Scope extends Scopes<Locale> | undefined,
   Key extends Keys<Locale, Scope>,
-  Value extends string = Scope extends undefined ? Locale[Key] : Locale[`${Scope}.${Key}`],
+  Plural extends boolean = IsPlural<Locale, Scope, Key>,
+  Value extends string = Scope extends undefined
+    ? Plural extends true
+      ? Locale[`${Key}#${PluralSuffix}`]
+      : Locale[Key]
+    : Plural extends true
+    ? Locale[`${Scope}.${Key}#${PluralSuffix}`]
+    : Locale[`${Scope}.${Key}`],
   TheParams extends string[] = ExtractParams<Value>,
-> = TheParams['length'] extends 0
+> = Plural extends true
+  ? TheParams['length'] extends 0
+    ? [{ count: GetPluralCount }]
+    : [
+        { count: GetPluralCount } & {
+          [K in TheParams[number]]: Param;
+        },
+      ]
+  : TheParams['length'] extends 0
   ? []
   : [
-    {
-      [K in TheParams[number]]: Param;
-    },
-  ];
+      {
+        [K in TheParams[number]]: Param;
+      },
+    ];
 
 type UnionToIntersection<U> = (U extends never ? never : (arg: U) => never) extends (arg: infer I) => void ? I : never;
 
