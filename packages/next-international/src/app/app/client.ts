@@ -8,7 +8,6 @@ import type {
   UseLocale,
   UseScopedI18n,
 } from './types';
-import { createI18nProvider } from './provider';
 import { SEGMENT_NAME } from './constants';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -43,8 +42,6 @@ export function createI18n<Locales extends LocalesObject, Locale extends LocaleT
     };
   };
 
-  const I18nProvider = createI18nProvider<Locale>();
-
   const generateI18nStaticParams: GenerateI18nStaticParams = () => {
     return Object.keys(locales).map(locale => ({ [config.segmentName ?? SEGMENT_NAME]: locale }));
   };
@@ -65,7 +62,6 @@ export function createI18n<Locales extends LocalesObject, Locale extends LocaleT
   return {
     useI18n,
     useScopedI18n,
-    I18nProvider,
     generateI18nStaticParams,
     useLocale,
     useChangeLocale,
