@@ -1,4 +1,4 @@
-import { I18nProvider, generateI18nStaticParams } from '@/locales';
+import { generateI18nStaticParams } from '@/locales';
 import React from 'react';
 
 export const dynamicParams = false;
@@ -15,9 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={locale}>
-      <body>
-        <I18nProvider locale={locale}>{children}</I18nProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
