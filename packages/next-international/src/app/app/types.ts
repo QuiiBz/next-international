@@ -1,14 +1,15 @@
 import type { Keys, LocaleType, LocalesObject, Params, Scopes } from 'international-types';
 import type { ReactNode } from 'react';
 
-export type UseI18n<Locale extends LocaleType> = () => <Key extends Keys<Locale, undefined>>(
-  key: Key,
-  ...params: Params<Locale, undefined, Key>
-) => string | ReactNode[];
+export type GetI18n<Locale extends LocaleType> = () => Promise<
+  <Key extends Keys<Locale, undefined>>(key: Key, ...params: Params<Locale, undefined, Key>) => string | ReactNode[]
+>;
 
-export type UseScopedI18n<Locale extends LocaleType> = <Scope extends Scopes<Locale>>(
+export type GetScopedI18n<Locale extends LocaleType> = <Scope extends Scopes<Locale>>(
   scope: Scope,
-) => <Key extends Keys<Locale, Scope>>(key: Key, ...params: Params<Locale, Scope, Key>) => string | ReactNode[];
+) => Promise<
+  <Key extends Keys<Locale, Scope>>(key: Key, ...params: Params<Locale, Scope, Key>) => string | ReactNode[]
+>;
 
 export type GenerateI18nStaticParams = () => Array<Record<string, string>>;
 
@@ -30,10 +31,10 @@ export type UseChangeLocale<Locales extends LocalesObject> = (
 ) => (locale: keyof Locales) => void;
 
 export type CreateI18n<Locales extends LocalesObject, Locale extends LocaleType> = {
-  useI18n: UseI18n<Locale>;
-  useScopedI18n: UseScopedI18n<Locale>;
+  getI18n: GetI18n<Locale>;
+  getScopedI18n: GetScopedI18n<Locale>;
   generateI18nStaticParams: GenerateI18nStaticParams;
-  useLocale: UseLocale<Locales>;
+  getLocale: UseLocale<Locales>;
   useChangeLocale: UseChangeLocale<Locales>;
 };
 

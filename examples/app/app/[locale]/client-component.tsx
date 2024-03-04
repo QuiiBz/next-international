@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
-import { useChangeLocale, useI18n, useLocale, useScopedI18n } from '@/locales';
+// @ts-expect-error - missing import
+import React, { use } from 'react';
+import { useChangeLocale, getI18n, getLocale, getScopedI18n } from '@/locales';
 
 export function ClientComponent() {
-  const t = useI18n();
-  const scopedT = useScopedI18n('hello');
-  const locale = useLocale();
+  const t = use(getI18n());
+  const scopedT = use(getScopedI18n('hello'));
+  const locale = getLocale();
   const changeLocale = useChangeLocale();
 
   return (

@@ -1,11 +1,12 @@
 import React from 'react';
-import { useI18n, useLocale, useScopedI18n } from '@/locales';
+import { getI18n, getLocale, getScopedI18n } from '@/locales';
 import { ClientComponent } from './client-component';
+import { Suspense } from 'react';
 
-export default function Home() {
-  const t = useI18n();
-  const scopedT = useScopedI18n('hello');
-  const locale = useLocale();
+export default async function Home() {
+  const t = await getI18n();
+  const scopedT = await getScopedI18n('hello');
+  const locale = getLocale();
 
   return (
     <div>
@@ -23,7 +24,9 @@ export default function Home() {
       </p>
       <p>Current locale: {locale}</p>
       <hr />
-      <ClientComponent />
+      <Suspense>
+        <ClientComponent />
+      </Suspense>
     </div>
   );
 }

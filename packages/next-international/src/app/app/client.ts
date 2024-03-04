@@ -4,17 +4,16 @@ import type {
   GenerateI18nStaticParams,
   I18nConfig,
   UseChangeLocale,
-  UseI18n,
+  GetI18n,
   UseLocale,
-  UseScopedI18n,
+  GetScopedI18n,
 } from './types';
 import { SEGMENT_NAME } from './constants';
 import { useParams, useRouter, usePathname, useSearchParams } from 'next/navigation';
-// @ts-expect-error - no types
-import { use } from 'react';
 import { createT } from './utils';
 
-function useLocaleCache(config: I18nConfig) {
+function getLocaleCache(config: I18nConfig) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const params = useParams();
   const locale = params[config.segmentName ?? SEGMENT_NAME];
 
@@ -31,24 +30,17 @@ export function createI18n<Locales extends LocalesObject, Locale extends LocaleT
 ): CreateI18n<Locales, Locale> {
   const localesCache = new Map<string, Record<string, unknown>>();
 
-  const useI18n: UseI18n<Locale> = () => {
-    const locale = useLocaleCache(config);
-    const data = localesCache.get(locale) ?? use(locales[locale]()).default;
+  const getI18n: GetI18n<Locale> = async () => {
+    const locale = getLocaleCache(config);
+    const data = localesCache.get(locale) ?? (await locales[locale]()).default;
 
-    if (!localesCache.has(locale)) {
-      localesCache.set(locale, data);
-    }
-
+    // @ts-expect-error - no types
     return (key, ...params) => createT(locale, data, undefined, key, ...params);
   };
 
-  const useScopedI18n: UseScopedI18n<Locale> = scope => {
-    const locale = useLocaleCache(config);
-    const data = localesCache.get(locale) ?? use(locales[locale]()).default;
-
-    if (!localesCache.has(locale)) {
-      localesCache.set(locale, data);
-    }
+  const getScopedI18n: GetScopedI18n<Locale> = async scope => {
+    const locale = getLocaleCache(config);
+    const data = localesCache.get(locale) ?? (await locales[locale]()).default;
 
     // @ts-expect-error - no types
     return (key, ...params) => createT(locale, data, scope, key, ...params);
@@ -58,13 +50,13 @@ export function createI18n<Locales extends LocalesObject, Locale extends LocaleT
     return Object.keys(locales).map(locale => ({ [config.segmentName ?? SEGMENT_NAME]: locale }));
   };
 
-  const useLocale: UseLocale<Locales> = () => {
-    return useLocaleCache(config);
+  const getLocale: UseLocale<Locales> = () => {
+    return getLocaleCache(config);
   };
 
   const useChangeLocale: UseChangeLocale<Locales> = changeLocaleConfig => {
     const router = useRouter();
-    const currentLocale = useLocaleCache(config);
+    const currentLocale = getLocaleCache(config);
     const path = usePathname();
     // We call the hook conditionally to avoid always opting out of Static Rendering.
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -87,23 +79,20 @@ export function createI18n<Locales extends LocalesObject, Locale extends LocaleT
       if (newLocale === currentLocale) return;
 
       locales[newLocale]().then(module => {
-        localesCache.set(newLocale as string, module.default);
-
         const finalLocale = newLocale as string;
+
         localesCache.set(finalLocale, module.default);
-
         document.cookie = `locale=${finalLocale};`;
-
         router.push(`/${newLocale as string}${pathWithoutLocale}${finalSearchParams}`);
       });
     };
   };
 
   return {
-    useI18n,
-    useScopedI18n,
+    getI18n,
+    getScopedI18n,
     generateI18nStaticParams,
-    useLocale,
+    getLocale,
     useChangeLocale,
   };
 }
