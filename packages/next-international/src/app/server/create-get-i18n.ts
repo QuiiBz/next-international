@@ -8,27 +8,30 @@ export function createGetI18n<Locales extends ImportedLocales, Locale extends Ba
   locales: Locales,
   config: I18nServerConfig,
 ) {
-  const localeCache = new Map<string, ReturnType<typeof createT<Locale, undefined>>>();
+  const localeCache = new Map<string, Promise<ReturnType<typeof createT<Locale, undefined>>>>();
 
   return async function getI18n() {
-    const locale = getLocaleCache();
-    const cached = localeCache.get(locale);
+    const locale = await getLocaleCache();
+    let cached = localeCache.get(locale);
 
     if (cached) {
-      return cached;
+      return await cached;
     }
 
-    const localeFn = createT(
-      {
-        localeContent: flattenLocale((await locales[locale]()).default),
-        fallbackLocale: config.fallbackLocale ? flattenLocale(config.fallbackLocale) : undefined,
-        locale,
-      } as LocaleContext<Locale>,
-      undefined,
-    );
+    const localeFnPromise = (async () => {
+      const localeModule = await locales[locale]();
+      return createT(
+        {
+          localeContent: flattenLocale(localeModule.default),
+          fallbackLocale: config.fallbackLocale ? flattenLocale(config.fallbackLocale) : undefined,
+          locale,
+        } as LocaleContext<Locale>,
+        undefined,
+      );
+    })();
 
-    localeCache.set(locale, localeFn);
+    localeCache.set(locale, localeFnPromise);
 
-    return localeFn;
+    return await localeFnPromise;
   };
 }

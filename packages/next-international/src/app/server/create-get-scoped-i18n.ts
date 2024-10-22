@@ -8,30 +8,33 @@ export function createGetScopedI18n<Locales extends ImportedLocales, Locale exte
   locales: Locales,
   config: I18nServerConfig,
 ) {
-  const localeCache = new Map<string, ReturnType<typeof createT<Locale, undefined>>>();
+  const localeCache = new Map<string, Promise<ReturnType<typeof createT<Locale, undefined>>>>();
 
   return async function getScopedI18n<Scope extends Scopes<Locale>>(
     scope: Scope,
   ): Promise<ReturnType<typeof createT<Locale, Scope>>> {
-    const locale = getLocaleCache();
+    const locale = await getLocaleCache();
     const cacheKey = `${locale}-${scope}`;
-    const cached = localeCache.get(cacheKey);
+    let cached = localeCache.get(cacheKey);
 
     if (cached) {
-      return cached;
+      return (await cached) as ReturnType<typeof createT<Locale, Scope>>;
     }
 
-    const localeFn = createT(
-      {
-        localeContent: flattenLocale((await locales[locale]()).default),
-        fallbackLocale: config.fallbackLocale ? flattenLocale(config.fallbackLocale) : undefined,
-        locale,
-      } as LocaleContext<Locale>,
-      scope,
-    );
+    const localeFnPromise = (async () => {
+      const localeModule = await locales[locale]();
+      return createT(
+        {
+          localeContent: flattenLocale(localeModule.default),
+          fallbackLocale: config.fallbackLocale ? flattenLocale(config.fallbackLocale) : undefined,
+          locale,
+        } as LocaleContext<Locale>,
+        scope,
+      );
+    })();
 
-    localeCache.set(cacheKey, localeFn);
+    localeCache.set(cacheKey, localeFnPromise);
 
-    return localeFn;
+    return await localeFnPromise;
   };
 }
