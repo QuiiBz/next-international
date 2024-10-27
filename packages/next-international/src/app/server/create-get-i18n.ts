@@ -12,7 +12,7 @@ export function createGetI18n<Locales extends ImportedLocales, Locale extends Ba
 
   return async function getI18n() {
     const locale = await getLocaleCache();
-    let cached = localeCache.get(locale);
+    const cached = localeCache.get(locale);
 
     if (cached) {
       return await cached;

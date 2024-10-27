@@ -1,6 +1,14 @@
 import type { ReactNode } from 'react';
 import { Provider } from '../provider';
 
-export default function Layout({ params: { locale }, children }: { params: { locale: string }; children: ReactNode }) {
+export default async function Layout({
+  params,
+  children,
+}: {
+  params: Promise<{ locale: string }>;
+  children: ReactNode;
+}) {
+  const { locale } = await params;
+
   return <Provider locale={locale}>{children}</Provider>;
 }

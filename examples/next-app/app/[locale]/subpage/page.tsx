@@ -7,8 +7,9 @@ import { getI18n } from '../../../locales/server';
 // }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default async function Subpage({ params: { locale } }: { params: { locale: string } }) {
+export default async function Subpage({ params }: { params: Promise<{ locale: string }> }) {
   // Uncomment to test Static Generation
+  // const { locale } = await params;
   // setStaticParamsLocale(locale);
 
   const t = await getI18n();

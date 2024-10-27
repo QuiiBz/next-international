@@ -9,10 +9,11 @@ import { Provider } from './provider';
 // }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default async function Home({ params: { locale } }: { params: { locale: string } }) {
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   // Uncomment to test Static Generation
   // setStaticParamsLocale(locale);
 
+  const { locale } = await params;
   const t = await getI18n();
   const t2 = await getScopedI18n('scope.more');
   const currentLocale = getCurrentLocale();

@@ -15,7 +15,7 @@ export function createGetScopedI18n<Locales extends ImportedLocales, Locale exte
   ): Promise<ReturnType<typeof createT<Locale, Scope>>> {
     const locale = await getLocaleCache();
     const cacheKey = `${locale}-${scope}`;
-    let cached = localeCache.get(cacheKey);
+    const cached = localeCache.get(cacheKey);
 
     if (cached) {
       return (await cached) as ReturnType<typeof createT<Locale, Scope>>;
