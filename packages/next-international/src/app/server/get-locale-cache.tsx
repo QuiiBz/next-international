@@ -12,17 +12,17 @@ export const setStaticParamsLocale = (value: string) => {
   getLocale().current = value;
 };
 
-export const getLocaleCache = cache(() => {
+export const getLocaleCache = cache(async () => {
   let locale: string | undefined | null;
 
   locale = getStaticParamsLocale();
 
   if (!locale) {
     try {
-      locale = headers().get(LOCALE_HEADER);
+      locale = (await headers()).get(LOCALE_HEADER);
 
       if (!locale) {
-        locale = cookies().get(LOCALE_COOKIE)?.value;
+        locale = (await cookies()).get(LOCALE_COOKIE)?.value;
       }
     } catch (e) {
       throw new Error(

@@ -51,7 +51,11 @@ Move all your routes inside an `app/[locale]/` folder. For Client Components, wr
 import { ReactElement } from 'react'
 import { I18nProviderClient } from '../../locales/client'
 
-export default function SubLayout({ params: { locale }, children }: { params: { locale: string }, children: ReactElement }) {
+// If you are using Next.js < 15, you don't need to await `params`:
+// export default function SubLayout({ params: { locale }, children }: { params: { locale: string }, children: ReactElement }) {
+export default function SubLayout({ params, children }: { params: Promise<{ locale: string }>, children: ReactElement }) {
+  const { locale } = await params
+
   return (
     <I18nProviderClient locale={locale}>
       {children}

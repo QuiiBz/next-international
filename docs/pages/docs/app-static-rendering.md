@@ -22,7 +22,10 @@ Inside all pages that you want to be statically rendered, call this `setStaticPa
 // app/[locale]/page.tsx and any other page
 import { setStaticParamsLocale } from 'next-international/server'
 
-export default function Page({ params: { locale } }: { params: { locale: string } }) {
+// If you are using Next.js < 15, you don't need to await `params`:
+// export default function Page({ params: { locale } }: { params: { locale: string } }) {
+export default function Page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   setStaticParamsLocale(locale)
 
   return (

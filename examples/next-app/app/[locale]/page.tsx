@@ -9,7 +9,9 @@ import { Provider } from './provider';
 // }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default async function Home({ params: { locale } }: { params: { locale: string } }) {
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+
   // Uncomment to test Static Generation
   // setStaticParamsLocale(locale);
 
