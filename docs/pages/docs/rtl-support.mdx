@@ -8,7 +8,11 @@ If you want to support the `dir` attribute in your `<html>` tag, you'll need to 
 
 ```tsx {3,6}
 // app/[locale]/layout.tsx
+
+// If you are using Next.js < 15, you don't need to await `params`:
+// export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) {
 export default function Layout({ children, params }: { children: ReactElement, params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   const dir = new Intl.Locale(locale).getTextInfo().direction
 
   return (
@@ -56,6 +60,8 @@ Then, use it instead of the native `Intl.Locale.prototype.getTextInfo` API:
 // app/[locale]/layout.tsx
 import Locale from 'intl-locale-textinfo-polyfill'
 
+// If you are using Next.js < 15, you don't need to await `params`:
+// export default function Layout({ children, params: { locale } }: { children: ReactElement, params: { locale: string } }) {
 export default function Layout({ children, params }: { children: ReactElement, params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const { direction: dir } = new Locale(locale).textInfo
