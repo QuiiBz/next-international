@@ -44,8 +44,10 @@ export default function Page() {
 // Server Component
 import { getCurrentLocale } from '../../locales/server'
 
-export default function Page() {
-  const locale = getCurrentLocale()
+export default async function Page() {
+  // If you are using Next.js < 15, you don't need to await `getCurrentLocale`:
+  // const locale = getCurrentLocale()
+  const locale = await getCurrentLocale()
 
   return (
     <p>Current locale: {locale}</p>
