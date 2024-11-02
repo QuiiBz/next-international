@@ -50,6 +50,21 @@ export type I18nServerConfig = {
 export type I18nMiddlewareConfig<Locales extends readonly string[]> = {
   locales: Locales;
   defaultLocale: Locales[number];
+
+  /**
+   * The name of the cookie that will be set and used to determine the locale.
+   *
+   * @default 'Next-Locale'
+   */
+  cookieName?: string;
+
+  /**
+   * The name of the header that will be added to the response.
+   *
+   * @default 'X-Next-Locale'
+   */
+  headerName?: `X-${string}`;
+
   /**
    * When a url is not prefixed with a locale, this setting determines whether the middleware should perform a *redirect* or *rewrite* to the default locale.
    *
