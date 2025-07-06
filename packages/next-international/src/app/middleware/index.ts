@@ -108,7 +108,7 @@ function addLocaleToResponse(request: NextRequest, response: NextResponse, local
   response.headers.set(LOCALE_HEADER, locale);
 
   if (request.cookies.get(LOCALE_COOKIE)?.value !== locale) {
-    response.cookies.set(LOCALE_COOKIE, locale, { sameSite: 'strict' });
+    response.cookies.set(LOCALE_COOKIE, locale, { sameSite: 'lax' });
   }
   return response;
 }
