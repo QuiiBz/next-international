@@ -9,6 +9,8 @@ export default {
   'namespace.subnamespace.weather': "Today's weather is {weather}",
   'namespace.subnamespace.user.description': '{name} is {years} years old',
   'only.exists.in.en': 'EN locale',
+  empty: '',
+  'namespace.empty': '',
   'double.param': 'This {param} is used twice ({param})',
   'cow#zero': 'No cows (#zero)',
   'cow#one': 'One cow (#one)',

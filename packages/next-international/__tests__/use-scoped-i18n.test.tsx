@@ -1,4 +1,5 @@
 import React from 'react';
+import { renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createI18n } from '../src';
 import { render, screen } from './utils';
@@ -110,6 +111,29 @@ describe('useScopedI18n', () => {
     );
 
     expect(screen.getByText('Hello')).toBeInTheDocument();
+  });
+
+  it('should translate empty string', async () => {
+    const { useScopedI18n, I18nProvider } = createI18n({
+      en: () => import('./utils/en'),
+      fr: () => import('./utils/fr'),
+    });
+
+    const App = ({ children }: { children: React.ReactNode }) => {
+      return <I18nProvider locale={en}>{children}</I18nProvider>;
+    };
+
+    const { result } = renderHook(
+      () => {
+        const t = useScopedI18n('namespace');
+        return t('empty');
+      },
+      {
+        wrapper: App,
+      },
+    );
+
+    expect(result.current).toBe('');
   });
 
   it('should translate multiple keys', async () => {
