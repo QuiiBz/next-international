@@ -64,7 +64,7 @@ export function createT<Locale extends BaseLocale, Scope extends Scopes<Locale> 
 
     if (!value && isPlural) {
       const baseKey = key.split('#', 1)[0] as Key;
-      value = (content[`${baseKey}#other`] || key)?.toString();
+      value = ((scope ? content[`${scope}.${baseKey}#other`] : content[`${baseKey}#other`]) || key)?.toString();
     } else {
       value = (value || key)?.toString();
     }
