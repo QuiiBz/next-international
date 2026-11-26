@@ -34,13 +34,11 @@ export function createI18nMiddleware<const Locales extends readonly string[]>(co
     const pathnameLocale = nextUrl.pathname.split('/', 2)?.[1];
 
     if (!pathnameLocale || config.locales.includes(pathnameLocale)) {
-      // If the URL mapping strategy is set to 'rewrite' and the locale from the request doesn't match the locale in the pathname,
-      // or if the URL mapping strategy is set to 'rewriteDefault' and the locale from the request doesn't match the locale in the pathname
-      // or is the same as the default locale, then proceed with the following logic
+      // Remove the locale prefix for 'rewrite' when it differs from the request locale,
+      // or for 'rewriteDefault' only when it is the default locale.
       if (
         (config.urlMappingStrategy === 'rewrite' && pathnameLocale !== locale) ||
-        (config.urlMappingStrategy === 'rewriteDefault' &&
-          (pathnameLocale !== locale || pathnameLocale === config.defaultLocale))
+        (config.urlMappingStrategy === 'rewriteDefault' && pathnameLocale === config.defaultLocale)
       ) {
         // Remove the locale from the pathname
         const pathnameWithoutLocale = nextUrl.pathname.slice(pathnameLocale.length + 1);
